@@ -1,383 +1,207 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Semanas 1–2 — Banco de dados, Algoritmos, Lógica</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semanas 1–2 — BD · Algoritmos · Lógica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0e10;--surface:#17171a;--border:#2a2a2e;--border2:#3a3a40;
+  --text:#e8e8ec;--muted:#7a7a85;--accent:#c9a84c;--danger:#e05252;
+  --success:#4caf82;--purple:#8b5cf6;--info:#38bdf8;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;--serif:'DM Serif Display',serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.65}
 
-    :root {
-      --bg:      #0e0e10;
-      --surface: #17171a;
-      --border:  #2a2a2e;
-      --text:    #e8e8ec;
-      --muted:   #7a7a85;
-      --accent:  #c9a84c;
-      --danger:  #e05252;
-      --success: #4caf82;
-      --purple:  #8b5cf6;
-      --mono:    'DM Mono', monospace;
-      --sans:    'DM Sans', sans-serif;
-      --serif:   'DM Serif Display', serif;
-    }
+/* ── PAGE HEADER ── */
+.ph{padding:clamp(1rem,4vw,2rem) clamp(1rem,4vw,2rem) 1.2rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.ph-meta{font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.45rem}
+.ph-title{font-family:var(--serif);font-size:clamp(1.3rem,4vw,1.8rem);line-height:1.2;margin-bottom:.4rem}
+.ph-title em{color:var(--accent);font-style:normal}
+.ph-desc{font-size:.82rem;color:var(--muted);max-width:600px;line-height:1.65}
+.ph-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:.85rem}
+.pill{font-family:var(--mono);font-size:.6rem;padding:2px 8px;border-radius:4px;border:1px solid var(--border);color:var(--muted)}
+.pill-r{border-color:rgba(224,82,82,.3);color:#e07070;background:rgba(224,82,82,.06)}
+.pill-a{border-color:rgba(201,168,76,.3);color:var(--accent);background:rgba(201,168,76,.06)}
+.pill-g{border-color:rgba(76,175,130,.3);color:var(--success);background:rgba(76,175,130,.06)}
+.pill-p{border-color:rgba(139,92,246,.3);color:var(--purple);background:rgba(139,92,246,.06)}
 
-    html { scroll-behavior: smooth; }
+/* ── MOBILE NAV ── */
+.mnav{display:none;overflow-x:auto;scrollbar-width:none;gap:4px;padding:.6rem 1rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.mnav::-webkit-scrollbar{display:none}
+.mnav a{display:inline-flex;align-items:center;padding:4px 10px;border-radius:5px;font-size:.72rem;color:var(--muted);text-decoration:none;white-space:nowrap;border:1px solid transparent;transition:color .15s,background .15s;flex-shrink:0}
+.mnav a:hover{color:var(--text);background:rgba(255,255,255,.04)}
 
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.65;
-    }
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 160px)}
 
-    /* ─── PAGE HEADER ─── */
-    .page-header {
-      padding: clamp(1rem, 4vw, 2rem) clamp(1rem, 4vw, 2rem) 1.2rem;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .ph-meta {
-      font-family: var(--mono);
-      font-size: .62rem;
-      color: var(--muted);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-bottom: .45rem;
-    }
-    .ph-title {
-      font-family: var(--serif);
-      font-size: clamp(1.3rem, 4vw, 1.7rem);
-      line-height: 1.2;
-      margin-bottom: .4rem;
-    }
-    .ph-title em { color: var(--accent); font-style: normal; }
-    .ph-desc { font-size: .8rem; color: var(--muted); max-width: 560px; line-height: 1.6; }
-    .ph-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .8rem; }
-    .pill {
-      font-family: var(--mono); font-size: .6rem;
-      padding: 2px 8px; border-radius: 4px;
-      border: 1px solid var(--border); color: var(--muted);
-    }
-    .pill-r { border-color: rgba(224,82,82,.3); color: #e07070; background: rgba(224,82,82,.06); }
-    .pill-a { border-color: rgba(201,168,76,.3); color: var(--accent); background: rgba(201,168,76,.06); }
-    .pill-g { border-color: rgba(76,175,130,.3); color: var(--success); background: rgba(76,175,130,.06); }
+/* ── TOC ── */
+.toc{border-right:1px solid var(--border);padding:1.25rem .9rem;position:sticky;top:0;max-height:100vh;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.toc-label{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.55rem}
+.toc-item{display:block;padding:3px 8px;border-radius:4px;font-size:.73rem;color:var(--muted);text-decoration:none;border-left:2px solid transparent;margin-bottom:1px;transition:color .15s,border-color .15s,background .15s}
+.toc-item:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.toc-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(201,168,76,.05)}
+.toc-sub{padding-left:14px;font-size:.69rem}
 
-    /* ─── MOBILE SECTION NAV ─── */
-    .mobile-nav {
-      display: none;
-      overflow-x: auto;
-      scrollbar-width: none;
-      gap: 4px;
-      padding: .6rem 1rem;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .mobile-nav::-webkit-scrollbar { display: none; }
-    .mobile-nav a {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      border-radius: 5px;
-      font-size: .72rem;
-      color: var(--muted);
-      text-decoration: none;
-      white-space: nowrap;
-      border: 1px solid transparent;
-      background: transparent;
-      transition: color .15s, background .15s;
-      flex-shrink: 0;
-    }
-    .mobile-nav a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+/* ── CONTENT ── */
+.content{padding:clamp(1rem,3vw,2rem);max-width:860px}
+section{margin-bottom:2.8rem}
+.sec-label{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.4rem}
+.sec-title{font-family:var(--serif);font-size:clamp(1.1rem,3vw,1.3rem);color:var(--text);margin-bottom:.9rem;padding-bottom:.55rem;border-bottom:1px solid var(--border)}
 
-    /* ─── MAIN LAYOUT ─── */
-    .layout {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      min-height: calc(100vh - 200px);
-    }
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:clamp(.8rem,3vw,1.15rem) clamp(.9rem,3vw,1.3rem);margin-bottom:10px}
+.card-title{font-size:.83rem;font-weight:500;color:var(--text);margin-bottom:.55rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
-    /* ─── TOC sidebar ─── */
-    .toc {
-      border-right: 1px solid var(--border);
-      padding: 1.25rem .9rem;
-      position: sticky;
-      top: 0;
-      max-height: 100vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-    .toc-label {
-      font-family: var(--mono); font-size: .6rem;
-      text-transform: uppercase; letter-spacing: .1em;
-      color: var(--muted); margin-bottom: .55rem;
-    }
-    .toc-item {
-      display: block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: .74rem;
-      color: var(--muted);
-      text-decoration: none;
-      border-left: 2px solid transparent;
-      margin-bottom: 1px;
-      transition: color .15s, border-color .15s, background .15s;
-    }
-    .toc-item:hover { color: var(--text); background: rgba(255,255,255,.04); }
-    .toc-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(201,168,76,.05); }
-    .toc-sub { padding-left: 16px; font-size: .7rem; }
+/* ── BADGE ── */
+.badge{font-family:var(--mono);font-size:.58rem;padding:1px 7px;border-radius:3px;border:1px solid;white-space:nowrap;flex-shrink:0}
+.b-r{border-color:rgba(224,82,82,.4);color:#e07070;background:rgba(224,82,82,.08)}
+.b-g{border-color:rgba(76,175,130,.4);color:var(--success);background:rgba(76,175,130,.08)}
+.b-p{border-color:rgba(139,92,246,.4);color:var(--purple);background:rgba(139,92,246,.08)}
+.b-a{border-color:rgba(201,168,76,.4);color:var(--accent);background:rgba(201,168,76,.08)}
+.b-i{border-color:rgba(56,189,248,.4);color:var(--info);background:rgba(56,189,248,.08)}
 
-    /* ─── CONTENT ─── */
-    .content {
-      padding: clamp(1rem, 3vw, 2rem);
-      max-width: 840px;
-    }
+/* ── ROWS ── */
+.row-item{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--border);font-size:.8rem;line-height:1.6}
+.row-item:first-child{border-top:none}
+.row-key{font-family:var(--mono);font-size:.7rem;color:var(--accent);white-space:nowrap;flex-shrink:0;padding-top:1px;min-width:100px}
+.row-val{flex:1}
+.row-val code{font-family:var(--mono);font-size:.7rem;color:var(--info);background:rgba(56,189,248,.08);padding:1px 5px;border-radius:3px}
 
-    section { margin-bottom: 2.5rem; }
+/* ── CALLOUTS ── */
+.trap,.tip,.note{padding:9px 13px;font-size:.79rem;margin:8px 0;line-height:1.65}
+.trap{border-left:3px solid var(--danger);background:rgba(224,82,82,.05);color:#e08080}
+.tip{border-left:3px solid var(--accent);background:rgba(201,168,76,.05);color:#c9b070}
+.note{border-left:3px solid var(--info);background:rgba(56,189,248,.05);color:#7dd3fc}
+.trap strong,.tip strong,.note strong{color:inherit;font-weight:600}
 
-    .section-label {
-      font-family: var(--mono); font-size: .6rem;
-      text-transform: uppercase; letter-spacing: .12em;
-      color: var(--muted); margin-bottom: .45rem;
-    }
-    .section-title {
-      font-family: var(--serif);
-      font-size: clamp(1.1rem, 3vw, 1.25rem);
-      color: var(--text);
-      margin-bottom: .85rem;
-      padding-bottom: .55rem;
-      border-bottom: 1px solid var(--border);
-    }
+/* ── CODE ── */
+.code{background:#0c0c0e;border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-family:var(--mono);font-size:.73rem;line-height:1.75;overflow-x:auto;margin:8px 0;color:#b0c4de;-webkit-overflow-scrolling:touch}
+.code .kw{color:#c792ea}
+.code .fn{color:#82aaff}
+.code .str{color:#c3e88d}
+.code .num{color:var(--accent)}
+.code .cm{color:#546e7a;font-style:italic}
+.code .tp{color:#ffcb6b}
 
-    /* ─── CARD ─── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: clamp(.8rem, 3vw, 1.1rem) clamp(.9rem, 3vw, 1.25rem);
-      margin-bottom: 10px;
-    }
-    .card-title {
-      font-size: .82rem; font-weight: 500;
-      color: var(--text);
-      margin-bottom: .5rem;
-      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    }
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;margin:8px 0;-webkit-overflow-scrolling:touch;border-radius:6px;border:1px solid var(--border)}
+table{border-collapse:collapse;font-size:.75rem;width:100%;min-width:380px}
+th{background:#111113;color:var(--muted);font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+th:last-child{border-right:none}
+td{padding:7px 10px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:top}
+td:last-child{border-right:none}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+td.ok{color:var(--success);font-family:var(--mono);font-size:.7rem}
+td.no{color:var(--danger);font-family:var(--mono);font-size:.7rem}
+td.mid{color:var(--accent);font-family:var(--mono);font-size:.7rem}
 
-    /* ─── BADGES ─── */
-    .badge {
-      font-family: var(--mono); font-size: .58rem;
-      padding: 1px 7px; border-radius: 3px; border: 1px solid;
-      white-space: nowrap; flex-shrink: 0;
-    }
-    .b-r { border-color: rgba(224,82,82,.4); color: #e07070; background: rgba(224,82,82,.08); }
-    .b-g { border-color: rgba(76,175,130,.4); color: var(--success); background: rgba(76,175,130,.08); }
-    .b-p { border-color: rgba(139,92,246,.4); color: var(--purple); background: rgba(139,92,246,.08); }
-    .b-a { border-color: rgba(201,168,76,.4); color: var(--accent); background: rgba(201,168,76,.08); }
+/* ── EXAMPLE BOX ── */
+.example{background:rgba(139,92,246,.04);border:1px solid rgba(139,92,246,.2);border-radius:6px;padding:10px 14px;margin:8px 0;font-size:.79rem;line-height:1.6}
+.example-label{font-family:var(--mono);font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:4px}
 
-    /* ─── ROWS ─── */
-    .row-item {
-      display: flex; gap: 10px;
-      padding: 6px 0;
-      border-top: 1px solid var(--border);
-      font-size: .8rem; line-height: 1.55;
-    }
-    .row-item:first-child { border-top: none; }
-    .row-key {
-      font-family: var(--mono); font-size: .7rem;
-      color: var(--accent); white-space: nowrap;
-      flex-shrink: 0; padding-top: 1px; min-width: 90px;
-    }
+/* ── FLASHCARDS ── */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:10px;margin-top:.8rem}
+.fc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;cursor:pointer;min-height:95px;display:flex;flex-direction:column;gap:.4rem;transition:border-color .2s;-webkit-tap-highlight-color:transparent}
+.fc:hover{border-color:var(--border2)}
+.fc.flipped{border-color:rgba(201,168,76,.35);background:#18180c}
+.fc-q{font-size:.78rem;font-weight:500;color:var(--text);line-height:1.45}
+.fc-a{font-size:.74rem;color:var(--muted);line-height:1.6;display:none}
+.fc.flipped .fc-q{color:var(--accent);font-size:.72rem}
+.fc.flipped .fc-a{display:block}
+.fc-hint{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:auto;opacity:.6}
+.fc-tag{font-family:var(--mono);font-size:.55rem;padding:1px 6px;border-radius:3px;border:1px solid rgba(201,168,76,.2);color:var(--accent);background:rgba(201,168,76,.05);display:inline-block;margin-bottom:4px}
 
-    /* ─── CALLOUTS ─── */
-    .trap, .tip {
-      padding: 8px 12px; font-size: .78rem;
-      margin: 8px 0; line-height: 1.6;
-    }
-    .trap { border-left: 3px solid var(--danger); background: rgba(224,82,82,.05); color: #e08080; }
-    .tip  { border-left: 3px solid var(--accent); background: rgba(201,168,76,.05); color: #c9b070; }
+/* ── QUESTÕES ── */
+.q-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:clamp(.8rem,3vw,1rem) clamp(.9rem,3vw,1.25rem);margin-bottom:10px}
+.q-num{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-bottom:.4rem;display:flex;align-items:center;gap:8px}
+.q-tag{font-family:var(--mono);font-size:.55rem;padding:1px 6px;border-radius:3px;border:1px solid var(--border);color:var(--muted)}
+.q-text{font-size:.82rem;line-height:1.68;margin-bottom:.65rem}
+.q-opts{display:flex;flex-direction:column;gap:4px}
+.q-opts button{width:100%;text-align:left;background:transparent;border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-size:.78rem;color:var(--muted);cursor:pointer;font-family:var(--sans);transition:background .15s,color .15s,border-color .15s;-webkit-tap-highlight-color:transparent}
+.q-opts button:hover{background:rgba(255,255,255,.04);color:var(--text)}
+.q-opts button.ok{background:rgba(76,175,130,.08);color:var(--success);border-color:rgba(76,175,130,.3)}
+.q-opts button.no{background:rgba(224,82,82,.08);color:var(--danger);border-color:rgba(224,82,82,.3)}
+.ce-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-ce{flex:1;min-width:80px;padding:7px 12px;border-radius:6px;font-size:.8rem;font-family:var(--sans);cursor:pointer;border:1px solid;background:transparent;transition:background .15s,color .15s;-webkit-tap-highlight-color:transparent}
+.btn-c{border-color:rgba(76,175,130,.4);color:var(--success)}
+.btn-e{border-color:rgba(224,82,82,.4);color:var(--danger)}
+.btn-c.ok,.btn-e.ok{background:rgba(76,175,130,.12);font-weight:500}
+.btn-c.no,.btn-e.no{background:rgba(224,82,82,.08);opacity:.5}
+.q-actions{margin-top:.55rem}
+.btn{font-family:var(--mono);font-size:.63rem;padding:4px 10px;border-radius:4px;border:1px solid var(--border);color:var(--muted);background:transparent;cursor:pointer;transition:color .15s}
+.btn:hover{color:var(--text)}
+.q-gab{background:rgba(255,255,255,.025);border-radius:6px;padding:10px 13px;font-size:.77rem;color:var(--muted);margin-top:8px;display:none;line-height:1.65;border:1px solid var(--border)}
+.q-gab.show{display:block}
+.q-gab strong{color:var(--text)}
 
-    /* ─── CODE ─── */
-    .code {
-      background: #121214; border: 1px solid var(--border);
-      border-radius: 6px; padding: 10px 14px;
-      font-family: var(--mono); font-size: .73rem;
-      line-height: 1.7; overflow-x: auto; margin: 6px 0; color: #b0c4de;
-    }
-    .code .kw  { color: var(--purple); }
-    .code .fn  { color: #5ec4e6; }
-    .code .num { color: var(--accent); }
-    .code .cm  { color: var(--muted); font-style: italic; }
+/* ── SCORE ── */
+.score-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;font-family:var(--mono);font-size:.7rem;color:var(--muted);flex-wrap:wrap}
+.prog{height:4px;flex:1;min-width:80px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-f{height:100%;background:var(--success);border-radius:2px;transition:width .3s;width:0%}
 
-    /* ─── TABLE ─── */
-    .tbl-wrap { overflow-x: auto; margin: 8px 0; -webkit-overflow-scrolling: touch; }
-    table { border-collapse: collapse; font-size: .75rem; width: 100%; min-width: 400px; }
-    th {
-      background: #12121466; color: var(--muted);
-      font-family: var(--mono); font-size: .63rem;
-      text-transform: uppercase; letter-spacing: .06em;
-      padding: 7px 10px; text-align: left;
-      border: 1px solid var(--border);
-    }
-    td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
-    tr:nth-child(even) td { background: rgba(255,255,255,.02); }
-    td.ok  { color: var(--success); font-family: var(--mono); font-size: .7rem; }
-    td.no  { color: var(--danger);  font-family: var(--mono); font-size: .7rem; }
-    td.mid { color: var(--accent);  font-family: var(--mono); font-size: .7rem; }
+/* ── LINKS ── */
+.link-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-bottom:10px}
+.link-card-title{font-size:.82rem;font-weight:500;color:var(--text);margin-bottom:.7rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.link-item{display:flex;flex-direction:column;gap:3px;padding:8px 0;border-top:1px solid var(--border)}
+.link-item:first-of-type{border-top:none}
+.link-title{font-size:.8rem;font-weight:500;color:var(--text)}
+.link-sub{font-size:.72rem;color:var(--muted);line-height:1.5}
+.link-a{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.65rem;color:var(--accent);text-decoration:none;margin-top:3px;transition:opacity .15s}
+.link-a:hover{opacity:.75}
+.link-a::before{content:"↗";font-size:.7rem}
 
-    /* ─── FLASHCARDS ─── */
-    .fc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
-      gap: 10px; margin-top: .75rem;
-    }
-    .fc {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 1rem;
-      cursor: pointer; min-height: 90px;
-      display: flex; flex-direction: column; gap: .4rem;
-      transition: border-color .2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .fc.flipped { border-color: rgba(201,168,76,.3); }
-    .fc-q { font-size: .78rem; font-weight: 500; color: var(--text); line-height: 1.4; }
-    .fc-a { font-size: .74rem; color: var(--muted); line-height: 1.55; display: none; }
-    .fc.flipped .fc-q { color: var(--accent); }
-    .fc.flipped .fc-a { display: block; }
-    .fc-hint { font-family: var(--mono); font-size: .58rem; color: var(--muted); margin-top: auto; }
+/* ── FC FILTER TABS ── */
+.fc-filters{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:.75rem}
+.fc-filter{font-family:var(--mono);font-size:.62rem;padding:3px 9px;border-radius:4px;border:1px solid var(--border);color:var(--muted);background:transparent;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.fc-filter.on{color:var(--accent);border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.07)}
 
-    /* ─── QUESTÕES ─── */
-    .q-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--purple);
-      border-radius: 0 8px 8px 0;
-      padding: clamp(.8rem, 3vw, 1rem) clamp(.9rem, 3vw, 1.25rem);
-      margin-bottom: 10px;
-    }
-    .q-num { font-family: var(--mono); font-size: .63rem; color: var(--muted); margin-bottom: .4rem; }
-    .q-text { font-size: .82rem; line-height: 1.65; margin-bottom: .65rem; }
-
-    .q-opts { display: flex; flex-direction: column; gap: 4px; }
-    .q-opts button {
-      width: 100%; text-align: left;
-      background: transparent; border: 1px solid var(--border);
-      border-radius: 5px; padding: 7px 10px;
-      font-size: .78rem; color: var(--muted);
-      cursor: pointer; font-family: var(--sans);
-      transition: background .15s, color .15s, border-color .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .q-opts button:hover { background: rgba(255,255,255,.04); color: var(--text); }
-    .q-opts button.ok { background: rgba(76,175,130,.08); color: var(--success); border-color: rgba(76,175,130,.3); }
-    .q-opts button.no { background: rgba(224,82,82,.08); color: var(--danger); border-color: rgba(224,82,82,.3); }
-
-    /* botões C/E */
-    .ce-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-ce {
-      flex: 1; min-width: 80px;
-      padding: 7px 12px;
-      border-radius: 6px; font-size: .8rem;
-      font-family: var(--sans); cursor: pointer;
-      border: 1px solid; background: transparent;
-      transition: background .15s, color .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn-c { border-color: rgba(76,175,130,.4); color: var(--success); }
-    .btn-e { border-color: rgba(224,82,82,.4); color: var(--danger); }
-    .btn-c.ok, .btn-e.ok { background: rgba(76,175,130,.12); }
-    .btn-c.no, .btn-e.no { background: rgba(224,82,82,.08); opacity: .5; }
-
-    .q-actions { margin-top: .55rem; }
-    .btn {
-      font-family: var(--mono); font-size: .63rem;
-      padding: 4px 10px; border-radius: 4px;
-      border: 1px solid var(--border); color: var(--muted);
-      background: transparent; cursor: pointer;
-      transition: color .15s;
-    }
-    .btn:hover { color: var(--text); }
-
-    .q-gab {
-      background: rgba(255,255,255,.03); border-radius: 6px;
-      padding: 8px 12px; font-size: .76rem;
-      color: var(--muted); margin-top: 8px;
-      display: none; line-height: 1.6;
-    }
-    .q-gab.show { display: block; }
-    .q-gab strong { color: var(--text); }
-
-    /* ─── SCORE BAR ─── */
-    .score-row {
-      display: flex; align-items: center;
-      gap: .75rem; margin-bottom: 1rem;
-      font-family: var(--mono); font-size: .7rem; color: var(--muted);
-      flex-wrap: wrap;
-    }
-    .prog { height: 4px; flex: 1; min-width: 80px; background: var(--border); border-radius: 2px; overflow: hidden; }
-    .prog-f { height: 100%; background: var(--success); border-radius: 2px; transition: width .3s; width: 0%; }
-
-    /* ─── LINKS ─── */
-    .link-row {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 8px 0; border-top: 1px solid var(--border);
-    }
-    .link-row:first-child { border-top: none; }
-    .link-body { flex: 1; }
-    .link-title { font-size: .8rem; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-    .link-sub { font-size: .72rem; color: var(--muted); }
-    .link-a {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-family: var(--mono); font-size: .65rem;
-      color: var(--accent); text-decoration: none;
-      margin-top: 3px; transition: opacity .15s;
-    }
-    .link-a:hover { opacity: .8; }
-
-    /* ═══════════════════════════════════════
-       RESPONSIVE
-    ═══════════════════════════════════════ */
-
-    /* Tablet e mobile */
-    @media (max-width: 760px) {
-      .layout { grid-template-columns: 1fr; }
-      .toc { display: none; }
-      .mobile-nav { display: flex; }
-      .row-key { min-width: 70px; font-size: .67rem; }
-    }
-
-    @media (max-width: 480px) {
-      .ph-pills .pill { font-size: .58rem; padding: 2px 6px; }
-      table { min-width: 340px; }
-      .fc-grid { grid-template-columns: 1fr; }
-      .row-key { min-width: 60px; }
-    }
-  </style>
+/* ── RESPONSIVE ── */
+@media(max-width:760px){
+  .layout{grid-template-columns:1fr}
+  .toc{display:none}
+  .mnav{display:flex}
+  .row-key{min-width:75px;font-size:.67rem}
+}
+@media(max-width:480px){
+  table{min-width:340px}
+  .fc-grid{grid-template-columns:1fr}
+  .row-key{min-width:62px}
+}
+</style>
 </head>
 <body>
 
 <!-- PAGE HEADER -->
-<div class="page-header">
+<div class="ph">
   <div class="ph-meta">módulo 01 · semanas 1–2 · prioridade alta</div>
   <h1 class="ph-title">Banco de dados, <em>algoritmos</em> e lógica</h1>
-  <p class="ph-desc">Fundação técnica — base para tudo que vem depois. Banco de dados relacional, estruturas de dados, OOP e raciocínio lógico para a P1.</p>
+  <p class="ph-desc">Fundação técnica completa — formas normais, SQL avançado, álgebra relacional, NoSQL, ACID/BASE, índices, transações, estruturas de dados, complexidade, OOP, lógica proposicional e muito mais. Base para cerca de 35–40% da P2.</p>
   <div class="ph-pills">
-    <span class="pill pill-r">P2 · ~30 itens estimados</span>
-    <span class="pill pill-a">SQL · NoSQL · Álgebra relacional</span>
-    <span class="pill pill-a">Big-O · Ordenação · OOP</span>
+    <span class="pill pill-r">P2 · ~35 itens estimados</span>
+    <span class="pill pill-a">SQL · NoSQL · Álgebra relacional · Índices</span>
+    <span class="pill pill-a">Big-O · Ordenação · Grafos · OOP</span>
     <span class="pill">P1 · Lógica proposicional</span>
+    <span class="pill pill-p">30 flashcards · 20 questões</span>
     <span class="pill pill-g">14 dias · 2–3h/dia</span>
   </div>
 </div>
 
 <!-- MOBILE SECTION NAV -->
-<nav class="mobile-nav" aria-label="Seções do módulo">
-  <a href="#bd">Banco de dados</a>
+<nav class="mnav" aria-label="Seções">
+  <a href="#bd">BD Relacional</a>
+  <a href="#sql-av">SQL Avançado</a>
+  <a href="#indices">Índices</a>
+  <a href="#nosql">NoSQL</a>
+  <a href="#acid">ACID/BASE</a>
   <a href="#algo">Algoritmos</a>
+  <a href="#grafos">Grafos</a>
+  <a href="#oop">OOP</a>
   <a href="#logica">Lógica</a>
   <a href="#flash">Flashcards</a>
   <a href="#quest">Questões</a>
@@ -386,363 +210,660 @@
 
 <div class="layout">
 
-  <!-- TOC — desktop -->
-  <nav class="toc" aria-label="Índice">
-    <div class="toc-label">neste módulo</div>
-    <a class="toc-item active" href="#bd">Banco de dados</a>
-    <a class="toc-item toc-sub" href="#normais">Formas normais</a>
-    <a class="toc-item toc-sub" href="#sql">SQL</a>
-    <a class="toc-item toc-sub" href="#algebra">Álgebra relacional</a>
-    <a class="toc-item toc-sub" href="#nosql">NoSQL</a>
-    <a class="toc-item toc-sub" href="#acid">ACID / BASE</a>
-    <a class="toc-item" href="#algo">Algoritmos</a>
-    <a class="toc-item toc-sub" href="#bigo">Complexidade</a>
-    <a class="toc-item toc-sub" href="#sort">Ordenação</a>
-    <a class="toc-item toc-sub" href="#structs">Estruturas</a>
-    <a class="toc-item toc-sub" href="#oop">OOP</a>
-    <a class="toc-item" href="#logica">Lógica</a>
-    <a class="toc-item" href="#flash">Flashcards</a>
-    <a class="toc-item" href="#quest">Questões</a>
-    <a class="toc-item" href="#links">Links</a>
-  </nav>
+<!-- TOC DESKTOP -->
+<nav class="toc" aria-label="Índice">
+  <div class="toc-label">neste módulo</div>
+  <a class="toc-item active" href="#bd">Banco de dados</a>
+  <a class="toc-item toc-sub" href="#normais">Formas normais</a>
+  <a class="toc-item toc-sub" href="#sql-av">SQL avançado</a>
+  <a class="toc-item toc-sub" href="#algebra">Álgebra relacional</a>
+  <a class="toc-item toc-sub" href="#indices">Índices e otimização</a>
+  <a class="toc-item toc-sub" href="#nosql">NoSQL</a>
+  <a class="toc-item toc-sub" href="#acid">ACID / BASE / CAP</a>
+  <a class="toc-item toc-sub" href="#concorrencia">Concorrência</a>
+  <a class="toc-item" href="#algo">Algoritmos</a>
+  <a class="toc-item toc-sub" href="#bigo">Complexidade</a>
+  <a class="toc-item toc-sub" href="#sort">Ordenação</a>
+  <a class="toc-item toc-sub" href="#structs">Estruturas de dados</a>
+  <a class="toc-item toc-sub" href="#grafos">Grafos</a>
+  <a class="toc-item toc-sub" href="#oop">OOP</a>
+  <a class="toc-item" href="#logica">Lógica</a>
+  <a class="toc-item toc-sub" href="#tv">Tabela-verdade</a>
+  <a class="toc-item toc-sub" href="#equiv">Equivalências</a>
+  <a class="toc-item toc-sub" href="#quant">Quantificadores</a>
+  <a class="toc-item toc-sub" href="#args">Argumentos</a>
+  <a class="toc-item" href="#flash">Flashcards</a>
+  <a class="toc-item" href="#quest">Questões</a>
+  <a class="toc-item" href="#links">Links</a>
+</nav>
 
-  <!-- CONTENT -->
-  <div class="content">
+<div class="content">
 
-    <!-- ═══ BANCO DE DADOS ═══ -->
-    <section id="bd">
-      <div class="section-label">módulo 01 · parte 1</div>
-      <h2 class="section-title">Banco de dados relacional</h2>
+<!-- ═══════════════════════ BANCO DE DADOS ═══════════════════════ -->
+<section id="bd">
+<div class="sec-label">módulo 01 · parte 1</div>
+<h2 class="sec-title">Banco de dados relacional</h2>
 
-      <div id="normais" class="card">
-        <div class="card-title"><span class="badge b-r">cai todo concurso</span> Formas normais</div>
-        <div class="trap">Pegadinha: a Cebraspe descreve um cenário e pede em qual forma normal a tabela está. Pratique identificar dependências — não decore definições.</div>
-        <div>
-          <div class="row-item"><span class="row-key">1FN</span><span>Sem grupos repetitivos, sem multivalorados. Cada célula tem um único valor atômico.</span></div>
-          <div class="row-item"><span class="row-key">2FN</span><span>1FN + sem dependência parcial. Todo atributo não-chave depende da chave <em>inteira</em>. Com chave simples, 1FN já implica 2FN.</span></div>
-          <div class="row-item"><span class="row-key">3FN</span><span>2FN + sem dependência transitiva. Se A→B e B→C, C não pode depender de B quando B não é chave.</span></div>
-          <div class="row-item"><span class="row-key">FNBC</span><span>Todo determinante é superchave. Mais restrita que 3FN — elimina anomalias residuais.</span></div>
-        </div>
-        <div class="tip">Mnemônico: "1=átomo · 2=chave toda · 3=sem escada · FNBC=só superchave decide"</div>
-      </div>
+<!-- FORMAS NORMAIS -->
+<div id="normais" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Formas normais — normalização completa</div>
+  <div class="trap"><strong>Pegadinha principal:</strong> a Cebraspe descreve um cenário com uma tabela real e pergunta em qual forma normal ela está, ou pede para identificar qual dependência viola qual forma normal. Não basta decorar — treine identificar dependências em tabelas concretas.</div>
 
-      <div id="sql" class="card">
-        <div class="card-title"><span class="badge b-r">cai todo concurso</span> SQL — o que a Cebraspe testa</div>
-        <div class="trap">A banca apresenta SELECT com JOIN + GROUP BY + HAVING e pede o resultado. Execute mentalmente linha a linha.</div>
-        <div class="code"><span class="kw">SELECT</span> d.nome, <span class="fn">COUNT</span>(f.id) <span class="kw">AS</span> total
+  <div class="row-item">
+    <span class="row-key">1FN</span>
+    <span class="row-val">Sem grupos repetitivos e sem atributos multivalorados. Cada célula deve ter um único valor atômico. Se uma coluna guarda "João, Maria" é violação da 1FN — cada valor deve estar em sua própria linha.</span>
+  </div>
+  <div class="row-item">
+    <span class="row-key">2FN</span>
+    <span class="row-val">Está na 1FN + sem dependência parcial. Todo atributo não-chave depende da chave primária <em>inteira</em>. Só é relevante com chave composta — se a chave for simples, estar na 1FN já garante a 2FN automaticamente.</span>
+  </div>
+  <div class="row-item">
+    <span class="row-key">3FN</span>
+    <span class="row-val">Está na 2FN + sem dependência transitiva. Se A→B e B→C (onde A é chave, B e C são não-chave), então C tem dependência transitiva e viola a 3FN. Corrija separando B e C em outra tabela.</span>
+  </div>
+  <div class="row-item">
+    <span class="row-key">FNBC</span>
+    <span class="row-val">Todo determinante deve ser superchave. É mais restrita que 3FN e elimina anomalias que a 3FN não cobre (quando há múltiplas chaves candidatas sobrepostas). A questão pede a diferença entre 3FN e FNBC — na 3FN atributos não-chave podem depender de chaves candidatas não-primárias; na FNBC isso é proibido.</span>
+  </div>
+  <div class="row-item">
+    <span class="row-key">4FN</span>
+    <span class="row-val">Sem dependências multivaloradas independentes. Raramente cobrada, mas cai em bancas técnicas. Se A ↠ B e A ↠ C (e B e C são independentes entre si), há violação da 4FN.</span>
+  </div>
+
+  <div class="example">
+    <div class="example-label">Exemplo prático — Cebraspe adora esse tipo</div>
+    Tabela: <code style="font-family:var(--mono);font-size:.72rem;color:var(--info)">PEDIDO(cod_pedido, cod_produto, nome_produto, qtd)</code><br>
+    Chave primária composta: (cod_pedido, cod_produto)<br>
+    Problema: nome_produto depende apenas de cod_produto (parte da chave) → viola a <strong>2FN</strong>.<br>
+    Solução: separar em PEDIDO(cod_pedido, cod_produto, qtd) e PRODUTO(cod_produto, nome_produto).
+  </div>
+  <div class="tip"><strong>Mnemônico:</strong> "1=átomo · 2=chave toda · 3=sem escada transitiva · FNBC=todo determinante é superchave"</div>
+</div>
+
+<!-- SQL AVANÇADO -->
+<div id="sql-av" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> SQL avançado — o que a Cebraspe realmente testa</div>
+  <div class="trap"><strong>Método da banca:</strong> apresentar um SELECT com 3+ cláusulas (JOIN + WHERE + GROUP BY + HAVING + ORDER BY) e pedir qual é o resultado, ou qual cláusula deve ser usada. Execute mentalmente na ordem: FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.</div>
+
+  <div class="row-item"><span class="row-key">Ordem lógica</span><span class="row-val"><code>FROM</code> → <code>JOIN</code> → <code>WHERE</code> → <code>GROUP BY</code> → <code>HAVING</code> → <code>SELECT</code> → <code>DISTINCT</code> → <code>ORDER BY</code> → <code>LIMIT</code>. A ordem de escrita difere da ordem de execução.</span></div>
+  <div class="row-item"><span class="row-key">INNER JOIN</span><span class="row-val">Retorna só linhas com correspondência nos dois lados. Se não houver match, a linha é descartada dos dois lados.</span></div>
+  <div class="row-item"><span class="row-key">LEFT JOIN</span><span class="row-val">Todas as linhas da tabela esquerda, mesmo sem correspondência. Onde não há match à direita, os campos ficam <code>NULL</code>.</span></div>
+  <div class="row-item"><span class="row-key">RIGHT JOIN</span><span class="row-val">Inverso do LEFT JOIN. Todas as linhas da direita são mantidas.</span></div>
+  <div class="row-item"><span class="row-key">FULL OUTER JOIN</span><span class="row-val">Todas as linhas de ambos os lados. NULLs onde não há correspondência em qualquer dos lados. Nem todos os SGBDs suportam nativamente (MySQL não tem — simula-se com UNION).</span></div>
+  <div class="row-item"><span class="row-key">WHERE vs HAVING</span><span class="row-val"><code>WHERE</code> filtra linhas individuais <em>antes</em> do agrupamento (não pode usar funções de agregação). <code>HAVING</code> filtra grupos <em>depois</em> do GROUP BY (pode usar <code>COUNT</code>, <code>SUM</code>, etc.). São intercambiáveis apenas quando não há GROUP BY.</span></div>
+  <div class="row-item"><span class="row-key">Subconsulta</span><span class="row-val">Independente: executa uma vez e retorna valor(es) para a consulta externa. Correlacionada: referencia coluna da consulta externa, executa uma vez por linha — mais lenta, mas poderosa.</span></div>
+  <div class="row-item"><span class="row-key">EXISTS vs IN</span><span class="row-val"><code>EXISTS</code> retorna true/false para cada linha; para quando acha o primeiro match (mais eficiente com grandes subconjuntos). <code>IN</code> carrega todo o subconjunto para comparação. Cebraspe testa qual usar em cada cenário.</span></div>
+  <div class="row-item"><span class="row-key">Window functions</span><span class="row-val"><code>ROW_NUMBER()</code>, <code>RANK()</code>, <code>DENSE_RANK()</code> com <code>OVER(PARTITION BY ... ORDER BY ...)</code>. Cada vez mais cobradas em provas de TI.</span></div>
+
+  <div class="code"><span class="cm">-- padrão clássico da banca: JOIN + GROUP BY + HAVING</span>
+<span class="kw">SELECT</span> d.nome, <span class="fn">COUNT</span>(f.id) <span class="kw">AS</span> total, <span class="fn">AVG</span>(f.salario) <span class="kw">AS</span> media_sal
 <span class="kw">FROM</span>   departamento d
        <span class="kw">LEFT JOIN</span> funcionario f <span class="kw">ON</span> f.dept_id = d.id
+<span class="kw">WHERE</span>  d.ativo = <span class="num">1</span>
 <span class="kw">GROUP BY</span> d.nome
-<span class="kw">HAVING</span>   <span class="fn">COUNT</span>(f.id) > <span class="num">2</span>
-<span class="kw">ORDER BY</span> total <span class="kw">DESC</span>;</div>
-        <div>
-          <div class="row-item"><span class="row-key">INNER JOIN</span><span>Só linhas com correspondência nos dois lados.</span></div>
-          <div class="row-item"><span class="row-key">LEFT JOIN</span><span>Todas as linhas da esquerda; NULL onde não há correspondência à direita.</span></div>
-          <div class="row-item"><span class="row-key">WHERE vs HAVING</span><span>WHERE filtra <em>antes</em> do GROUP BY (linhas). HAVING filtra <em>depois</em> (grupos). Não são intercambiáveis.</span></div>
-          <div class="row-item"><span class="row-key">Subconsulta</span><span>Correlacionada referencia tabela externa e executa uma vez por linha. Mais lenta.</span></div>
-        </div>
-      </div>
+<span class="kw">HAVING</span>   <span class="fn">COUNT</span>(f.id) >= <span class="num">3</span>
+<span class="kw">ORDER BY</span> media_sal <span class="kw">DESC</span>;</div>
 
-      <div id="algebra" class="card">
-        <div class="card-title"><span class="badge b-a">alta incidência</span> Álgebra relacional</div>
-        <div class="trap">Confundir projeção com seleção é o erro mais comum. π = colunas. σ = linhas.</div>
-        <div>
-          <div class="row-item"><span class="row-key">σ seleção</span><span>Filtra linhas. Equivale ao WHERE. Ex: σ<sub>salario&gt;5000</sub>(Funcionário)</span></div>
-          <div class="row-item"><span class="row-key">π projeção</span><span>Seleciona colunas. Equivale ao SELECT col. Remove duplicatas automaticamente.</span></div>
-          <div class="row-item"><span class="row-key">⋈ junção</span><span>Combina tabelas por atributos comuns. Junção natural = NATURAL JOIN.</span></div>
-          <div class="row-item"><span class="row-key">− diferença</span><span>Linhas em R que não estão em S. Relações devem ter mesmo esquema.</span></div>
-          <div class="row-item"><span class="row-key">∪ união</span><span>Todas as linhas de R e S (sem duplicatas). Requer compatibilidade.</span></div>
-        </div>
-      </div>
+  <div class="example">
+    <div class="example-label">Subconsulta correlacionada — formato favorito da Cebraspe</div>
+    <div class="code"><span class="kw">SELECT</span> nome, salario
+<span class="kw">FROM</span>   funcionario f
+<span class="kw">WHERE</span>  salario > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(salario)
+                  <span class="kw">FROM</span>   funcionario
+                  <span class="kw">WHERE</span>  dept_id = f.dept_id); <span class="cm">-- referencia f da consulta externa</span></div>
+  </div>
+</div>
 
-      <div id="nosql" class="card">
-        <div class="card-title"><span class="badge b-a">alta incidência</span> NoSQL — tipos e casos de uso</div>
-        <div class="tip">A Cebraspe dá um cenário e pede qual tipo NoSQL. Associe o cenário ao tipo, não ao produto.</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Tipo</th><th>Exemplos</th><th>Caso de uso ideal</th></tr></thead>
-            <tbody>
-              <tr><td>Documento</td><td>MongoDB, CouchDB</td><td>Posts, catálogos, dados heterogêneos</td></tr>
-              <tr><td>Chave-valor</td><td>Redis, DynamoDB</td><td>Cache, sessão, contadores em tempo real</td></tr>
-              <tr><td>Colunar</td><td>Cassandra, HBase</td><td>Analytics, escrita intensiva</td></tr>
-              <tr><td>Grafo</td><td>Neo4j</td><td>Redes sociais, detecção de fraude</td></tr>
-              <tr><td>Time series</td><td>InfluxDB</td><td>Métricas, IoT, monitoramento</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+<!-- ÁLGEBRA RELACIONAL -->
+<div id="algebra" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Álgebra relacional — operações e equivalências SQL</div>
+  <div class="trap"><strong>Armadilha clássica:</strong> confundir projeção (π) com seleção (σ). π = colunas. σ = linhas. A Cebraspe apresenta uma expressão e pede o equivalente SQL, ou o contrário.</div>
 
-      <div id="acid" class="card">
-        <div class="card-title"><span class="badge b-p">conceito-chave</span> ACID vs BASE</div>
-        <div>
-          <div class="row-item"><span class="row-key">Atomicidade</span><span>Tudo ou nada. Falha → rollback completo.</span></div>
-          <div class="row-item"><span class="row-key">Consistência</span><span>Sai de estado válido e chega em estado válido.</span></div>
-          <div class="row-item"><span class="row-key">Isolamento</span><span>Transações concorrentes não se interferem. Níveis: RU &lt; RC &lt; RR &lt; Serializable.</span></div>
-          <div class="row-item"><span class="row-key">Durabilidade</span><span>Após commit, dado persiste mesmo com falha de hardware.</span></div>
-          <div class="row-item"><span class="row-key">BASE</span><span>Basically Available · Soft state · Eventually consistent. Modelo NoSQL — troca consistência imediata por disponibilidade.</span></div>
-        </div>
-      </div>
-    </section>
+  <div class="row-item"><span class="row-key">σ seleção</span><span class="row-val">Filtra <strong>linhas</strong> segundo uma condição. SQL: <code>WHERE</code>. Ex: σ<sub>salario&gt;5000</sub>(Funcionário) → todos os funcionários com salário acima de 5000.</span></div>
+  <div class="row-item"><span class="row-key">π projeção</span><span class="row-val">Seleciona <strong>colunas</strong>. Remove duplicatas automaticamente (equivale a <code>SELECT DISTINCT col1, col2</code>). SQL sem DISTINCT pode ter duplicatas; π nunca tem.</span></div>
+  <div class="row-item"><span class="row-key">⋈ junção natural</span><span class="row-val">Combina tabelas por atributos de mesmo nome e mesmo valor. Equivale ao <code>NATURAL JOIN</code> do SQL. Cuidado: se houver colunas homônimas sem relação semântica, o resultado pode ser inesperado.</span></div>
+  <div class="row-item"><span class="row-key">⋈<sub>θ</sub> theta-join</span><span class="row-val">Junção com condição θ arbitrária (não precisa ser igualdade). Ex: R⋈<sub>R.a &gt; S.b</sub>S. Equivale ao <code>JOIN ... ON condição</code>.</span></div>
+  <div class="row-item"><span class="row-key">÷ divisão</span><span class="row-val">Retorna tuplas de R que se relacionam com <em>todas</em> as tuplas de S. Clássico para consultas "todos os X que fizeram todos os Y". Não tem equivalente direto em SQL — implementa-se com dupla negação ou <code>HAVING COUNT = total</code>.</span></div>
+  <div class="row-item"><span class="row-key">∪ ∩ −</span><span class="row-val">União, interseção, diferença. Requerem compatibilidade de esquema (mesmas colunas e tipos). SQL: <code>UNION</code>, <code>INTERSECT</code>, <code>EXCEPT</code>/<code>MINUS</code>.</span></div>
 
-    <!-- ═══ ALGORITMOS ═══ -->
-    <section id="algo">
-      <div class="section-label">módulo 01 · parte 2</div>
-      <h2 class="section-title">Algoritmos e estruturas de dados</h2>
+  <div class="example">
+    <div class="example-label">Equivalência álgebra ↔ SQL</div>
+    π<sub>nome,salario</sub>(σ<sub>dept='TI'</sub>(Funcionário))<br>
+    = <code style="font-family:var(--mono);font-size:.72rem;color:var(--info)">SELECT DISTINCT nome, salario FROM Funcionário WHERE dept = 'TI'</code>
+  </div>
+</div>
 
-      <div id="bigo" class="card">
-        <div class="card-title"><span class="badge b-r">cai todo concurso</span> Complexidade — Big-O</div>
-        <div class="trap">A Cebraspe apresenta um algoritmo com loops aninhados e pede a complexidade. Conte as operações — não decore.</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Notação</th><th>Nome</th><th>Exemplo</th></tr></thead>
-            <tbody>
-              <tr><td class="ok">O(1)</td><td>Constante</td><td>Acesso por índice, hash table (médio)</td></tr>
-              <tr><td class="ok">O(log n)</td><td>Logarítmica</td><td>Busca binária, BST balanceada</td></tr>
-              <tr><td class="mid">O(n)</td><td>Linear</td><td>Percorrer lista, busca sequencial</td></tr>
-              <tr><td class="mid">O(n log n)</td><td>Linearítmica</td><td>MergeSort, HeapSort, QuickSort médio</td></tr>
-              <tr><td class="no">O(n²)</td><td>Quadrática</td><td>BubbleSort, dois loops aninhados sobre n</td></tr>
-              <tr><td class="no">O(2ⁿ)</td><td>Exponencial</td><td>Subconjuntos, força bruta</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):      <span class="cm"># n</span>
-    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(n):  <span class="cm"># n × n = O(n²)</span>
-        <span class="fn">print</span>(i, j)</div>
-      </div>
+<!-- ÍNDICES -->
+<div id="indices" class="card">
+  <div class="card-title"><span class="badge b-a">alta incidência</span> Índices e otimização de consultas</div>
+  <div class="note"><strong>Por que cai:</strong> o SERPRO trabalha com grandes volumes de dados. A Cebraspe cobra quando usar cada tipo de índice e o impacto no desempenho de leituras vs escritas.</div>
 
-      <div id="sort" class="card">
-        <div class="card-title"><span class="badge b-r">cai todo concurso</span> Algoritmos de ordenação</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>Algoritmo</th><th>Melhor</th><th>Médio</th><th>Pior</th><th>Estável</th></tr></thead>
-            <tbody>
-              <tr><td>BubbleSort</td><td class="ok">O(n)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">sim</td></tr>
-              <tr><td>InsertionSort</td><td class="ok">O(n)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">sim</td></tr>
-              <tr><td>SelectionSort</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="no">não</td></tr>
-              <tr><td><strong>MergeSort</strong></td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">sim</td></tr>
-              <tr><td>QuickSort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="no">O(n²)*</td><td class="no">não</td></tr>
-              <tr><td>HeapSort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="no">não</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="tip">* QuickSort O(n²) quando pivot é sempre o extremo. MergeSort é o único com pior caso O(n log n) garantido e estável simultaneamente.</div>
-      </div>
+  <div class="row-item"><span class="row-key">B-Tree</span><span class="row-val">Índice padrão. Eficiente para buscas por igualdade (<code>=</code>), intervalos (<code>BETWEEN</code>, <code>&lt;</code>, <code>&gt;</code>) e ordenação. Mantém dados ordenados. Profundidade O(log n).</span></div>
+  <div class="row-item"><span class="row-key">Hash</span><span class="row-val">Ótimo para buscas por igualdade exata (<code>=</code>). Ineficiente para intervalos e ordenação (dados não ficam ordenados). Acesso O(1) médio.</span></div>
+  <div class="row-item"><span class="row-key">Bitmap</span><span class="row-val">Ideal para colunas de baixa cardinalidade (poucos valores distintos — ex: sexo, status). Muito eficiente em data warehouses. Ruim para OLTP com muitas escritas concorrentes (lock no bitmap inteiro).</span></div>
+  <div class="row-item"><span class="row-key">Full-text</span><span class="row-val">Para buscas em texto livre (<code>LIKE '%palavra%'</code> não usa B-Tree). Suportado no PostgreSQL, MySQL e SQL Server.</span></div>
+  <div class="row-item"><span class="row-key">Índice composto</span><span class="row-val">Cobre múltiplas colunas. A ordem importa — o índice em (A, B) serve para buscas em A e em (A, B), mas <em>não</em> para buscas só em B (regra do "prefixo mais à esquerda").</span></div>
+  <div class="row-item"><span class="row-key">Trade-off</span><span class="row-val">Índices aceleram leituras (SELECT) mas penalizam escritas (INSERT/UPDATE/DELETE — o índice precisa ser atualizado). Nunca se indexa tudo — há custo de manutenção e de espaço.</span></div>
 
-      <div id="structs" class="card">
-        <div class="card-title"><span class="badge b-a">alta incidência</span> Estruturas de dados</div>
-        <div class="trap">Pilha = LIFO. Fila = FIFO. A Cebraspe inverte os dois — questão clássica.</div>
-        <div>
-          <div class="row-item"><span class="row-key">Array</span><span>Acesso O(1), inserção/remoção no meio O(n). Memória contígua.</span></div>
-          <div class="row-item"><span class="row-key">Lista ligada</span><span>Inserção/remoção O(1) dado o nó, busca O(n). Memória não-contígua.</span></div>
-          <div class="row-item"><span class="row-key">Pilha — LIFO</span><span>push/pop O(1). Usos: chamadas de função, undo, parsing.</span></div>
-          <div class="row-item"><span class="row-key">Fila — FIFO</span><span>enqueue/dequeue O(1). Usos: BFS, filas de tarefas.</span></div>
-          <div class="row-item"><span class="row-key">BST balanceada</span><span>Busca/inserção/remoção O(log n). AVL e Red-Black rebalanceiam automaticamente.</span></div>
-          <div class="row-item"><span class="row-key">Hash table</span><span>Acesso médio O(1), pior caso O(n) por colisões.</span></div>
-          <div class="row-item"><span class="row-key">Heap min/max</span><span>Extração do mínimo/máximo O(log n). HeapSort e filas de prioridade.</span></div>
-        </div>
-      </div>
+  <div class="tip"><strong>Regra prática para provas:</strong> "Coluna usada em WHERE, JOIN, ORDER BY com alta cardinalidade → B-Tree. Coluna de baixa cardinalidade em DW → Bitmap. Busca exata de alta frequência → Hash."</div>
+</div>
 
-      <div id="oop" class="card">
-        <div class="card-title"><span class="badge b-a">alta incidência</span> OOP — os 4 pilares</div>
-        <div class="trap">Override = runtime, mesma assinatura, subclasse redefine superclasse. Overload = compile time, mesmo nome, assinaturas diferentes. A Cebraspe troca os dois.</div>
-        <div>
-          <div class="row-item"><span class="row-key">Encapsulamento</span><span>Ocultar estado interno; expor apenas interface pública. Atributos privados + getters/setters.</span></div>
-          <div class="row-item"><span class="row-key">Herança</span><span>Subclasse reutiliza e estende superclasse. Relação "é um". Java não tem herança múltipla de classes — usa interfaces.</span></div>
-          <div class="row-item"><span class="row-key">Polimorfismo</span><span>Mesmo método, comportamentos diferentes. Sobrescrita (runtime) vs sobrecarga (compile time).</span></div>
-          <div class="row-item"><span class="row-key">Abstração</span><span>Modelar apenas o essencial. Classes abstratas e interfaces definem contratos sem implementação concreta.</span></div>
-        </div>
-      </div>
-    </section>
+<!-- NOSQL -->
+<div id="nosql" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> NoSQL — tipos, modelos e casos de uso</div>
+  <div class="trap"><strong>Pegadinha:</strong> a Cebraspe dá um cenário ("armazenar posts de blog com campos variáveis por autor") e pede qual tipo NoSQL. Associe o <em>cenário</em> ao tipo, não o produto ao tipo.</div>
 
-    <!-- ═══ LÓGICA ═══ -->
-    <section id="logica">
-      <div class="section-label">módulo 01 · parte 3 · P1</div>
-      <h2 class="section-title">Raciocínio lógico</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Tipo</th><th>Modelo de dados</th><th>Produtos</th><th>Ideal para</th><th>Evitar quando</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Documento</strong></td><td>JSON/BSON aninhado</td><td>MongoDB, CouchDB, Firestore</td><td>Dados heterogêneos, catálogos, CMS, e-commerce</td><td>Relações complexas e joins frequentes</td></tr>
+        <tr><td><strong>Chave-valor</strong></td><td>Par chave:valor simples</td><td>Redis, DynamoDB, Memcached</td><td>Cache, sessão, contadores, filas simples</td><td>Consultas por campo interno do valor</td></tr>
+        <tr><td><strong>Colunar</strong></td><td>Famílias de colunas</td><td>Cassandra, HBase, ScyllaDB</td><td>Analytics, escrita massiva, séries largas</td><td>Transações ACID, joins, baixa latência de leitura aleatória</td></tr>
+        <tr><td><strong>Grafo</strong></td><td>Nós, arestas, propriedades</td><td>Neo4j, Amazon Neptune, ArangoDB</td><td>Redes sociais, detecção de fraude, recomendação, grafos de conhecimento</td><td>Dados tabulares simples sem relações</td></tr>
+        <tr><td><strong>Time series</strong></td><td>Registros com timestamp</td><td>InfluxDB, TimescaleDB, Prometheus</td><td>Métricas, IoT, monitoramento, logs temporais</td><td>Atualizações de dados históricos</td></tr>
+        <tr><td><strong>Busca textual</strong></td><td>Índice invertido</td><td>Elasticsearch, OpenSearch, Solr</td><td>Busca full-text, logs, analytics de texto</td><td>Transações, consistência forte</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-r">mais cobrado</span> Tabela-verdade completa</div>
-        <div class="trap">O condicional p→q só é FALSO quando p=V e q=F. Inclusive F→V e F→F são VERDADEIROS — ponto mais explorado pela banca.</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>p</th><th>q</th><th>p∧q</th><th>p∨q</th><th>p→q</th><th>p↔q</th></tr></thead>
-            <tbody>
-              <tr><td>V</td><td>V</td><td class="ok">V</td><td class="ok">V</td><td class="ok">V</td><td class="ok">V</td></tr>
-              <tr><td>V</td><td>F</td><td class="no">F</td><td class="ok">V</td><td class="no" style="white-space:nowrap">F ← único falso</td><td class="no">F</td></tr>
-              <tr><td>F</td><td>V</td><td class="no">F</td><td class="ok">V</td><td class="ok" style="white-space:nowrap">V ← confunde!</td><td class="no">F</td></tr>
-              <tr><td>F</td><td>F</td><td class="no">F</td><td class="no">F</td><td class="ok" style="white-space:nowrap">V ← confunde!</td><td class="ok">V</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+  <div class="note" style="margin-top:8px"><strong>Diferença importante:</strong> Redis é chave-valor mas suporta estruturas complexas como listas, sets, hashes e sorted sets. Em provas, se o enunciado falar em "estruturas de dados em memória com persistência opcional", é Redis.</div>
+</div>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-r">mais cobrado</span> Equivalências do condicional</div>
-        <div>
-          <div class="row-item"><span class="row-key">p→q</span><span>Equivale a ~p∨q</span></div>
-          <div class="row-item"><span class="row-key">Contrapositiva</span><span>~q→~p — EQUIVALENTE. Inverte E nega os dois lados.</span></div>
-          <div class="row-item"><span class="row-key">Recíproca</span><span>q→p — NÃO equivalente. Só inverte.</span></div>
-          <div class="row-item"><span class="row-key">Inversa</span><span>~p→~q — NÃO equivalente. Só nega.</span></div>
-          <div class="row-item"><span class="row-key">Negação</span><span>~(p→q) = p∧~q — o único caso falso do condicional.</span></div>
-        </div>
-        <div class="tip">Mnemônico: "Contrapositiva = INVERTE e NEGA = equivalente. Recíproca = só inverte = não equivalente."</div>
-      </div>
+<!-- ACID / BASE / CAP -->
+<div id="acid" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> ACID, BASE e Teorema CAP</div>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-a">alta incidência</span> Negação de quantificadores</div>
-        <div class="trap">Negar "Todos aprovaram" como "Nenhum aprovou" é o erro mais comum. O correto é "Existe pelo menos um que não aprovou."</div>
-        <div>
-          <div class="row-item"><span class="row-key">¬(∀x P)</span><span>"Todos P" → "Existe pelo menos um que não P"</span></div>
-          <div class="row-item"><span class="row-key">¬(∃x P)</span><span>"Existe P" → "Nenhum é P" (Todo P não é P)</span></div>
-        </div>
-      </div>
+  <div class="row-item"><span class="row-key">Atomicidade</span><span class="row-val">Tudo ou nada. Se qualquer operação da transação falhar, todas as operações anteriores dessa transação são desfeitas (rollback). Não existe "meia transação".</span></div>
+  <div class="row-item"><span class="row-key">Consistência</span><span class="row-val">A transação leva o banco de um estado válido para outro estado válido. Todas as regras de integridade (chaves, constraints) devem ser respeitadas após o commit.</span></div>
+  <div class="row-item"><span class="row-key">Isolamento</span><span class="row-val">Transações concorrentes não se interferem — o resultado deve ser equivalente a executá-las em série. Diferentes níveis sacrificam isolamento por desempenho.</span></div>
+  <div class="row-item"><span class="row-key">Durabilidade</span><span class="row-val">Após o commit, as mudanças persistem mesmo em caso de falha de hardware ou queda de energia. Implementado via write-ahead log (WAL) ou redo log.</span></div>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-p">argumentos</span> Formas válidas e falácias</div>
-        <div>
-          <div class="row-item"><span class="row-key">Modus Ponens</span><span>[p→q, p] ⊢ q — VÁLIDO</span></div>
-          <div class="row-item"><span class="row-key">Modus Tollens</span><span>[p→q, ~q] ⊢ ~p — VÁLIDO</span></div>
-          <div class="row-item"><span class="row-key">Sil. hipotético</span><span>[p→q, q→r] ⊢ p→r — VÁLIDO</span></div>
-          <div class="row-item"><span class="row-key">Falácia 1</span><span>[p→q, q] ⊢ p — INVÁLIDO (afirmação do consequente)</span></div>
-          <div class="row-item"><span class="row-key">Falácia 2</span><span>[p→q, ~p] ⊢ ~q — INVÁLIDO (negação da antecedente)</span></div>
-        </div>
-      </div>
-    </section>
+  <div class="tbl-wrap" style="margin-top:8px">
+    <table>
+      <thead><tr><th>Nível de isolamento</th><th>Dirty read</th><th>Non-repeatable read</th><th>Phantom read</th></tr></thead>
+      <tbody>
+        <tr><td>Read Uncommitted</td><td class="no">possível</td><td class="no">possível</td><td class="no">possível</td></tr>
+        <tr><td>Read Committed</td><td class="ok">evita</td><td class="no">possível</td><td class="no">possível</td></tr>
+        <tr><td>Repeatable Read</td><td class="ok">evita</td><td class="ok">evita</td><td class="no">possível</td></tr>
+        <tr><td>Serializable</td><td class="ok">evita</td><td class="ok">evita</td><td class="ok">evita</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-    <!-- ═══ FLASHCARDS ═══ -->
-    <section id="flash">
-      <div class="section-label">módulo 01 · prática</div>
-      <h2 class="section-title">Flashcards — toque para revelar</h2>
-      <div class="fc-grid" id="fc-grid"></div>
-      <div style="margin-top:10px">
-        <button class="btn" onclick="resetFC()">reiniciar todos</button>
-      </div>
-    </section>
+  <div class="row-item" style="margin-top:8px"><span class="row-key">BASE</span><span class="row-val"><strong>B</strong>asically Available (disponível mesmo com falhas parciais) · <strong>S</strong>oft state (o estado pode mudar sem input externo — consistência eventual) · <strong>E</strong>ventually consistent (em algum momento todos os nós convergem para o mesmo valor). Modelo adotado pela maioria dos sistemas NoSQL distribuídos.</span></div>
+  <div class="row-item"><span class="row-key">Teorema CAP</span><span class="row-val">Em um sistema distribuído, é impossível garantir simultaneamente: <strong>C</strong>onsistency (todo nó lê o dado mais recente), <strong>A</strong>vailability (toda requisição recebe resposta) e <strong>P</strong>artition tolerance (funciona mesmo com falha de comunicação entre nós). Na prática, partição é inevitável — escolhe-se entre CP (bancos como HBase, ZooKeeper) ou AP (Cassandra, DynamoDB).</span></div>
 
-    <!-- ═══ QUESTÕES ═══ -->
-    <section id="quest">
-      <div class="section-label">módulo 01 · simulado</div>
-      <h2 class="section-title">Questões — estilo Cebraspe</h2>
-      <div class="score-row">
-        <span id="score-txt">0 acertos / 0 respondidas</span>
-        <div class="prog"><div class="prog-f" id="prog-f"></div></div>
-        <button class="btn" onclick="resetQs()">reiniciar</button>
-      </div>
-      <div id="q-list"></div>
-    </section>
+  <div class="tip"><strong>Mnemônico CAP:</strong> "Na internet a rede sempre pode falhar (P é obrigatório). Então escolha: consistência ou disponibilidade?"</div>
+</div>
 
-    <!-- ═══ LINKS ═══ -->
-    <section id="links">
-      <div class="section-label">módulo 01 · recursos</div>
-      <h2 class="section-title">Links e plataformas de estudo</h2>
+<!-- CONCORRÊNCIA -->
+<div id="concorrencia" class="card">
+  <div class="card-title"><span class="badge b-a">média-alta incidência</span> Controle de concorrência — locks e MVCC</div>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-r">banco de dados</span> YouTube — termos de busca</div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Formas normais</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=normaliza%C3%A7%C3%A3o+banco+de+dados+formas+normais+concurso+p%C3%BAblico" target="_blank">↗ normalização banco de dados formas normais concurso público</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">SQL avançado — JOIN, GROUP BY, HAVING</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=SQL+JOIN+GROUP+BY+HAVING+exerc%C3%ADcios+Cebraspe" target="_blank">↗ SQL JOIN GROUP BY HAVING exercícios Cebraspe</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Álgebra relacional σ, π, ⋈</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=%C3%A1lgebra+relacional+sele%C3%A7%C3%A3o+proje%C3%A7%C3%A3o+concurso" target="_blank">↗ álgebra relacional seleção projeção junção concurso</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">NoSQL tipos e casos de uso</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=NoSQL+tipos+documento+chave+valor+colunar+grafo+concurso" target="_blank">↗ NoSQL tipos documento chave-valor colunar grafo concurso</a>
-        </div></div>
-      </div>
+  <div class="row-item"><span class="row-key">Lock pessimista</span><span class="row-val">Bloqueia o recurso antes de usá-lo. Simples de implementar, mas pode gerar deadlocks e gargalos em sistemas com muitas leituras.</span></div>
+  <div class="row-item"><span class="row-key">Lock otimista</span><span class="row-val">Não bloqueia; verifica na hora do commit se houve conflito. Melhor para workloads com poucas escritas concorrentes. Usa versioning (timestamp ou número de versão).</span></div>
+  <div class="row-item"><span class="row-key">MVCC</span><span class="row-val">Multiversion Concurrency Control — leitores não bloqueiam escritores e vice-versa. Cada transação vê um snapshot consistente do banco. Usado no PostgreSQL, Oracle, MySQL (InnoDB). Permite maior concorrência sem sacrificar consistência.</span></div>
+  <div class="row-item"><span class="row-key">Deadlock</span><span class="row-val">Dois processos se bloqueiam mutuamente esperando o outro liberar um recurso. SGBDs detectam e resolvem abortando uma das transações (vítima). Prevenção: sempre adquirir locks na mesma ordem.</span></div>
+</div>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-a">algoritmos</span> YouTube — termos de busca</div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Complexidade Big-O</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=complexidade+algoritmos+Big+O+nota%C3%A7%C3%A3o+concurso+TI" target="_blank">↗ complexidade algoritmos Big O notação concurso TI</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Algoritmos de ordenação comparados</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=BubbleSort+MergeSort+QuickSort+complexidade+concurso" target="_blank">↗ BubbleSort MergeSort QuickSort complexidade concurso</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Estruturas de dados — pilha, fila, lista, árvore</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=estruturas+de+dados+pilha+fila+lista+%C3%A1rvore+concurso" target="_blank">↗ estruturas de dados pilha fila lista árvore concurso</a>
-        </div></div>
-      </div>
+</section>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-p">lógica</span> YouTube — termos de busca</div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Lógica proposicional — tabela-verdade Cebraspe</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=l%C3%B3gica+proposicional+Cebraspe+certo+errado+tabela+verdade" target="_blank">↗ lógica proposicional Cebraspe certo errado tabela verdade</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Negação de quantificadores</div>
-          <a class="link-a" href="https://www.youtube.com/results?search_query=nega%C3%A7%C3%A3o+proposi%C3%A7%C3%B5es+quantificadores+todos+algum+concurso" target="_blank">↗ negação proposições quantificadores todos algum concurso</a>
-        </div></div>
-      </div>
+<!-- ═══════════════════════ ALGORITMOS ═══════════════════════ -->
+<section id="algo">
+<div class="sec-label">módulo 01 · parte 2</div>
+<h2 class="sec-title">Algoritmos e estruturas de dados</h2>
 
-      <div class="card">
-        <div class="card-title"><span class="badge b-g">questões</span> Plataformas de prática</div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">QConcursos</div>
-          <div class="link-sub">Filtrar: banca Cebraspe + Banco de Dados / Lógica</div>
-          <a class="link-a" href="https://www.qconcursos.com" target="_blank">↗ qconcursos.com</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Tecconcursos</div>
-          <div class="link-sub">Gratuito, forte em TI</div>
-          <a class="link-a" href="https://www.tecconcursos.com.br" target="_blank">↗ tecconcursos.com.br</a>
-        </div></div>
-        <div class="link-row"><div class="link-body">
-          <div class="link-title">Estratégia Concursos</div>
-          <div class="link-sub">Buscar SERPRO 2023 para provas anteriores da banca</div>
-          <a class="link-a" href="https://www.estrategiaconcursos.com.br" target="_blank">↗ estrategiaconcursos.com.br</a>
-        </div></div>
-      </div>
-    </section>
+<!-- BIG-O -->
+<div id="bigo" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Complexidade — notação Big-O e análise</div>
+  <div class="trap"><strong>Método Cebraspe:</strong> apresentar um fragmento de código com loops e pedir a complexidade de tempo. Conte as operações — não decore listas. Dois loops aninhados sobre n = O(n²). Loop que divide por 2 a cada iteração = O(log n).</div>
 
-  </div><!-- /content -->
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Notação</th><th>Nome</th><th>Exemplo clássico</th><th>n=1000</th></tr></thead>
+      <tbody>
+        <tr><td class="ok">O(1)</td><td>Constante</td><td>Acesso por índice em array, hash table (médio)</td><td class="ok">1 op</td></tr>
+        <tr><td class="ok">O(log n)</td><td>Logarítmica</td><td>Busca binária, BST balanceada, heap</td><td class="ok">~10 ops</td></tr>
+        <tr><td class="mid">O(n)</td><td>Linear</td><td>Percorrer lista, busca sequencial, BFS/DFS</td><td class="mid">1.000 ops</td></tr>
+        <tr><td class="mid">O(n log n)</td><td>Linearítmica</td><td>MergeSort, HeapSort, QuickSort médio</td><td class="mid">~10.000 ops</td></tr>
+        <tr><td class="no">O(n²)</td><td>Quadrática</td><td>BubbleSort, dois loops aninhados sobre n</td><td class="no">1.000.000 ops</td></tr>
+        <tr><td class="no">O(n³)</td><td>Cúbica</td><td>Multiplicação de matrizes ingênua, Floyd-Warshall</td><td class="no">10⁹ ops</td></tr>
+        <tr><td class="no">O(2ⁿ)</td><td>Exponencial</td><td>Subconjuntos, força bruta, Fibonacci recursivo</td><td class="no">10³⁰⁰ ops</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code"><span class="cm">// Análise passo a passo — padrão de questão Cebraspe</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):        <span class="cm"># executa n vezes</span>
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(n):    <span class="cm"># executa n vezes para cada i</span>
+        arr[i][j] = i*j  <span class="cm"># operação O(1) → total: n × n = O(n²)</span>
+
+<span class="kw">while</span> n > <span class="num">1</span>:             <span class="cm"># n é dividido por 2 a cada passo</span>
+    n = n // <span class="num">2</span>          <span class="cm"># → O(log n)</span></div>
+
+  <div class="note">Big-O representa o <strong>pior caso</strong> (limite superior assintótico). Big-Ω representa o melhor caso. Big-Θ representa o caso médio / limite exato. A Cebraspe usa Big-O salvo indicação contrária.</div>
+</div>
+
+<!-- ORDENAÇÃO -->
+<div id="sort" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Algoritmos de ordenação — análise completa</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Algoritmo</th><th>Melhor</th><th>Médio</th><th>Pior</th><th>Espaço</th><th>Estável</th></tr></thead>
+      <tbody>
+        <tr><td>BubbleSort</td><td class="ok">O(n)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">O(1)</td><td class="ok">sim</td></tr>
+        <tr><td>InsertionSort</td><td class="ok">O(n)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">O(1)</td><td class="ok">sim</td></tr>
+        <tr><td>SelectionSort</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">O(1)</td><td class="no">não</td></tr>
+        <tr><td><strong>MergeSort</strong></td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="no">O(n)</td><td class="ok">sim</td></tr>
+        <tr><td>QuickSort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="no">O(n²)*</td><td class="mid">O(log n)</td><td class="no">não</td></tr>
+        <tr><td>HeapSort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(1)</td><td class="no">não</td></tr>
+        <tr><td>CountingSort</td><td class="ok">O(n+k)</td><td class="ok">O(n+k)</td><td class="ok">O(n+k)</td><td class="mid">O(k)</td><td class="ok">sim</td></tr>
+        <tr><td>RadixSort</td><td class="ok">O(nk)</td><td class="ok">O(nk)</td><td class="ok">O(nk)</td><td class="mid">O(n+k)</td><td class="ok">sim</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example" style="margin-top:8px">
+    <div class="example-label">Pontos que a Cebraspe cobra nessa tabela</div>
+    • MergeSort: único com pior caso O(n log n) <em>e</em> estabilidade garantidos simultaneamente.<br>
+    • QuickSort: O(n²) quando pivot é sempre o extremo (array já ordenado + pivot no extremo). Com pivot aleatório ou mediana-de-3, o pior caso é praticamente eliminado na prática.<br>
+    • HeapSort: O(n log n) garantido e in-place (O(1) extra), mas não é estável.<br>
+    • CountingSort/RadixSort: quebram o limite teórico O(n log n) porque não são baseados em comparação — funcionam apenas com inteiros em intervalo conhecido.<br>
+    • InsertionSort: O(n) no melhor caso quando o array está quase ordenado — ótimo para arrays pequenos ou quase-ordenados.
+  </div>
+  <div class="trap"><strong>Pegadinha de estabilidade:</strong> algoritmo estável preserva a ordem relativa de elementos iguais. MergeSort e InsertionSort são estáveis. QuickSort e HeapSort padrão não são. Se a questão pedir "qual preserva a ordem de elementos iguais", a resposta é MergeSort.</div>
+</div>
+
+<!-- ESTRUTURAS DE DADOS -->
+<div id="structs" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Estruturas de dados — operações e complexidades</div>
+  <div class="trap"><strong>Inversão clássica:</strong> Pilha = LIFO (último a entrar, primeiro a sair). Fila = FIFO (primeiro a entrar, primeiro a sair). A Cebraspe simplesmente troca os dois e aguarda o erro.</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Estrutura</th><th>Acesso</th><th>Busca</th><th>Inserção</th><th>Remoção</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Array</strong></td><td class="ok">O(1)</td><td class="mid">O(n)</td><td class="no">O(n)</td><td class="no">O(n)</td><td>Memória contígua; inserção/remoção no meio desloca tudo</td></tr>
+        <tr><td><strong>Lista ligada</strong></td><td class="no">O(n)</td><td class="no">O(n)</td><td class="ok">O(1)*</td><td class="ok">O(1)*</td><td>*dado o nó; memória não-contígua</td></tr>
+        <tr><td><strong>Pilha (Stack)</strong></td><td class="no">O(n)</td><td class="no">O(n)</td><td class="ok">O(1)</td><td class="ok">O(1)</td><td>LIFO; topo é o único ponto de acesso eficiente</td></tr>
+        <tr><td><strong>Fila (Queue)</strong></td><td class="no">O(n)</td><td class="no">O(n)</td><td class="ok">O(1)</td><td class="ok">O(1)</td><td>FIFO; enqueue no final, dequeue no início</td></tr>
+        <tr><td><strong>Hash table</strong></td><td class="ok">O(1)*</td><td class="ok">O(1)*</td><td class="ok">O(1)*</td><td class="ok">O(1)*</td><td>*médio; pior caso O(n) por colisões</td></tr>
+        <tr><td><strong>BST</strong></td><td class="mid">O(log n)*</td><td class="mid">O(log n)*</td><td class="mid">O(log n)*</td><td class="mid">O(log n)*</td><td>*se balanceada; degenerada → O(n)</td></tr>
+        <tr><td><strong>AVL / Red-Black</strong></td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td>Rebalanceamento automático garante O(log n)</td></tr>
+        <tr><td><strong>Heap min/max</strong></td><td class="ok">O(1)*</td><td class="no">O(n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td>*acesso ao mínimo/máximo; fila de prioridade</td></tr>
+        <tr><td><strong>Trie</strong></td><td class="mid">O(k)</td><td class="mid">O(k)</td><td class="mid">O(k)</td><td class="mid">O(k)</td><td>k = tamanho da chave; ideal para prefixos/strings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example" style="margin-top:8px">
+    <div class="example-label">Casos de uso — Cebraspe dá o problema e pede a estrutura</div>
+    • Desfazer ações (Ctrl+Z) → <strong>Pilha</strong> (LIFO)<br>
+    • Impressão de documentos em ordem de chegada → <strong>Fila</strong> (FIFO)<br>
+    • Dicionário / mapa de dados → <strong>Hash table</strong><br>
+    • Fila de prioridade (sistema de escalonamento) → <strong>Heap</strong><br>
+    • Autocomplete / busca por prefixo → <strong>Trie</strong><br>
+    • Conjunto ordenado com buscas frequentes → <strong>BST balanceada (AVL/Red-Black)</strong>
+  </div>
+</div>
+
+<!-- GRAFOS -->
+<div id="grafos" class="card">
+  <div class="card-title"><span class="badge b-a">alta incidência</span> Grafos — algoritmos de busca e caminhos mínimos</div>
+  <div class="note"><strong>Por que está aqui:</strong> grafos aparecem nos conhecimentos específicos de TI e no P3 de desenvolvimento. A Cebraspe cobra BFS, DFS, Dijkstra e detecção de ciclos.</div>
+
+  <div class="row-item"><span class="row-key">BFS</span><span class="row-val">Busca em largura — usa fila (FIFO). Visita todos os vizinhos antes de ir mais fundo. Garante caminho mínimo em grafos <em>não ponderados</em>. Complexidade: O(V+E) onde V=vértices, E=arestas.</span></div>
+  <div class="row-item"><span class="row-key">DFS</span><span class="row-val">Busca em profundidade — usa pilha (explícita ou recursão). Vai até o fim de um caminho antes de retroceder. Usado para detecção de ciclos, ordenação topológica, componentes conexos. O(V+E).</span></div>
+  <div class="row-item"><span class="row-key">Dijkstra</span><span class="row-val">Caminho mínimo em grafos <em>ponderados sem pesos negativos</em>. Usa fila de prioridade (min-heap). Complexidade: O((V+E) log V). Não funciona com pesos negativos.</span></div>
+  <div class="row-item"><span class="row-key">Bellman-Ford</span><span class="row-val">Caminho mínimo com pesos negativos. O(V·E). Detecta ciclos negativos. Mais lento que Dijkstra, mas mais geral.</span></div>
+  <div class="row-item"><span class="row-key">Representação</span><span class="row-val">Matriz de adjacência: O(V²) espaço, acesso O(1). Lista de adjacência: O(V+E) espaço, percurso mais eficiente. Para grafos esparsos, lista é melhor; para densos, matriz.</span></div>
+
+  <div class="trap"><strong>Pegadinha:</strong> BFS garante o caminho mínimo apenas em grafos sem peso (ou com peso uniforme). Para grafos ponderados, use Dijkstra. A Cebraspe troca os dois frequentemente.</div>
+</div>
+
+<!-- OOP -->
+<div id="oop" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> OOP — pilares, princípios SOLID e padrões</div>
+  <div class="trap"><strong>Override vs Overload:</strong> Override (sobrescrita) = runtime, mesma assinatura, subclasse redefine superclasse. Overload (sobrecarga) = compile time, mesmo nome, assinaturas diferentes (tipo/número de parâmetros). A Cebraspe inverte as definições.</div>
+
+  <div class="row-item"><span class="row-key">Encapsulamento</span><span class="row-val">Ocultar estado interno e expor apenas a interface pública. Atributos privados com getters/setters. Objetivo: reduzir acoplamento e proteger a integridade dos dados.</span></div>
+  <div class="row-item"><span class="row-key">Herança</span><span class="row-val">Subclasse reutiliza e estende a superclasse. Relação "é um" (is-a). Java não tem herança múltipla de classes — usa interfaces. Herança profunda demais aumenta acoplamento (preferir composição).</span></div>
+  <div class="row-item"><span class="row-key">Polimorfismo</span><span class="row-val">Mesmo nome, comportamentos diferentes. <strong>Sobrescrita</strong> (override) = runtime, subclasse redefine o método da superclasse com a mesma assinatura. <strong>Sobrecarga</strong> (overload) = compile time, mesmo nome mas assinaturas diferentes no mesmo escopo.</span></div>
+  <div class="row-item"><span class="row-key">Abstração</span><span class="row-val">Modelar apenas o essencial. Classes abstratas (podem ter implementação parcial, não podem ser instanciadas) vs interfaces (só contratos, sem estado, desde Java 8 podem ter default methods).</span></div>
+
+  <div class="example" style="margin-top:6px">
+    <div class="example-label">SOLID — o que a Cebraspe cobra do P2 de Arquitetura (antecipação para semanas 3–4)</div>
+    <strong>S</strong> — Single Responsibility: uma classe deve ter uma única razão para mudar.<br>
+    <strong>O</strong> — Open/Closed: aberta para extensão, fechada para modificação. Use herança/composição em vez de alterar a classe original.<br>
+    <strong>L</strong> — Liskov Substitution: uma subclasse deve poder substituir a superclasse sem quebrar o programa.<br>
+    <strong>I</strong> — Interface Segregation: prefira interfaces pequenas e específicas a interfaces grandes e genéricas.<br>
+    <strong>D</strong> — Dependency Inversion: dependa de abstrações, não de implementações concretas.
+  </div>
+</div>
+
+</section>
+
+<!-- ═══════════════════════ LÓGICA ═══════════════════════ -->
+<section id="logica">
+<div class="sec-label">módulo 01 · parte 3 · P1</div>
+<h2 class="sec-title">Raciocínio lógico — P1 (10 itens, mínimo 5 pts)</h2>
+
+<!-- TABELA-VERDADE -->
+<div id="tv" class="card">
+  <div class="card-title"><span class="badge b-r">mais cobrado</span> Tabela-verdade completa dos conectivos</div>
+  <div class="trap"><strong>Armadilha número 1 da prova:</strong> o condicional (p→q) é verdadeiro em 3 dos 4 casos. Ele só é FALSO quando a premissa é verdadeira e a conclusão é falsa (p=V, q=F). A Cebraspe explora os casos F→V e F→F, onde candidatos erroneamente marcam FALSO.</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>p</th><th>q</th><th>¬p</th><th>p∧q</th><th>p∨q</th><th>p→q</th><th>p↔q</th><th>p⊕q (XOR)</th></tr></thead>
+      <tbody>
+        <tr><td>V</td><td>V</td><td>F</td><td class="ok">V</td><td class="ok">V</td><td class="ok">V</td><td class="ok">V</td><td class="no">F</td></tr>
+        <tr><td>V</td><td>F</td><td>F</td><td class="no">F</td><td class="ok">V</td><td class="no" style="font-weight:600;white-space:nowrap">F ← único falso</td><td class="no">F</td><td class="ok">V</td></tr>
+        <tr><td>F</td><td>V</td><td>V</td><td class="no">F</td><td class="ok">V</td><td class="ok" style="white-space:nowrap">V ← confunde!</td><td class="no">F</td><td class="ok">V</td></tr>
+        <tr><td>F</td><td>F</td><td>V</td><td class="no">F</td><td class="no">F</td><td class="ok" style="white-space:nowrap">V ← confunde!</td><td class="ok">V</td><td class="no">F</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="example" style="margin-top:8px">
+    <div class="example-label">Leitura de enunciados em português — o que cada palavra significa</div>
+    <strong>"e", "mas", "porém", "entretanto", "todavia", "contudo"</strong> → conjunção (∧)<br>
+    <strong>"ou"</strong> → disjunção (∨) — em lógica clássica é inclusivo (pelo menos um)<br>
+    <strong>"se ... então", "caso", "quando", "sempre que"</strong> → condicional (→)<br>
+    <strong>"se e somente se", "quando e apenas quando", "equivale a"</strong> → bicondicional (↔)<br>
+    <strong>"não", "é falso que", "é errado afirmar que"</strong> → negação (¬)
+  </div>
+</div>
+
+<!-- EQUIVALÊNCIAS -->
+<div id="equiv" class="card">
+  <div class="card-title"><span class="badge b-r">mais cobrado</span> Equivalências lógicas — o que cai mais</div>
+
+  <div class="row-item"><span class="row-key">p→q</span><span class="row-val">Equivale a <strong>¬p∨q</strong>. Forma usada para negar condicionais e construir tabelas-verdade.</span></div>
+  <div class="row-item"><span class="row-key">Contrapositiva</span><span class="row-val">¬q→¬p é <strong>logicamente equivalente</strong> a p→q. Inverte E nega os dois lados. Muito usado em demonstrações e questões de raciocínio lógico-matemático.</span></div>
+  <div class="row-item"><span class="row-key">Recíproca</span><span class="row-val">q→p — <strong>NÃO equivalente</strong> a p→q. Apenas inverte sem negar. Erro clássico: tratar recíproca como equivalente.</span></div>
+  <div class="row-item"><span class="row-key">Inversa</span><span class="row-val">¬p→¬q — <strong>NÃO equivalente</strong> a p→q. Apenas nega sem inverter. (É equivalente à recíproca, não ao original.)</span></div>
+  <div class="row-item"><span class="row-key">Negação de p→q</span><span class="row-val">¬(p→q) = p∧¬q. "A promessa foi feita E não foi cumprida." Esse é exatamente o único caso em que o condicional é falso.</span></div>
+  <div class="row-item"><span class="row-key">De Morgan</span><span class="row-val">¬(p∧q) = ¬p∨¬q &nbsp;|&nbsp; ¬(p∨q) = ¬p∧¬q. Regra usada para negar conjunções e disjunções. Muito cobrado.</span></div>
+  <div class="row-item"><span class="row-key">Dupla negação</span><span class="row-val">¬(¬p) = p. Negação da negação retorna ao original.</span></div>
+
+  <div class="tip"><strong>Mnemônico das formas do condicional:</strong><br>
+    Original: p→q &nbsp;|&nbsp; Contrapositiva: ¬q→¬p (equivalente)<br>
+    Recíproca: q→p (não equiv.) &nbsp;|&nbsp; Inversa: ¬p→¬q (não equiv., mas equiv. à recíproca)</div>
+</div>
+
+<!-- QUANTIFICADORES -->
+<div id="quant" class="card">
+  <div class="card-title"><span class="badge b-r">mais cobrado</span> Negação de quantificadores — erro mais comum da P1</div>
+  <div class="trap"><strong>Erro frequentíssimo:</strong> negar "Todos os aprovados estudaram" como "Nenhum aprovado estudou". O correto é "Existe pelo menos um aprovado que não estudou." A Cebraspe usa essa armadilha em mais de 60% das questões de quantificadores.</div>
+
+  <div class="row-item"><span class="row-key">¬(∀x P(x))</span><span class="row-val">"Nem todos P" = "Existe pelo menos um x tal que ¬P(x)". Negação de "Todos" é "Algum não".</span></div>
+  <div class="row-item"><span class="row-key">¬(∃x P(x))</span><span class="row-val">"Não existe nenhum P" = "Para todo x, ¬P(x)". Negação de "Existe" é "Nenhum".</span></div>
+  <div class="row-item"><span class="row-key">¬(∀x ∃y P)</span><span class="row-val">= ∃x ∀y ¬P. Ao negar, troca-se ∀ por ∃ e vice-versa, e nega-se o predicado.</span></div>
+
+  <div class="example">
+    <div class="example-label">Exemplos com as construções favoritas da Cebraspe</div>
+    "Todos os servidores foram aprovados" → neg: <strong>"Existe pelo menos um servidor que não foi aprovado"</strong><br>
+    "Nenhum candidato colou" → neg: <strong>"Existe pelo menos um candidato que colou"</strong><br>
+    "Algum candidato foi reprovado" → neg: <strong>"Nenhum candidato foi reprovado"</strong><br>
+    "Há um sistema que nunca falha" → neg: <strong>"Todo sistema falha em algum momento"</strong>
+  </div>
+</div>
+
+<!-- ARGUMENTOS -->
+<div id="args" class="card">
+  <div class="card-title"><span class="badge b-a">alta incidência</span> Formas válidas de argumento e falácias</div>
+
+  <div class="row-item"><span class="row-key">Modus Ponens</span><span class="row-val">[p→q, p] ⊢ q — <span style="color:var(--success)">VÁLIDO</span>. "Se p então q. p ocorreu. Logo q." — afirma a antecedente, conclui o consequente.</span></div>
+  <div class="row-item"><span class="row-key">Modus Tollens</span><span class="row-val">[p→q, ¬q] ⊢ ¬p — <span style="color:var(--success)">VÁLIDO</span>. "Se p então q. q não ocorreu. Logo p não ocorreu." — nega o consequente, conclui negação da antecedente.</span></div>
+  <div class="row-item"><span class="row-key">Sil. hipotético</span><span class="row-val">[p→q, q→r] ⊢ p→r — <span style="color:var(--success)">VÁLIDO</span>. Encadeamento de condicionais (transitividade do implica).</span></div>
+  <div class="row-item"><span class="row-key">Sil. disjuntivo</span><span class="row-val">[p∨q, ¬p] ⊢ q — <span style="color:var(--success)">VÁLIDO</span>. "p ou q. p não ocorreu. Logo q." Eliminação da disjunção.</span></div>
+  <div class="row-item"><span class="row-key">Falácia 1</span><span class="row-val">[p→q, q] ⊢ p — <span style="color:var(--danger)">INVÁLIDO</span> (afirmação do consequente). Porque q ocorreu não significa que foi p a causa. Exemplo: "Se chover, o chão molha. O chão está molhado. Logo choveu." — pode ter sido o regador.</span></div>
+  <div class="row-item"><span class="row-key">Falácia 2</span><span class="row-val">[p→q, ¬p] ⊢ ¬q — <span style="color:var(--danger)">INVÁLIDO</span> (negação da antecedente). Porque p não ocorreu não significa que q não pode ocorrer por outra causa.</span></div>
+
+  <div class="example">
+    <div class="example-label">Questão clássica Cebraspe — identificar se o argumento é válido</div>
+    "Se o sistema é seguro, os dados estão protegidos. Os dados não estão protegidos. Logo, o sistema não é seguro."<br>
+    → Forma: [p→q, ¬q] ⊢ ¬p → <strong>Modus Tollens → VÁLIDO ✓</strong>
+  </div>
+</div>
+
+</section>
+
+<!-- ═══════════════════════ FLASHCARDS ═══════════════════════ -->
+<section id="flash">
+<div class="sec-label">módulo 01 · prática</div>
+<h2 class="sec-title">Flashcards — toque para revelar</h2>
+
+<div class="fc-filters" id="fc-filters"></div>
+<div class="fc-grid" id="fc-grid"></div>
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn" onclick="resetFC()">reiniciar todos</button>
+</div>
+</section>
+
+<!-- ═══════════════════════ QUESTÕES ═══════════════════════ -->
+<section id="quest">
+<div class="sec-label">módulo 01 · simulado</div>
+<h2 class="sec-title">Questões — estilo Cebraspe (C/E + múltipla escolha)</h2>
+<div class="score-row">
+  <span id="score-txt">0 acertos / 0 respondidas</span>
+  <div class="prog"><div class="prog-f" id="prog-f"></div></div>
+  <button class="btn" onclick="resetQs()">reiniciar</button>
+</div>
+<div id="q-list"></div>
+</section>
+
+<!-- ═══════════════════════ LINKS ═══════════════════════ -->
+<section id="links">
+<div class="sec-label">módulo 01 · recursos</div>
+<h2 class="sec-title">Links e vídeos recomendados — PT-BR</h2>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-r">banco de dados</span> YouTube — canais e vídeos indicados</div>
+
+  <div class="link-item">
+    <div class="link-title">Normalização completa — 1FN, 2FN, 3FN, FNBC</div>
+    <div class="link-sub">Canal Bóson Treinamentos — didático, exemplos com tabelas reais, 4 partes</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=boson+treinamentos+normalizacao+banco+de+dados" target="_blank">boson treinamentos normalização banco de dados</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">SQL — JOINs, GROUP BY, HAVING e subconsultas</div>
+    <div class="link-sub">Canal Curso em Vídeo (Gustavo Guanabara) — aulas completas de MySQL/SQL</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=curso+em+video+MySQL+JOIN+GROUP+BY+HAVING" target="_blank">curso em video MySQL JOIN GROUP BY HAVING</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Álgebra relacional — σ, π, ⋈, ÷</div>
+    <div class="link-sub">Canal Univesp — videoaulas universitárias gratuitas e bem estruturadas</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=univesp+algebra+relacional+banco+de+dados" target="_blank">univesp álgebra relacional banco de dados</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">NoSQL — tipos, diferenças, MongoDB, Redis, Cassandra</div>
+    <div class="link-sub">Canal Filipe Deschamps — explicações modernas e visuais</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=filipe+deschamps+NoSQL+tipos+banco+de+dados" target="_blank">filipe deschamps NoSQL tipos banco de dados</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">ACID, transações e controle de concorrência</div>
+    <div class="link-sub">Busca direta — vídeos de banco de dados para concursos</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=ACID+transa%C3%A7%C3%B5es+banco+de+dados+concurso+p%C3%BAblico" target="_blank">ACID transações banco de dados concurso público</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Índices B-Tree, Hash, Bitmap — quando usar cada um</div>
+    <div class="link-sub">Busca direta — otimização de consultas SQL</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=%C3%ADndices+banco+de+dados+B-Tree+Hash+otimiza%C3%A7%C3%A3o+SQL" target="_blank">índices banco de dados B-Tree Hash otimização SQL</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Teorema CAP e sistemas distribuídos</div>
+    <div class="link-sub">Busca direta — teorema CAP explicado em português</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=teorema+CAP+sistemas+distribu%C3%ADdos+banco+de+dados" target="_blank">teorema CAP sistemas distribuídos banco de dados</a>
+  </div>
+</div>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-a">algoritmos</span> YouTube — canais e vídeos indicados</div>
+
+  <div class="link-item">
+    <div class="link-title">Big-O — análise de complexidade do zero</div>
+    <div class="link-sub">Canal Código Fonte TV — explicações práticas com código</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=codigo+fonte+tv+complexidade+algoritmos+big+O" target="_blank">codigo fonte tv complexidade algoritmos big O</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Algoritmos de ordenação — visualização e análise</div>
+    <div class="link-sub">Canal Prof. Douglas Maioli — didático para concursos</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=algoritmos+ordena%C3%A7%C3%A3o+BubbleSort+MergeSort+QuickSort+complexidade+concurso" target="_blank">algoritmos ordenação BubbleSort MergeSort QuickSort complexidade concurso</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Estruturas de dados — pilha, fila, lista, árvore, heap</div>
+    <div class="link-sub">Canal Bóson Treinamentos — série completa de estruturas de dados</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=boson+treinamentos+estruturas+de+dados+pilha+fila+arvore" target="_blank">boson treinamentos estruturas de dados pilha fila arvore</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Grafos — BFS, DFS, Dijkstra</div>
+    <div class="link-sub">Canal Univesp — aulas de teoria dos grafos</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=univesp+grafos+BFS+DFS+Dijkstra+algoritmos" target="_blank">univesp grafos BFS DFS Dijkstra algoritmos</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">OOP — herança, polimorfismo, encapsulamento, abstração</div>
+    <div class="link-sub">Canal Curso em Vídeo — série completa de POO</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=curso+em+video+POO+orienta%C3%A7%C3%A3o+objetos+heran%C3%A7a+polimorfismo" target="_blank">curso em video POO orientação objetos herança polimorfismo</a>
+  </div>
+</div>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-p">lógica</span> YouTube — canais e vídeos indicados</div>
+
+  <div class="link-item">
+    <div class="link-title">Lógica proposicional — tabela-verdade, conectivos, Cebraspe</div>
+    <div class="link-sub">Canal Gran Cursos Online — foco em provas de TI e Cebraspe</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=gran+cursos+logica+proposicional+tabela+verdade+Cebraspe" target="_blank">gran cursos lógica proposicional tabela verdade Cebraspe</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Condicional e bicondicional — os casos que confundem</div>
+    <div class="link-sub">Canal Estratégia Concursos — aulas específicas para Cebraspe</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=estrategia+concursos+condicional+bicondicional+logica+cebraspe" target="_blank">estratégia concursos condicional bicondicional lógica cebraspe</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Negação de proposições, quantificadores e De Morgan</div>
+    <div class="link-sub">Busca direta — nega todos, algum, nenhum</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=nega%C3%A7%C3%A3o+proposicoes+quantificadores+todos+algum+cebraspe+concurso" target="_blank">negação proposições quantificadores todos algum cebraspe concurso</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Modus Ponens, Tollens e falácias lógicas</div>
+    <div class="link-sub">Busca direta — raciocínio dedutivo concurso público</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=modus+ponens+tollens+fal%C3%A1cias+racioc%C3%ADnio+l%C3%B3gico+concurso" target="_blank">modus ponens tollens falácias raciocínio lógico concurso</a>
+  </div>
+</div>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-g">plataformas de questões</span> Onde praticar</div>
+
+  <div class="link-item">
+    <div class="link-title">QConcursos</div>
+    <div class="link-sub">Filtrar: banca Cebraspe + disciplinas BD, Algoritmos, Lógica. Melhor plataforma para Cebraspe.</div>
+    <a class="link-a" href="https://www.qconcursos.com" target="_blank">qconcursos.com</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Tecconcursos</div>
+    <div class="link-sub">Gratuito, excelente acervo de TI. Filtrar por assunto específico.</div>
+    <a class="link-a" href="https://www.tecconcursos.com.br" target="_blank">tecconcursos.com.br</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Estratégia Concursos</div>
+    <div class="link-sub">Simulados do SERPRO 2023 e questões comentadas em vídeo.</div>
+    <a class="link-a" href="https://www.estrategiaconcursos.com.br" target="_blank">estrategiaconcursos.com.br</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">LeetCode — prática de algoritmos (P3)</div>
+    <div class="link-sub">Para treinar a prova prática de código offline. Foco em "Easy" e "Medium" de arrays, strings e grafos.</div>
+    <a class="link-a" href="https://leetcode.com/problemset/" target="_blank">leetcode.com/problemset</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">SQL Fiddle / DB Fiddle — praticar SQL online</div>
+    <div class="link-sub">Execute os exemplos deste módulo diretamente no browser, sem instalar nada.</div>
+    <a class="link-a" href="https://www.db-fiddle.com" target="_blank">db-fiddle.com</a>
+  </div>
+</div>
+
+</section>
+
+</div><!-- /content -->
 </div><!-- /layout -->
 
 <script>
-const FC=[
-  {q:"O que faz σ (sigma) na álgebra relacional?",a:"Seleção — filtra LINHAS conforme uma condição. Equivale ao WHERE do SQL."},
-  {q:"O que faz π (pi) na álgebra relacional?",a:"Projeção — seleciona COLUNAS. Equivale ao SELECT col1,col2. Remove duplicatas automaticamente."},
-  {q:"Quando p→q é FALSO?",a:"Somente quando p é VERDADEIRO e q é FALSO. Nos outros 3 casos (VV, FV, FF) é sempre verdadeiro."},
-  {q:"MergeSort vs QuickSort no pior caso",a:"MergeSort = O(n log n) sempre, estável, usa memória extra. QuickSort = O(n²) quando pivot é extremo (array já ordenado)."},
-  {q:"O que é dependência transitiva — viola qual forma normal?",a:"A→B e B→C, A sendo chave e B não-chave. C depende transitivamente de A por B. Viola a 3FN. Corrigir: separar em tabela."},
-  {q:"Pilha vs Fila: qual é LIFO e qual é FIFO?",a:"Pilha = LIFO (último a entrar, primeiro a sair — pilha de pratos). Fila = FIFO (primeiro a entrar, primeiro a sair — fila de banco)."},
-  {q:"O que é a contrapositiva de p→q?",a:"~q→~p — inverte E nega os dois lados. É logicamente EQUIVALENTE a p→q. Não confundir com recíproca (q→p), que não é equivalente."},
-  {q:"Qual tipo NoSQL usar para redes sociais ou detecção de fraude?",a:"Grafo (ex: Neo4j). Relacionamentos são a entidade principal — nós e arestas são nativos, consultas de relacionamento são O(1) por salto."},
-  {q:"Diferença entre 2FN e 3FN",a:"2FN: elimina dependências parciais (atributo depende de parte da chave composta). 3FN: elimina dependências transitivas (não-chave depende de outro não-chave)."},
-  {q:"Modus Ponens vs Modus Tollens",a:"Ponens: [p→q, p] ⊢ q — afirma antecedente. Tollens: [p→q, ~q] ⊢ ~p — nega consequente. Ambos VÁLIDOS."},
-  {q:"Negação correta de 'Todos os servidores passaram'",a:"'Existe pelo menos um servidor que não passou.' Negação de 'Todos P' = 'Existe P que não'. NÃO é 'Nenhum passou'."},
-  {q:"Override vs Overload — qual ocorre em runtime?",a:"Override (sobrescrita) = runtime, mesma assinatura, subclasse redefine superclasse. Overload (sobrecarga) = compile time, mesmo nome, assinaturas diferentes."},
+/* ═══════════ FLASHCARDS ═══════════ */
+const CARDS = [
+  /* BD */
+  {t:"BD",q:"O que é dependência parcial e qual forma normal ela viola?",a:"Um atributo não-chave depende apenas de PARTE da chave primária composta (não da chave inteira). Viola a 2FN. Só é possível com chave composta — com chave simples não existe dependência parcial."},
+  {t:"BD",q:"O que é dependência transitiva e qual forma normal ela viola?",a:"A→B e B→C, onde A é chave e B é não-chave. C depende transitivamente de A através de B. Viola a 3FN. Correção: separar B e C em outra tabela."},
+  {t:"BD",q:"Diferença entre 3FN e FNBC",a:"3FN permite que atributos não-chave dependam de uma chave candidata que não é a chave primária. FNBC é mais restrita: todo determinante deve ser superchave, sem exceção. Uma relação pode estar na 3FN e não na FNBC."},
+  {t:"BD",q:"O que faz σ (sigma) na álgebra relacional?",a:"Seleção — filtra LINHAS conforme uma condição. Equivale ao WHERE do SQL. Ex: σ(salario>5000)(Func) retorna só os funcionários com salário acima de 5000."},
+  {t:"BD",q:"O que faz π (pi) na álgebra relacional?",a:"Projeção — seleciona COLUNAS. Equivale ao SELECT col1,col2 COM DISTINCT. Remove duplicatas automaticamente — diferente do SELECT sem DISTINCT do SQL."},
+  {t:"BD",q:"Para que serve o operador de divisão (÷) na álgebra relacional?",a:"Retorna as tuplas de R que se relacionam com TODAS as tuplas de S. Clássico para 'quais alunos cursaram TODAS as disciplinas'. Não tem equivalente direto em SQL — implementa-se com dupla negação ou HAVING COUNT = total."},
+  {t:"BD",q:"WHERE vs HAVING — diferença e quando usar cada um",a:"WHERE filtra linhas individuais ANTES do GROUP BY (não pode usar funções de agregação como COUNT, SUM). HAVING filtra grupos DEPOIS do GROUP BY (pode usar funções de agregação). Usar HAVING sem GROUP BY é equivalente a WHERE para funções de agregação sobre toda a tabela."},
+  {t:"BD",q:"Qual a diferença entre EXISTS e IN em SQL?",a:"EXISTS retorna true/false para cada linha da consulta externa e para quando encontra o primeiro match (mais eficiente com subconjuntos grandes). IN carrega todo o resultado da subconsulta para comparação. Para subconsultas pequenas, IN é mais legível; para grandes, EXISTS é mais performático."},
+  {t:"BD",q:"Quais são os níveis de isolamento de transações em ordem crescente?",a:"Read Uncommitted < Read Committed < Repeatable Read < Serializable. Cada nível evita um fenômeno a mais: RC evita dirty read; RR evita também non-repeatable read; Serializable evita também phantom read."},
+  {t:"BD",q:"O que é MVCC e por que é importante?",a:"Multiversion Concurrency Control — leitores não bloqueiam escritores e vice-versa. Cada transação vê um snapshot consistente do banco no momento de início. Usado no PostgreSQL e Oracle. Permite alta concorrência sem sacrificar consistência."},
+  {t:"BD",q:"Quando usar índice Bitmap vs B-Tree?",a:"Bitmap: colunas de baixa cardinalidade (poucos valores distintos — ex: status, sexo), workloads de leitura/analytics (DW). B-Tree: buscas por igualdade e intervalo, alta cardinalidade, OLTP com escritas frequentes. Bitmap é ruim para escritas concorrentes (lock no bitmap inteiro)."},
+  {t:"BD",q:"O que é o Teorema CAP e quais são as combinações possíveis?",a:"Em sistemas distribuídos: Consistency, Availability e Partition tolerance. Não é possível garantir os três simultaneamente. Como partição é inevitável na prática, escolhe-se CP (HBase, ZooKeeper — consistente mas pode ficar indisponível) ou AP (Cassandra, DynamoDB — disponível mas com consistência eventual)."},
+
+  /* ALGORITMOS */
+  {t:"Algo",q:"Qual é o único algoritmo de ordenação por comparação com pior caso O(n log n) E estabilidade garantidos simultaneamente?",a:"MergeSort. HeapSort também tem O(n log n) garantido mas não é estável. QuickSort não garante O(n log n) no pior caso. MergeSort usa O(n) de memória extra (desvantagem)."},
+  {t:"Algo",q:"Por que o QuickSort tem pior caso O(n²)?",a:"Quando o pivot escolhido é sempre o elemento máximo ou mínimo do subarray (ex: primeiro/último elemento em array já ordenado). Cada partição gera subarrays de tamanho n-1 e 0, resultando em n + (n-1) + ... + 1 = O(n²) comparações."},
+  {t:"Algo",q:"Pilha vs Fila: qual é LIFO e qual é FIFO?",a:"Pilha (Stack) = LIFO (Last In, First Out — último a entrar, primeiro a sair). Fila (Queue) = FIFO (First In, First Out — primeiro a entrar, primeiro a sair). Pilha: push/pop. Fila: enqueue/dequeue."},
+  {t:"Algo",q:"Complexidade de busca em BST balanceada vs degenerada",a:"BST balanceada (AVL, Red-Black): O(log n) para busca, inserção e remoção. BST degenerada (inserções em ordem crescente/decrescente): comporta-se como lista ligada, O(n) para busca. AVL e Red-Black garantem balanceamento automático."},
+  {t:"Algo",q:"Diferença entre BFS e DFS — quando usar cada um",a:"BFS (fila/FIFO): garante caminho mínimo em grafos sem peso. Usado para menor número de passos. DFS (pilha/recursão): vai até o fundo antes de retroceder. Usado para detectar ciclos, ordenação topológica, componentes conexos."},
+  {t:"Algo",q:"Por que Dijkstra não funciona com pesos negativos?",a:"Dijkstra assume que uma vez que um nó é visitado com o menor custo, esse custo não pode diminuir. Com pesos negativos, um caminho mais longo pode ter custo total menor — o que viola essa suposição. Use Bellman-Ford (O(V·E)) para grafos com pesos negativos."},
+  {t:"Algo",q:"Quando CountingSort/RadixSort é melhor que MergeSort?",a:"Quando os dados são inteiros em um intervalo pequeno e conhecido (k << n²). CountingSort e RadixSort são lineares O(n+k) ou O(nk) — quebram o limite teórico O(n log n) porque não são baseados em comparações. Para dados genéricos ou com k grande, MergeSort é superior."},
+  {t:"Algo",q:"O que é um algoritmo estável de ordenação?",a:"Um algoritmo que preserva a ordem relativa de elementos com chaves iguais. Estáveis: BubbleSort, InsertionSort, MergeSort, CountingSort, RadixSort. Não estáveis: SelectionSort, HeapSort, QuickSort (padrão). Importante quando se ordena por múltiplos critérios em sequência."},
+  {t:"Algo",q:"Override vs Overload — diferença fundamental",a:"Override (sobrescrita): RUNTIME. Subclasse redefine método da superclasse com a MESMA assinatura. Polimorfismo dinâmico. Overload (sobrecarga): COMPILE TIME. Mesmo nome, assinaturas DIFERENTES (tipo/número de parâmetros) na mesma classe."},
+  {t:"Algo",q:"Quando usar Heap (fila de prioridade)?",a:"Quando se precisa acessar o mínimo ou máximo repetidamente com inserções intercaladas. Exemplos: algoritmo de Dijkstra (min-heap), simulação de eventos, sistema de escalonamento de processos, algoritmo de Huffman. Extração do mínimo/máximo: O(log n). Acesso ao mínimo/máximo: O(1)."},
+
+  /* LÓGICA */
+  {t:"Lógica",q:"Quando o condicional p→q é FALSO?",a:"Somente quando p é VERDADEIRO e q é FALSO. Nos outros 3 casos — V→V, F→V e F→F — o condicional é sempre VERDADEIRO. Memorize: 'uma promessa só é quebrada quando foi feita (p=V) e não foi cumprida (q=F).'"},
+  {t:"Lógica",q:"Qual é a negação correta de 'Todos os servidores foram aprovados'?",a:"'Existe pelo menos um servidor que NÃO foi aprovado.' A negação de ∀x P(x) é ∃x ¬P(x). NÃO é 'Nenhum servidor foi aprovado' (que seria a negação de 'Algum servidor foi aprovado')."},
+  {t:"Lógica",q:"Contrapositiva vs Recíproca — qual é equivalente ao original?",a:"Contrapositiva (¬q→¬p) É equivalente a p→q — inverte E nega os dois lados. Recíproca (q→p) NÃO é equivalente — só inverte. Inversa (¬p→¬q) NÃO é equivalente — só nega. A recíproca e a inversa são equivalentes entre si."},
+  {t:"Lógica",q:"O que significa 'mas', 'porém', 'todavia' em lógica formal?",a:"Todos equivalem à conjunção (∧ = 'e'). 'O sistema é rápido, mas é inseguro' = 'O sistema é rápido E é inseguro'. Outras palavras-chave: 'entretanto', 'contudo', 'no entanto', 'apesar disso' → conjunção."},
+  {t:"Lógica",q:"O que é uma tautologia? Dê um exemplo.",a:"Uma proposição composta que é VERDADEIRA para todas as combinações possíveis de valores de suas proposições simples. Exemplo: p∨¬p (princípio do terceiro excluído) é sempre verdadeiro. Contradição = sempre falso (p∧¬p). Contingência = pode ser V ou F."},
+  {t:"Lógica",q:"Modus Tollens — descreva e dê um exemplo concreto",a:"[p→q, ¬q] ⊢ ¬p. 'Se o servidor tiver carga alta, o desempenho cai. O desempenho não caiu. Logo, o servidor não tem carga alta.' Nega o consequente → conclui negação da antecedente. VÁLIDO."},
+  {t:"Lógica",q:"Identifique a falácia: 'Se chover, a rua molha. A rua está molhada. Logo, choveu.'",a:"Falácia da afirmação do consequente: [p→q, q] ⊢ p — INVÁLIDO. A rua pode ter molhado por outra causa (lavagem, vazamento). O consequente sendo verdadeiro não implica que a antecedente é a única causa."},
+  {t:"Lógica",q:"Lei de De Morgan — como aplicar na prática",a:"¬(p∧q) = ¬p∨¬q (negação de 'E' vira 'OU') e ¬(p∨q) = ¬p∧¬q (negação de 'OU' vira 'E'). Exemplo: 'Não é verdade que João estudou E Maria estudou' = 'João não estudou OU Maria não estudou'."},
 ];
 
-const QS=[
-  {ce:true, q:"(C/E) A operação de projeção (π) da álgebra relacional corresponde à cláusula WHERE do SQL, pois ambas filtram linhas de uma relação de acordo com uma condição.",ok:false,g:"ERRADO. π = projeção = seleciona COLUNAS (equivale ao SELECT col). Quem filtra linhas é a seleção (σ), equivalente ao WHERE. Confundir as duas é o erro mais cobrado em álgebra relacional."},
-  {ce:true, q:"(C/E) Na Segunda Forma Normal, quando a chave primária é composta por um único atributo, a relação está automaticamente nessa forma normal se estiver na 1FN, pois não há possibilidade de dependência parcial.",ok:true,g:"CERTO. Dependência parcial só existe com chave composta. Com chave simples não há 'parte' da chave, portanto a 2FN é satisfeita automaticamente ao satisfazer a 1FN."},
-  {ce:true, q:"(C/E) O QuickSort possui complexidade O(n²) no pior caso, que ocorre quando o pivot escolhido é sempre o maior ou o menor elemento do subarray, resultando em partições extremamente desbalanceadas.",ok:true,g:"CERTO. Com pivot extremo, cada partição gera subarrays de tamanho n-1 e 0. Total de comparações = n + (n-1) + ... + 1 = n(n-1)/2 = O(n²)."},
-  {ce:true, q:"(C/E) Uma pilha (stack) implementa a política FIFO (First In, First Out), enquanto uma fila (queue) implementa LIFO (Last In, First Out).",ok:false,g:"ERRADO. É o oposto: Pilha = LIFO (último a entrar, primeiro a sair). Fila = FIFO (primeiro a entrar, primeiro a sair). Inversão clássica da Cebraspe."},
-  {ce:true, q:"(C/E) A contrapositiva de 'Se o sistema falhar, os dados serão perdidos' é 'Se os dados não forem perdidos, o sistema não falhou', e essa proposição é logicamente equivalente à original.",ok:true,g:"CERTO. Contrapositiva de p→q é ~q→~p — inverte E nega os dois lados. Sempre equivalente ao condicional original."},
-  {ce:false, q:"(múltipla) Qual operador SQL filtra grupos após o GROUP BY, retornando apenas departamentos com mais de 3 funcionários?\na) WHERE COUNT(id) > 3\nb) HAVING COUNT(id) > 3\nc) FILTER COUNT(id) > 3\nd) WHERE HAVING COUNT(id) > 3\ne) AFTER GROUP COUNT(id) > 3",ok:"b",g:"B — CORRETA. HAVING filtra após o agrupamento, sobre os grupos. WHERE filtra antes do GROUP BY, sobre linhas individuais. FILTER, AFTER GROUP e a combinação WHERE HAVING não existem em SQL ANSI."},
-  {ce:true, q:"(C/E) A negação da proposição 'Todos os candidatos aprovados estudaram diariamente' é 'Nenhum candidato aprovado estudou diariamente'.",ok:false,g:"ERRADO. Negação de 'Todos P são Q' = 'Existe pelo menos um P que não é Q'. Correto: 'Existe pelo menos um candidato aprovado que não estudou diariamente.' 'Nenhum estudou' seria a negação de 'Algum estudou'."},
-  {ce:true, q:"(C/E) Bancos de dados do tipo chave-valor são ideais para armazenar dados com estrutura altamente variável e consultas complexas envolvendo múltiplos atributos.",ok:false,g:"ERRADO. Chave-valor (Redis, DynamoDB) são ideais para acesso simples e rápido por chave única — cache, sessão, contadores. Para consultas complexas com múltiplos atributos, use relacional ou orientado a documentos."},
-  {ce:true, q:"(C/E) O argumento 'Se há sobrecarga no sistema, o desempenho cai. O desempenho não caiu. Logo, não há sobrecarga' é uma aplicação válida do Modus Tollens.",ok:true,g:"CERTO. Modus Tollens: [p→q, ~q] ⊢ ~p. Premissas: sobrecarga→queda; não houve queda. Conclusão: não há sobrecarga. Argumento válido."},
-  {ce:false, q:"(múltipla) Em OOP, qual define corretamente a diferença entre sobrescrita e sobrecarga?\na) Sobrescrita em compile time; sobrecarga em runtime\nb) Sobrecarga redefine método da superclasse com mesma assinatura\nc) Sobrescrita ocorre em runtime, redefine método da superclasse com mesma assinatura\nd) São sinônimos em Java\ne) Sobrecarga exige herança",ok:"c",g:"C — CORRETA. Override (sobrescrita) = runtime, mesma assinatura, subclasse redefine superclasse. Overload (sobrecarga) = compile time, mesmo nome, assinaturas diferentes. A A inverte os tempos. B descreve override. D e E são falsas."},
-];
+const TOPICS = [...new Set(CARDS.map(c=>c.t))];
+let activeFC = 'Todos';
 
-/* flashcards */
-function buildFC(){
+function buildFCFilters(){
+  const wrap = document.getElementById('fc-filters');
+  const all = document.createElement('button');
+  all.className='fc-filter on'; all.textContent='Todos ('+CARDS.length+')';
+  all.onclick=()=>setFC('Todos');
+  wrap.appendChild(all);
+  TOPICS.forEach(t=>{
+    const btn=document.createElement('button');
+    btn.className='fc-filter';
+    btn.textContent=t+' ('+CARDS.filter(c=>c.t===t).length+')';
+    btn.onclick=()=>setFC(t);
+    wrap.appendChild(btn);
+  });
+}
+
+function setFC(topic){
+  activeFC=topic;
+  document.querySelectorAll('.fc-filter').forEach(b=>{
+    b.classList.toggle('on', b.textContent.startsWith(topic));
+  });
+  document.getElementById('fc-grid').innerHTML='';
+  buildFCCards();
+}
+
+function buildFCCards(){
   const g=document.getElementById('fc-grid');
-  if(!g) return;
-  FC.forEach((card,i)=>{
+  CARDS.filter(c=>activeFC==='Todos'||c.t===activeFC).forEach((card)=>{
     const el=document.createElement('div');
     el.className='fc';
-    el.innerHTML=`<div class="fc-q">${card.q}</div><div class="fc-a">${card.a}</div><div class="fc-hint">toque para revelar</div>`;
+    el.innerHTML=`<div class="fc-tag">${card.t}</div><div class="fc-q">${card.q}</div><div class="fc-a">${card.a}</div><div class="fc-hint">toque para revelar</div>`;
     el.addEventListener('click',()=>{
       el.classList.toggle('flipped');
       el.querySelector('.fc-hint').textContent=el.classList.contains('flipped')?'toque para ocultar':'toque para revelar';
@@ -750,6 +871,7 @@ function buildFC(){
     g.appendChild(el);
   });
 }
+
 function resetFC(){
   document.querySelectorAll('.fc').forEach(el=>{
     el.classList.remove('flipped');
@@ -757,8 +879,32 @@ function resetFC(){
   });
 }
 
-/* questões */
+/* ═══════════ QUESTÕES ═══════════ */
+const QS=[
+  {t:"BD",ce:true, q:"(C/E) A operação de projeção (π) da álgebra relacional corresponde à cláusula WHERE do SQL, pois ambas filtram linhas de uma relação de acordo com uma condição booleana.",ok:false,g:"ERRADO. π (projeção) = seleciona COLUNAS, equivale ao SELECT col1,col2. Quem filtra linhas é a seleção (σ), equivalente ao WHERE. Essa confusão é o erro mais cobrado em álgebra relacional — nunca troque π por σ."},
+  {t:"BD",ce:true, q:"(C/E) Na Segunda Forma Normal, quando a chave primária é composta por um único atributo, a relação está automaticamente na 2FN se estiver na 1FN, pois não há possibilidade de dependência parcial.",ok:true,g:"CERTO. Dependência parcial só existe com chave composta (um atributo dependendo de PARTE da chave). Com chave simples não há 'parte' da chave, logo a 2FN é automaticamente satisfeita ao satisfazer a 1FN."},
+  {t:"BD",ce:true, q:"(C/E) O operador HAVING pode ser utilizado sem a cláusula GROUP BY para filtrar linhas individuais com base em funções de agregação aplicadas sobre toda a tabela.",ok:true,g:"CERTO. HAVING sem GROUP BY trata a tabela inteira como um único grupo. Por exemplo, HAVING COUNT(*) > 100 verifica se a tabela tem mais de 100 linhas. É um uso válido, embora incomum."},
+  {t:"BD",ce:true, q:"(C/E) Em um banco de dados relacional, um índice do tipo Bitmap é mais adequado para colunas com alta cardinalidade (muitos valores distintos) em sistemas OLTP, pois permite acesso mais rápido a registros individuais.",ok:false,g:"ERRADO. Índice Bitmap é ideal para BAIXA cardinalidade (poucos valores distintos) em workloads analíticos/DW. Em sistemas OLTP com muitas escritas concorrentes, Bitmap é péssimo pois exige lock no bitmap inteiro. Para alta cardinalidade em OLTP, use B-Tree."},
+  {t:"BD",ce:true, q:"(C/E) No Teorema CAP, como a tolerância a partições (P) é considerada inevitável em sistemas distribuídos reais, os projetistas devem escolher entre consistência (C) e disponibilidade (A).",ok:true,g:"CERTO. Partições de rede são inevitáveis em sistemas distribuídos reais. Portanto, na prática, o trade-off real é entre CP (consistente, pode ficar indisponível durante partição) e AP (disponível, mas com consistência eventual). Sistemas como HBase escolhem CP; Cassandra e DynamoDB escolhem AP."},
+  {t:"BD",ce:false, q:"(múltipla) Qual tipo de banco NoSQL é mais adequado para armazenar o histórico de temperatura de sensores IoT coletados a cada segundo, com consultas por intervalo de tempo?\na) Orientado a documento (MongoDB)\nb) Chave-valor (Redis)\nc) Time series (InfluxDB)\nd) Orientado a grafo (Neo4j)\ne) Colunar (Cassandra)",ok:"c",g:"C — CORRETA. Bancos time series são otimizados para dados com timestamp denso e consultas por intervalo temporal (InfluxDB, TimescaleDB, Prometheus). Embora Cassandra (E) também suporte séries temporais, time series é a resposta mais específica e correta. MongoDB armazenaria mas sem otimização nativa para séries temporais. Redis seria para dados em memória de curto prazo. Grafo não faz sentido para séries temporais."},
+  {t:"Algo",ce:true, q:"(C/E) O algoritmo MergeSort é estável e possui complexidade de tempo O(n log n) no melhor, médio e pior caso, sendo preferível ao HeapSort quando a estabilidade da ordenação é um requisito.",ok:true,g:"CERTO. MergeSort tem complexidade garantida O(n log n) em todos os casos e é estável (preserva a ordem relativa de elementos iguais). HeapSort também é O(n log n) em todos os casos mas NÃO é estável. Quando a estabilidade importa (ex: ordenação secundária), MergeSort é a escolha."},
+  {t:"Algo",ce:true, q:"(C/E) Em uma árvore binária de busca degenerada (todos os nós em cadeia unilateral), as operações de busca, inserção e remoção têm complexidade O(log n), pois a árvore mantém a propriedade de ordenação.",ok:false,g:"ERRADO. Uma BST degenerada (inserções em ordem crescente ou decrescente) comporta-se como uma lista ligada — a altura é n, não log n. Portanto, as operações têm complexidade O(n), não O(log n). Apenas BSTs balanceadas (AVL, Red-Black) garantem O(log n)."},
+  {t:"Algo",ce:true, q:"(C/E) O algoritmo BFS (Busca em Largura) garante encontrar o caminho de menor custo em grafos ponderados, desde que todos os pesos sejam positivos.",ok:false,g:"ERRADO. BFS garante o caminho com o MENOR NÚMERO DE ARESTAS (menor número de passos), não o caminho de menor custo em grafos ponderados. Para grafos ponderados com pesos positivos, use Dijkstra. BFS é adequado apenas para grafos sem peso ou com peso uniforme."},
+  {t:"Algo",ce:false, q:"(múltipla) Um sistema precisa processar requisições em ordem de chegada, mas requisições urgentes podem ser inseridas à frente. Qual estrutura de dados é mais adequada?\na) Pilha (Stack)\nb) Fila simples (Queue)\nc) Fila de prioridade (Heap)\nd) Lista ligada dupla\ne) Árvore AVL",ok:"c",g:"C — CORRETA. Fila de prioridade (implementada como Heap) permite inserir elementos com diferentes prioridades e sempre extrair o de maior prioridade com O(log n). A fila simples (B) não suporta prioridades. A pilha (A) é LIFO e também não atende. Lista ligada dupla (D) poderia funcionar mas com O(n) para inserção ordenada. AVL (E) é excessivo para esse caso de uso."},
+  {t:"Algo",ce:true, q:"(C/E) A sobrecarga (overload) de métodos em orientação a objetos ocorre em tempo de execução (runtime), quando uma subclasse redefine um método da superclasse com a mesma assinatura.",ok:false,g:"ERRADO. Essa é a definição de SOBRESCRITA (override), não de sobrecarga. Sobrescrita ocorre em runtime (polimorfismo dinâmico) e redefine o método com a MESMA assinatura. Sobrecarga (overload) ocorre em COMPILE TIME, com o MESMO nome mas assinaturas DIFERENTES (tipo ou número de parâmetros) dentro da mesma classe."},
+  {t:"Lógica",ce:true, q:"(C/E) A proposição 'Se o sistema processa mais de 1000 requisições, então a latência aumenta' é logicamente equivalente à proposição 'Se a latência não aumentou, então o sistema processou no máximo 1000 requisições'.",ok:true,g:"CERTO. A segunda proposição é a CONTRAPOSITIVA da primeira: ¬q→¬p, que é sempre logicamente equivalente a p→q. Contrapositiva = inverte E nega os dois lados. Não confundir com a recíproca (q→p, não equivalente)."},
+  {t:"Lógica",ce:true, q:"(C/E) A negação lógica correta da proposição 'Todos os módulos do sistema foram testados' é 'Nenhum módulo do sistema foi testado'.",ok:false,g:"ERRADO. A negação de '∀x P(x)' é '∃x ¬P(x)'. Portanto, a negação correta é 'Existe pelo menos um módulo que NÃO foi testado'. 'Nenhum módulo foi testado' seria a negação de 'Algum módulo foi testado' (∃x P(x))."},
+  {t:"Lógica",ce:true, q:"(C/E) O argumento 'Se o banco de dados está disponível, as transações são processadas. As transações não estão sendo processadas. Logo, o banco de dados não está disponível' é logicamente válido.",ok:true,g:"CERTO. Forma: [p→q, ¬q] ⊢ ¬p — Modus Tollens, argumento VÁLIDO. A negação do consequente (transações não processadas) permite concluir a negação da antecedente (banco indisponível)."},
+  {t:"Lógica",ce:true, q:"(C/E) O argumento 'Se o código compila, o programa funciona. O programa funciona. Logo, o código compilou' constitui uma forma de argumento logicamente válida.",ok:false,g:"ERRADO. Falácia da afirmação do consequente: [p→q, q] ⊢ p — INVÁLIDO. O programa pode funcionar por outra razão que não seja a compilação (ex: estava em cache). O fato de q ser verdadeiro não implica que p é a causa — pode haver outras antecedentes que levam a q."},
+  {t:"Lógica",ce:false, q:"(múltipla) Em lógica proposicional, a expressão ¬(p∧q) é equivalente a qual das alternativas abaixo?\na) ¬p∧¬q\nb) ¬p∨¬q\nc) p∨¬q\nd) ¬p∧q\ne) p↔¬q",ok:"b",g:"B — CORRETA. Pela Lei de De Morgan: ¬(p∧q) = ¬p∨¬q. A negação de uma conjunção é a disjunção das negações. Analogamente, ¬(p∨q) = ¬p∧¬q. Memorize: 'negação de E vira OU; negação de OU vira E'. A alternativa A seria a dupla negação aplicada erroneamente."},
+  {t:"BD",ce:false, q:"(múltipla) Qual afirmativa sobre os níveis de isolamento de transações está CORRETA?\na) Read Uncommitted é o nível mais seguro e elimina todos os fenômenos de concorrência\nb) Serializable permite leituras fantasmas (phantom reads) para melhorar desempenho\nc) Read Committed evita leituras sujas mas permite leituras não repetíveis\nd) Repeatable Read elimina leituras fantasmas em todos os SGBDs\ne) O nível de isolamento padrão do SQL ANSI é Serializable",ok:"c",g:"C — CORRETA. Read Committed (padrão no PostgreSQL e Oracle) garante que uma transação só lê dados commitados — evita dirty read. Porém, outra transação pode alterar e commitar um dado entre duas leituras da mesma transação — permite non-repeatable read. A: Read Uncommitted é o MENOS seguro. B: Serializable ELIMINA phantom reads. D: Repeatable Read elimina non-repeatable reads, não phantom reads (exceto no MySQL InnoDB que usa MVCC). E: O padrão SQL sugere Serializable mas SGBDs geralmente usam Read Committed por padrão."},
+  {t:"Algo",ce:false, q:"(múltipla) Qual algoritmo de ordenação deve ser escolhido quando: os dados são quase ordenados, o volume é pequeno (n < 50) e é fundamental preservar a ordem relativa de elementos iguais?\na) HeapSort\nb) QuickSort\nc) MergeSort\nd) InsertionSort\ne) SelectionSort",ok:"d",g:"D — CORRETA. InsertionSort tem O(n) no melhor caso (array quase ordenado), é estável (preserva ordem de iguais), tem baixo overhead para n pequeno e é in-place (O(1) de espaço). MergeSort (C) é estável mas usa O(n) de memória extra e tem overhead de recursão para n pequeno. HeapSort (A) e QuickSort (B) não são estáveis. SelectionSort (E) é sempre O(n²) mesmo com array quase ordenado."},
+  {t:"BD",ce:true, q:"(C/E) Em SQL, a operação FULL OUTER JOIN retorna todas as linhas de ambas as tabelas, preenchendo com NULL os campos sem correspondência em qualquer dos lados.",ok:true,g:"CERTO. FULL OUTER JOIN é a união do LEFT JOIN e RIGHT JOIN — inclui todas as linhas de ambas as tabelas. Onde não há correspondência, os campos da tabela sem match ficam NULL. Observação: MySQL não suporta FULL OUTER JOIN nativamente — simula-se com LEFT JOIN UNION RIGHT JOIN."},
+  {t:"Lógica",ce:true, q:"(C/E) A expressão lógica p→q é equivalente à expressão ¬p∨q, o que implica que, se p for falso, a proposição condicional será verdadeira independentemente do valor de q.",ok:true,g:"CERTO. p→q ≡ ¬p∨q. Quando p é falso (¬p é verdadeiro), a disjunção ¬p∨q é verdadeira independentemente de q. Isso explica por que F→V e F→F são ambos verdadeiros na tabela-verdade do condicional — o comprometimento da antecedente 'absuelve' o condicional."},
+];
+
 let qState={ans:{},right:0,total:0};
+
 function buildQs(){
   const list=document.getElementById('q-list');
   if(!list) return;
@@ -766,7 +912,7 @@ function buildQs(){
     const block=document.createElement('div');
     block.className='q-block';
     const isMC=!q.ce;
-    let inner=`<div class="q-num">questão ${String(i+1).padStart(2,'0')}</div>`;
+    let inner=`<div class="q-num"><span>questão ${String(i+1).padStart(2,'0')}</span><span class="q-tag">${q.t}</span></div>`;
     if(isMC){
       const lines=q.q.split('\n');
       inner+=`<div class="q-text">${lines[0]}</div><div class="q-opts" id="opts-${i}">`;
@@ -784,7 +930,9 @@ function buildQs(){
     list.appendChild(block);
   });
 }
-function toggleGab(i){ document.getElementById('gab-'+i)?.classList.toggle('show'); }
+
+function toggleGab(i){document.getElementById('gab-'+i)?.classList.toggle('show')}
+
 function pickMC(i,ltr){
   if(qState.ans[i]!==undefined) return;
   qState.ans[i]=ltr; qState.total++;
@@ -795,6 +943,7 @@ function pickMC(i,ltr){
   });
   updateScore();
 }
+
 function pickCE(i,val){
   if(qState.ans[i]!==undefined) return;
   qState.ans[i]=val; qState.total++;
@@ -805,29 +954,30 @@ function pickCE(i,val){
   if(be) be.className='btn-ce btn-e '+(val===false?(QS[i].ok===false?'ok':'no'):'');
   updateScore();
 }
+
 function updateScore(){
   const pct=qState.total>0?Math.round(qState.right/qState.total*100):0;
   const el=document.getElementById('score-txt');
   const bar=document.getElementById('prog-f');
-  if(el) el.textContent=`${qState.right} acertos / ${qState.total} respondidas`;
+  if(el) el.textContent=`${qState.right} acertos / ${qState.total} respondidas (${pct}%)`;
   if(bar) bar.style.width=pct+'%';
 }
+
 function resetQs(){
   qState={ans:{},right:0,total:0};
   updateScore();
-  document.querySelectorAll('.q-opts button').forEach(b=>{ b.className=''; });
+  document.querySelectorAll('.q-opts button').forEach(b=>{b.className=''});
   document.querySelectorAll('[id^="bc-"],[id^="be-"]').forEach(b=>{
-    const isc=b.id.startsWith('bc-');
-    b.className='btn-ce '+(isc?'btn-c':'btn-e');
+    b.className='btn-ce '+(b.id.startsWith('bc-')?'btn-c':'btn-e');
   });
   document.querySelectorAll('.q-gab').forEach(g=>g.classList.remove('show'));
 }
 
-/* TOC highlight */
+/* ═══════════ TOC HIGHLIGHT ═══════════ */
 function initTOC(){
   const items=document.querySelectorAll('.toc-item');
   if(!items.length) return;
-  const sections=[...document.querySelectorAll('section[id]')];
+  const sections=[...document.querySelectorAll('section[id], div[id]')];
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
@@ -836,11 +986,12 @@ function initTOC(){
         if(active) active.classList.add('active');
       }
     });
-  },{rootMargin:'-20% 0px -60% 0px'});
+  },{rootMargin:'-15% 0px -65% 0px'});
   sections.forEach(s=>obs.observe(s));
 }
 
-buildFC();
+buildFCFilters();
+buildFCCards();
 buildQs();
 initTOC();
 </script>
