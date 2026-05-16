@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semanas 1–2 — Banco de dados, Algoritmos, Lógica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0e0e10;
+      --surface: #17171a;
+      --border:  #2a2a2e;
+      --text:    #e8e8ec;
+      --muted:   #7a7a85;
+      --accent:  #c9a84c;
+      --danger:  #e05252;
+      --success: #4caf82;
+      --purple:  #8b5cf6;
+      --mono:    'DM Mono', monospace;
+      --sans:    'DM Sans', sans-serif;
+      --serif:   'DM Serif Display', serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: clamp(1rem, 4vw, 2rem) clamp(1rem, 4vw, 2rem) 1.2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .ph-meta {
+      font-family: var(--mono);
+      font-size: .62rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: .45rem;
+    }
+    .ph-title {
+      font-family: var(--serif);
+      font-size: clamp(1.3rem, 4vw, 1.7rem);
+      line-height: 1.2;
+      margin-bottom: .4rem;
+    }
+    .ph-title em { color: var(--accent); font-style: normal; }
+    .ph-desc { font-size: .8rem; color: var(--muted); max-width: 560px; line-height: 1.6; }
+    .ph-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .8rem; }
+    .pill {
+      font-family: var(--mono); font-size: .6rem;
+      padding: 2px 8px; border-radius: 4px;
+      border: 1px solid var(--border); color: var(--muted);
+    }
+    .pill-r { border-color: rgba(224,82,82,.3); color: #e07070; background: rgba(224,82,82,.06); }
+    .pill-a { border-color: rgba(201,168,76,.3); color: var(--accent); background: rgba(201,168,76,.06); }
+    .pill-g { border-color: rgba(76,175,130,.3); color: var(--success); background: rgba(76,175,130,.06); }
+
+    /* ─── MOBILE SECTION NAV ─── */
+    .mobile-nav {
+      display: none;
+      overflow-x: auto;
+      scrollbar-width: none;
+      gap: 4px;
+      padding: .6rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .mobile-nav::-webkit-scrollbar { display: none; }
+    .mobile-nav a {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: .72rem;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border: 1px solid transparent;
+      background: transparent;
+      transition: color .15s, background .15s;
+      flex-shrink: 0;
+    }
+    .mobile-nav a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+
+    /* ─── MAIN LAYOUT ─── */
+    .layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: calc(100vh - 200px);
+    }
+
+    /* ─── TOC sidebar ─── */
+    .toc {
+      border-right: 1px solid var(--border);
+      padding: 1.25rem .9rem;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .toc-label {
+      font-family: var(--mono); font-size: .6rem;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted); margin-bottom: .55rem;
+    }
+    .toc-item {
+      display: block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: .74rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      margin-bottom: 1px;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .toc-item:hover { color: var(--text); background: rgba(255,255,255,.04); }
+    .toc-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(201,168,76,.05); }
+    .toc-sub { padding-left: 16px; font-size: .7rem; }
+
+    /* ─── CONTENT ─── */
+    .content {
+      padding: clamp(1rem, 3vw, 2rem);
+      max-width: 840px;
+    }
+
+    section { margin-bottom: 2.5rem; }
+
+    .section-label {
+      font-family: var(--mono); font-size: .6rem;
+      text-transform: uppercase; letter-spacing: .12em;
+      color: var(--muted); margin-bottom: .45rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 3vw, 1.25rem);
+      color: var(--text);
+      margin-bottom: .85rem;
+      padding-bottom: .55rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: clamp(.8rem, 3vw, 1.1rem) clamp(.9rem, 3vw, 1.25rem);
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-size: .82rem; font-weight: 500;
+      color: var(--text);
+      margin-bottom: .5rem;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    }
+
+    /* ─── BADGES ─── */
+    .badge {
+      font-family: var(--mono); font-size: .58rem;
+      padding: 1px 7px; border-radius: 3px; border: 1px solid;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .b-r { border-color: rgba(224,82,82,.4); color: #e07070; background: rgba(224,82,82,.08); }
+    .b-g { border-color: rgba(76,175,130,.4); color: var(--success); background: rgba(76,175,130,.08); }
+    .b-p { border-color: rgba(139,92,246,.4); color: var(--purple); background: rgba(139,92,246,.08); }
+    .b-a { border-color: rgba(201,168,76,.4); color: var(--accent); background: rgba(201,168,76,.08); }
+
+    /* ─── ROWS ─── */
+    .row-item {
+      display: flex; gap: 10px;
+      padding: 6px 0;
+      border-top: 1px solid var(--border);
+      font-size: .8rem; line-height: 1.55;
+    }
+    .row-item:first-child { border-top: none; }
+    .row-key {
+      font-family: var(--mono); font-size: .7rem;
+      color: var(--accent); white-space: nowrap;
+      flex-shrink: 0; padding-top: 1px; min-width: 90px;
+    }
+
+    /* ─── CALLOUTS ─── */
+    .trap, .tip {
+      padding: 8px 12px; font-size: .78rem;
+      margin: 8px 0; line-height: 1.6;
+    }
+    .trap { border-left: 3px solid var(--danger); background: rgba(224,82,82,.05); color: #e08080; }
+    .tip  { border-left: 3px solid var(--accent); background: rgba(201,168,76,.05); color: #c9b070; }
+
+    /* ─── CODE ─── */
+    .code {
+      background: #121214; border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 14px;
+      font-family: var(--mono); font-size: .73rem;
+      line-height: 1.7; overflow-x: auto; margin: 6px 0; color: #b0c4de;
+    }
+    .code .kw  { color: var(--purple); }
+    .code .fn  { color: #5ec4e6; }
+    .code .num { color: var(--accent); }
+    .code .cm  { color: var(--muted); font-style: italic; }
+
+    /* ─── TABLE ─── */
+    .tbl-wrap { overflow-x: auto; margin: 8px 0; -webkit-overflow-scrolling: touch; }
+    table { border-collapse: collapse; font-size: .75rem; width: 100%; min-width: 400px; }
+    th {
+      background: #12121466; color: var(--muted);
+      font-family: var(--mono); font-size: .63rem;
+      text-transform: uppercase; letter-spacing: .06em;
+      padding: 7px 10px; text-align: left;
+      border: 1px solid var(--border);
+    }
+    td { padding: 6px 10px; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+    td.ok  { color: var(--success); font-family: var(--mono); font-size: .7rem; }
+    td.no  { color: var(--danger);  font-family: var(--mono); font-size: .7rem; }
+    td.mid { color: var(--accent);  font-family: var(--mono); font-size: .7rem; }
+
+    /* ─── FLASHCARDS ─── */
+    .fc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+      gap: 10px; margin-top: .75rem;
+    }
+    .fc {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem;
+      cursor: pointer; min-height: 90px;
+      display: flex; flex-direction: column; gap: .4rem;
+      transition: border-color .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .fc.flipped { border-color: rgba(201,168,76,.3); }
+    .fc-q { font-size: .78rem; font-weight: 500; color: var(--text); line-height: 1.4; }
+    .fc-a { font-size: .74rem; color: var(--muted); line-height: 1.55; display: none; }
+    .fc.flipped .fc-q { color: var(--accent); }
+    .fc.flipped .fc-a { display: block; }
+    .fc-hint { font-family: var(--mono); font-size: .58rem; color: var(--muted); margin-top: auto; }
+
+    /* ─── QUESTÕES ─── */
+    .q-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--purple);
+      border-radius: 0 8px 8px 0;
+      padding: clamp(.8rem, 3vw, 1rem) clamp(.9rem, 3vw, 1.25rem);
+      margin-bottom: 10px;
+    }
+    .q-num { font-family: var(--mono); font-size: .63rem; color: var(--muted); margin-bottom: .4rem; }
+    .q-text { font-size: .82rem; line-height: 1.65; margin-bottom: .65rem; }
+
+    .q-opts { display: flex; flex-direction: column; gap: 4px; }
+    .q-opts button {
+      width: 100%; text-align: left;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: 5px; padding: 7px 10px;
+      font-size: .78rem; color: var(--muted);
+      cursor: pointer; font-family: var(--sans);
+      transition: background .15s, color .15s, border-color .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .q-opts button:hover { background: rgba(255,255,255,.04); color: var(--text); }
+    .q-opts button.ok { background: rgba(76,175,130,.08); color: var(--success); border-color: rgba(76,175,130,.3); }
+    .q-opts button.no { background: rgba(224,82,82,.08); color: var(--danger); border-color: rgba(224,82,82,.3); }
+
+    /* botões C/E */
+    .ce-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-ce {
+      flex: 1; min-width: 80px;
+      padding: 7px 12px;
+      border-radius: 6px; font-size: .8rem;
+      font-family: var(--sans); cursor: pointer;
+      border: 1px solid; background: transparent;
+      transition: background .15s, color .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-c { border-color: rgba(76,175,130,.4); color: var(--success); }
+    .btn-e { border-color: rgba(224,82,82,.4); color: var(--danger); }
+    .btn-c.ok, .btn-e.ok { background: rgba(76,175,130,.12); }
+    .btn-c.no, .btn-e.no { background: rgba(224,82,82,.08); opacity: .5; }
+
+    .q-actions { margin-top: .55rem; }
+    .btn {
+      font-family: var(--mono); font-size: .63rem;
+      padding: 4px 10px; border-radius: 4px;
+      border: 1px solid var(--border); color: var(--muted);
+      background: transparent; cursor: pointer;
+      transition: color .15s;
+    }
+    .btn:hover { color: var(--text); }
+
+    .q-gab {
+      background: rgba(255,255,255,.03); border-radius: 6px;
+      padding: 8px 12px; font-size: .76rem;
+      color: var(--muted); margin-top: 8px;
+      display: none; line-height: 1.6;
+    }
+    .q-gab.show { display: block; }
+    .q-gab strong { color: var(--text); }
+
+    /* ─── SCORE BAR ─── */
+    .score-row {
+      display: flex; align-items: center;
+      gap: .75rem; margin-bottom: 1rem;
+      font-family: var(--mono); font-size: .7rem; color: var(--muted);
+      flex-wrap: wrap;
+    }
+    .prog { height: 4px; flex: 1; min-width: 80px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .prog-f { height: 100%; background: var(--success); border-radius: 2px; transition: width .3s; width: 0%; }
+
+    /* ─── LINKS ─── */
+    .link-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-top: 1px solid var(--border);
+    }
+    .link-row:first-child { border-top: none; }
+    .link-body { flex: 1; }
+    .link-title { font-size: .8rem; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .link-sub { font-size: .72rem; color: var(--muted); }
+    .link-a {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-family: var(--mono); font-size: .65rem;
+      color: var(--accent); text-decoration: none;
+      margin-top: 3px; transition: opacity .15s;
+    }
+    .link-a:hover { opacity: .8; }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+
+    /* Tablet e mobile */
+    @media (max-width: 760px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { display: none; }
+      .mobile-nav { display: flex; }
+      .row-key { min-width: 70px; font-size: .67rem; }
+    }
+
+    @media (max-width: 480px) {
+      .ph-pills .pill { font-size: .58rem; padding: 2px 6px; }
+      table { min-width: 340px; }
+      .fc-grid { grid-template-columns: 1fr; }
+      .row-key { min-width: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="ph-meta">módulo 01 · semanas 1–2 · prioridade alta</div>
+  <h1 class="ph-title">Banco de dados, <em>algoritmos</em> e lógica</h1>
+  <p class="ph-desc">Fundação técnica — base para tudo que vem depois. Banco de dados relacional, estruturas de dados, OOP e raciocínio lógico para a P1.</p>
+  <div class="ph-pills">
+    <span class="pill pill-r">P2 · ~30 itens estimados</span>
+    <span class="pill pill-a">SQL · NoSQL · Álgebra relacional</span>
+    <span class="pill pill-a">Big-O · Ordenação · OOP</span>
+    <span class="pill">P1 · Lógica proposicional</span>
+    <span class="pill pill-g">14 dias · 2–3h/dia</span>
+  </div>
+</div>
+
+<!-- MOBILE SECTION NAV -->
+<nav class="mobile-nav" aria-label="Seções do módulo">
+  <a href="#bd">Banco de dados</a>
+  <a href="#algo">Algoritmos</a>
+  <a href="#logica">Lógica</a>
+  <a href="#flash">Flashcards</a>
+  <a href="#quest">Questões</a>
+  <a href="#links">Links</a>
+</nav>
+
+<div class="layout">
+
+  <!-- TOC — desktop -->
+  <nav class="toc" aria-label="Índice">
+    <div class="toc-label">neste módulo</div>
+    <a class="toc-item active" href="#bd">Banco de dados</a>
+    <a class="toc-item toc-sub" href="#normais">Formas normais</a>
+    <a class="toc-item toc-sub" href="#sql">SQL</a>
+    <a class="toc-item toc-sub" href="#algebra">Álgebra relacional</a>
+    <a class="toc-item toc-sub" href="#nosql">NoSQL</a>
+    <a class="toc-item toc-sub" href="#acid">ACID / BASE</a>
+    <a class="toc-item" href="#algo">Algoritmos</a>
+    <a class="toc-item toc-sub" href="#bigo">Complexidade</a>
+    <a class="toc-item toc-sub" href="#sort">Ordenação</a>
+    <a class="toc-item toc-sub" href="#structs">Estruturas</a>
+    <a class="toc-item toc-sub" href="#oop">OOP</a>
+    <a class="toc-item" href="#logica">Lógica</a>
+    <a class="toc-item" href="#flash">Flashcards</a>
+    <a class="toc-item" href="#quest">Questões</a>
+    <a class="toc-item" href="#links">Links</a>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══ BANCO DE DADOS ═══ -->
+    <section id="bd">
+      <div class="section-label">módulo 01 · parte 1</div>
+      <h2 class="section-title">Banco de dados relacional</h2>
+
+      <div id="normais" class="card">
+        <div class="card-title"><span class="badge b-r">cai todo concurso</span> Formas normais</div>
+        <div class="trap">Pegadinha: a Cebraspe descreve um cenário e pede em qual forma normal a tabela está. Pratique identificar dependências — não decore definições.</div>
+        <div>
+          <div class="row-item"><span class="row-key">1FN</span><span>Sem grupos repetitivos, sem multivalorados. Cada célula tem um único valor atômico.</span></div>
+          <div class="row-item"><span class="row-key">2FN</span><span>1FN + sem dependência parcial. Todo atributo não-chave depende da chave <em>inteira</em>. Com chave simples, 1FN já implica 2FN.</span></div>
+          <div class="row-item"><span class="row-key">3FN</span><span>2FN + sem dependência transitiva. Se A→B e B→C, C não pode depender de B quando B não é chave.</span></div>
+          <div class="row-item"><span class="row-key">FNBC</span><span>Todo determinante é superchave. Mais restrita que 3FN — elimina anomalias residuais.</span></div>
+        </div>
+        <div class="tip">Mnemônico: "1=átomo · 2=chave toda · 3=sem escada · FNBC=só superchave decide"</div>
+      </div>
+
+      <div id="sql" class="card">
+        <div class="card-title"><span class="badge b-r">cai todo concurso</span> SQL — o que a Cebraspe testa</div>
+        <div class="trap">A banca apresenta SELECT com JOIN + GROUP BY + HAVING e pede o resultado. Execute mentalmente linha a linha.</div>
+        <div class="code"><span class="kw">SELECT</span> d.nome, <span class="fn">COUNT</span>(f.id) <span class="kw">AS</span> total
+<span class="kw">FROM</span>   departamento d
+       <span class="kw">LEFT JOIN</span> funcionario f <span class="kw">ON</span> f.dept_id = d.id
+<span class="kw">GROUP BY</span> d.nome
+<span class="kw">HAVING</span>   <span class="fn">COUNT</span>(f.id) > <span class="num">2</span>
+<span class="kw">ORDER BY</span> total <span class="kw">DESC</span>;</div>
+        <div>
+          <div class="row-item"><span class="row-key">INNER JOIN</span><span>Só linhas com correspondência nos dois lados.</span></div>
+          <div class="row-item"><span class="row-key">LEFT JOIN</span><span>Todas as linhas da esquerda; NULL onde não há correspondência à direita.</span></div>
+          <div class="row-item"><span class="row-key">WHERE vs HAVING</span><span>WHERE filtra <em>antes</em> do GROUP BY (linhas). HAVING filtra <em>depois</em> (grupos). Não são intercambiáveis.</span></div>
+          <div class="row-item"><span class="row-key">Subconsulta</span><span>Correlacionada referencia tabela externa e executa uma vez por linha. Mais lenta.</span></div>
+        </div>
+      </div>
+
+      <div id="algebra" class="card">
+        <div class="card-title"><span class="badge b-a">alta incidência</span> Álgebra relacional</div>
+        <div class="trap">Confundir projeção com seleção é o erro mais comum. π = colunas. σ = linhas.</div>
+        <div>
+          <div class="row-item"><span class="row-key">σ seleção</span><span>Filtra linhas. Equivale ao WHERE. Ex: σ<sub>salario&gt;5000</sub>(Funcionário)</span></div>
+          <div class="row-item"><span class="row-key">π projeção</span><span>Seleciona colunas. Equivale ao SELECT col. Remove duplicatas automaticamente.</span></div>
+          <div class="row-item"><span class="row-key">⋈ junção</span><span>Combina tabelas por atributos comuns. Junção natural = NATURAL JOIN.</span></div>
+          <div class="row-item"><span class="row-key">− diferença</span><span>Linhas em R que não estão em S. Relações devem ter mesmo esquema.</span></div>
+          <div class="row-item"><span class="row-key">∪ união</span><span>Todas as linhas de R e S (sem duplicatas). Requer compatibilidade.</span></div>
+        </div>
+      </div>
+
+      <div id="nosql" class="card">
+        <div class="card-title"><span class="badge b-a">alta incidência</span> NoSQL — tipos e casos de uso</div>
+        <div class="tip">A Cebraspe dá um cenário e pede qual tipo NoSQL. Associe o cenário ao tipo, não ao produto.</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Tipo</th><th>Exemplos</th><th>Caso de uso ideal</th></tr></thead>
+            <tbody>
+              <tr><td>Documento</td><td>MongoDB, CouchDB</td><td>Posts, catálogos, dados heterogêneos</td></tr>
+              <tr><td>Chave-valor</td><td>Redis, DynamoDB</td><td>Cache, sessão, contadores em tempo real</td></tr>
+              <tr><td>Colunar</td><td>Cassandra, HBase</td><td>Analytics, escrita intensiva</td></tr>
+              <tr><td>Grafo</td><td>Neo4j</td><td>Redes sociais, detecção de fraude</td></tr>
+              <tr><td>Time series</td><td>InfluxDB</td><td>Métricas, IoT, monitoramento</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="acid" class="card">
+        <div class="card-title"><span class="badge b-p">conceito-chave</span> ACID vs BASE</div>
+        <div>
+          <div class="row-item"><span class="row-key">Atomicidade</span><span>Tudo ou nada. Falha → rollback completo.</span></div>
+          <div class="row-item"><span class="row-key">Consistência</span><span>Sai de estado válido e chega em estado válido.</span></div>
+          <div class="row-item"><span class="row-key">Isolamento</span><span>Transações concorrentes não se interferem. Níveis: RU &lt; RC &lt; RR &lt; Serializable.</span></div>
+          <div class="row-item"><span class="row-key">Durabilidade</span><span>Após commit, dado persiste mesmo com falha de hardware.</span></div>
+          <div class="row-item"><span class="row-key">BASE</span><span>Basically Available · Soft state · Eventually consistent. Modelo NoSQL — troca consistência imediata por disponibilidade.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ALGORITMOS ═══ -->
+    <section id="algo">
+      <div class="section-label">módulo 01 · parte 2</div>
+      <h2 class="section-title">Algoritmos e estruturas de dados</h2>
+
+      <div id="bigo" class="card">
+        <div class="card-title"><span class="badge b-r">cai todo concurso</span> Complexidade — Big-O</div>
+        <div class="trap">A Cebraspe apresenta um algoritmo com loops aninhados e pede a complexidade. Conte as operações — não decore.</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Notação</th><th>Nome</th><th>Exemplo</th></tr></thead>
+            <tbody>
+              <tr><td class="ok">O(1)</td><td>Constante</td><td>Acesso por índice, hash table (médio)</td></tr>
+              <tr><td class="ok">O(log n)</td><td>Logarítmica</td><td>Busca binária, BST balanceada</td></tr>
+              <tr><td class="mid">O(n)</td><td>Linear</td><td>Percorrer lista, busca sequencial</td></tr>
+              <tr><td class="mid">O(n log n)</td><td>Linearítmica</td><td>MergeSort, HeapSort, QuickSort médio</td></tr>
+              <tr><td class="no">O(n²)</td><td>Quadrática</td><td>BubbleSort, dois loops aninhados sobre n</td></tr>
+              <tr><td class="no">O(2ⁿ)</td><td>Exponencial</td><td>Subconjuntos, força bruta</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n):      <span class="cm"># n</span>
+    <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(n):  <span class="cm"># n × n = O(n²)</span>
+        <span class="fn">print</span>(i, j)</div>
+      </div>
+
+      <div id="sort" class="card">
+        <div class="card-title"><span class="badge b-r">cai todo concurso</span> Algoritmos de ordenação</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Algoritmo</th><th>Melhor</th><th>Médio</th><th>Pior</th><th>Estável</th></tr></thead>
+            <tbody>
+              <tr><td>BubbleSort</td><td class="ok">O(n)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">sim</td></tr>
+              <tr><td>InsertionSort</td><td class="ok">O(n)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="ok">sim</td></tr>
+              <tr><td>SelectionSort</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="no">O(n²)</td><td class="no">não</td></tr>
+              <tr><td><strong>MergeSort</strong></td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">sim</td></tr>
+              <tr><td>QuickSort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="no">O(n²)*</td><td class="no">não</td></tr>
+              <tr><td>HeapSort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="no">não</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tip">* QuickSort O(n²) quando pivot é sempre o extremo. MergeSort é o único com pior caso O(n log n) garantido e estável simultaneamente.</div>
+      </div>
+
+      <div id="structs" class="card">
+        <div class="card-title"><span class="badge b-a">alta incidência</span> Estruturas de dados</div>
+        <div class="trap">Pilha = LIFO. Fila = FIFO. A Cebraspe inverte os dois — questão clássica.</div>
+        <div>
+          <div class="row-item"><span class="row-key">Array</span><span>Acesso O(1), inserção/remoção no meio O(n). Memória contígua.</span></div>
+          <div class="row-item"><span class="row-key">Lista ligada</span><span>Inserção/remoção O(1) dado o nó, busca O(n). Memória não-contígua.</span></div>
+          <div class="row-item"><span class="row-key">Pilha — LIFO</span><span>push/pop O(1). Usos: chamadas de função, undo, parsing.</span></div>
+          <div class="row-item"><span class="row-key">Fila — FIFO</span><span>enqueue/dequeue O(1). Usos: BFS, filas de tarefas.</span></div>
+          <div class="row-item"><span class="row-key">BST balanceada</span><span>Busca/inserção/remoção O(log n). AVL e Red-Black rebalanceiam automaticamente.</span></div>
+          <div class="row-item"><span class="row-key">Hash table</span><span>Acesso médio O(1), pior caso O(n) por colisões.</span></div>
+          <div class="row-item"><span class="row-key">Heap min/max</span><span>Extração do mínimo/máximo O(log n). HeapSort e filas de prioridade.</span></div>
+        </div>
+      </div>
+
+      <div id="oop" class="card">
+        <div class="card-title"><span class="badge b-a">alta incidência</span> OOP — os 4 pilares</div>
+        <div class="trap">Override = runtime, mesma assinatura, subclasse redefine superclasse. Overload = compile time, mesmo nome, assinaturas diferentes. A Cebraspe troca os dois.</div>
+        <div>
+          <div class="row-item"><span class="row-key">Encapsulamento</span><span>Ocultar estado interno; expor apenas interface pública. Atributos privados + getters/setters.</span></div>
+          <div class="row-item"><span class="row-key">Herança</span><span>Subclasse reutiliza e estende superclasse. Relação "é um". Java não tem herança múltipla de classes — usa interfaces.</span></div>
+          <div class="row-item"><span class="row-key">Polimorfismo</span><span>Mesmo método, comportamentos diferentes. Sobrescrita (runtime) vs sobrecarga (compile time).</span></div>
+          <div class="row-item"><span class="row-key">Abstração</span><span>Modelar apenas o essencial. Classes abstratas e interfaces definem contratos sem implementação concreta.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ LÓGICA ═══ -->
+    <section id="logica">
+      <div class="section-label">módulo 01 · parte 3 · P1</div>
+      <h2 class="section-title">Raciocínio lógico</h2>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-r">mais cobrado</span> Tabela-verdade completa</div>
+        <div class="trap">O condicional p→q só é FALSO quando p=V e q=F. Inclusive F→V e F→F são VERDADEIROS — ponto mais explorado pela banca.</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>p</th><th>q</th><th>p∧q</th><th>p∨q</th><th>p→q</th><th>p↔q</th></tr></thead>
+            <tbody>
+              <tr><td>V</td><td>V</td><td class="ok">V</td><td class="ok">V</td><td class="ok">V</td><td class="ok">V</td></tr>
+              <tr><td>V</td><td>F</td><td class="no">F</td><td class="ok">V</td><td class="no" style="white-space:nowrap">F ← único falso</td><td class="no">F</td></tr>
+              <tr><td>F</td><td>V</td><td class="no">F</td><td class="ok">V</td><td class="ok" style="white-space:nowrap">V ← confunde!</td><td class="no">F</td></tr>
+              <tr><td>F</td><td>F</td><td class="no">F</td><td class="no">F</td><td class="ok" style="white-space:nowrap">V ← confunde!</td><td class="ok">V</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-r">mais cobrado</span> Equivalências do condicional</div>
+        <div>
+          <div class="row-item"><span class="row-key">p→q</span><span>Equivale a ~p∨q</span></div>
+          <div class="row-item"><span class="row-key">Contrapositiva</span><span>~q→~p — EQUIVALENTE. Inverte E nega os dois lados.</span></div>
+          <div class="row-item"><span class="row-key">Recíproca</span><span>q→p — NÃO equivalente. Só inverte.</span></div>
+          <div class="row-item"><span class="row-key">Inversa</span><span>~p→~q — NÃO equivalente. Só nega.</span></div>
+          <div class="row-item"><span class="row-key">Negação</span><span>~(p→q) = p∧~q — o único caso falso do condicional.</span></div>
+        </div>
+        <div class="tip">Mnemônico: "Contrapositiva = INVERTE e NEGA = equivalente. Recíproca = só inverte = não equivalente."</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-a">alta incidência</span> Negação de quantificadores</div>
+        <div class="trap">Negar "Todos aprovaram" como "Nenhum aprovou" é o erro mais comum. O correto é "Existe pelo menos um que não aprovou."</div>
+        <div>
+          <div class="row-item"><span class="row-key">¬(∀x P)</span><span>"Todos P" → "Existe pelo menos um que não P"</span></div>
+          <div class="row-item"><span class="row-key">¬(∃x P)</span><span>"Existe P" → "Nenhum é P" (Todo P não é P)</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-p">argumentos</span> Formas válidas e falácias</div>
+        <div>
+          <div class="row-item"><span class="row-key">Modus Ponens</span><span>[p→q, p] ⊢ q — VÁLIDO</span></div>
+          <div class="row-item"><span class="row-key">Modus Tollens</span><span>[p→q, ~q] ⊢ ~p — VÁLIDO</span></div>
+          <div class="row-item"><span class="row-key">Sil. hipotético</span><span>[p→q, q→r] ⊢ p→r — VÁLIDO</span></div>
+          <div class="row-item"><span class="row-key">Falácia 1</span><span>[p→q, q] ⊢ p — INVÁLIDO (afirmação do consequente)</span></div>
+          <div class="row-item"><span class="row-key">Falácia 2</span><span>[p→q, ~p] ⊢ ~q — INVÁLIDO (negação da antecedente)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FLASHCARDS ═══ -->
+    <section id="flash">
+      <div class="section-label">módulo 01 · prática</div>
+      <h2 class="section-title">Flashcards — toque para revelar</h2>
+      <div class="fc-grid" id="fc-grid"></div>
+      <div style="margin-top:10px">
+        <button class="btn" onclick="resetFC()">reiniciar todos</button>
+      </div>
+    </section>
+
+    <!-- ═══ QUESTÕES ═══ -->
+    <section id="quest">
+      <div class="section-label">módulo 01 · simulado</div>
+      <h2 class="section-title">Questões — estilo Cebraspe</h2>
+      <div class="score-row">
+        <span id="score-txt">0 acertos / 0 respondidas</span>
+        <div class="prog"><div class="prog-f" id="prog-f"></div></div>
+        <button class="btn" onclick="resetQs()">reiniciar</button>
+      </div>
+      <div id="q-list"></div>
+    </section>
+
+    <!-- ═══ LINKS ═══ -->
+    <section id="links">
+      <div class="section-label">módulo 01 · recursos</div>
+      <h2 class="section-title">Links e plataformas de estudo</h2>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-r">banco de dados</span> YouTube — termos de busca</div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Formas normais</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=normaliza%C3%A7%C3%A3o+banco+de+dados+formas+normais+concurso+p%C3%BAblico" target="_blank">↗ normalização banco de dados formas normais concurso público</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">SQL avançado — JOIN, GROUP BY, HAVING</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=SQL+JOIN+GROUP+BY+HAVING+exerc%C3%ADcios+Cebraspe" target="_blank">↗ SQL JOIN GROUP BY HAVING exercícios Cebraspe</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Álgebra relacional σ, π, ⋈</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=%C3%A1lgebra+relacional+sele%C3%A7%C3%A3o+proje%C3%A7%C3%A3o+concurso" target="_blank">↗ álgebra relacional seleção projeção junção concurso</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">NoSQL tipos e casos de uso</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=NoSQL+tipos+documento+chave+valor+colunar+grafo+concurso" target="_blank">↗ NoSQL tipos documento chave-valor colunar grafo concurso</a>
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-a">algoritmos</span> YouTube — termos de busca</div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Complexidade Big-O</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=complexidade+algoritmos+Big+O+nota%C3%A7%C3%A3o+concurso+TI" target="_blank">↗ complexidade algoritmos Big O notação concurso TI</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Algoritmos de ordenação comparados</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=BubbleSort+MergeSort+QuickSort+complexidade+concurso" target="_blank">↗ BubbleSort MergeSort QuickSort complexidade concurso</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Estruturas de dados — pilha, fila, lista, árvore</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=estruturas+de+dados+pilha+fila+lista+%C3%A1rvore+concurso" target="_blank">↗ estruturas de dados pilha fila lista árvore concurso</a>
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-p">lógica</span> YouTube — termos de busca</div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Lógica proposicional — tabela-verdade Cebraspe</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=l%C3%B3gica+proposicional+Cebraspe+certo+errado+tabela+verdade" target="_blank">↗ lógica proposicional Cebraspe certo errado tabela verdade</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Negação de quantificadores</div>
+          <a class="link-a" href="https://www.youtube.com/results?search_query=nega%C3%A7%C3%A3o+proposi%C3%A7%C3%B5es+quantificadores+todos+algum+concurso" target="_blank">↗ negação proposições quantificadores todos algum concurso</a>
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="badge b-g">questões</span> Plataformas de prática</div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">QConcursos</div>
+          <div class="link-sub">Filtrar: banca Cebraspe + Banco de Dados / Lógica</div>
+          <a class="link-a" href="https://www.qconcursos.com" target="_blank">↗ qconcursos.com</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Tecconcursos</div>
+          <div class="link-sub">Gratuito, forte em TI</div>
+          <a class="link-a" href="https://www.tecconcursos.com.br" target="_blank">↗ tecconcursos.com.br</a>
+        </div></div>
+        <div class="link-row"><div class="link-body">
+          <div class="link-title">Estratégia Concursos</div>
+          <div class="link-sub">Buscar SERPRO 2023 para provas anteriores da banca</div>
+          <a class="link-a" href="https://www.estrategiaconcursos.com.br" target="_blank">↗ estrategiaconcursos.com.br</a>
+        </div></div>
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</div><!-- /layout -->
+
+<script>
+const FC=[
+  {q:"O que faz σ (sigma) na álgebra relacional?",a:"Seleção — filtra LINHAS conforme uma condição. Equivale ao WHERE do SQL."},
+  {q:"O que faz π (pi) na álgebra relacional?",a:"Projeção — seleciona COLUNAS. Equivale ao SELECT col1,col2. Remove duplicatas automaticamente."},
+  {q:"Quando p→q é FALSO?",a:"Somente quando p é VERDADEIRO e q é FALSO. Nos outros 3 casos (VV, FV, FF) é sempre verdadeiro."},
+  {q:"MergeSort vs QuickSort no pior caso",a:"MergeSort = O(n log n) sempre, estável, usa memória extra. QuickSort = O(n²) quando pivot é extremo (array já ordenado)."},
+  {q:"O que é dependência transitiva — viola qual forma normal?",a:"A→B e B→C, A sendo chave e B não-chave. C depende transitivamente de A por B. Viola a 3FN. Corrigir: separar em tabela."},
+  {q:"Pilha vs Fila: qual é LIFO e qual é FIFO?",a:"Pilha = LIFO (último a entrar, primeiro a sair — pilha de pratos). Fila = FIFO (primeiro a entrar, primeiro a sair — fila de banco)."},
+  {q:"O que é a contrapositiva de p→q?",a:"~q→~p — inverte E nega os dois lados. É logicamente EQUIVALENTE a p→q. Não confundir com recíproca (q→p), que não é equivalente."},
+  {q:"Qual tipo NoSQL usar para redes sociais ou detecção de fraude?",a:"Grafo (ex: Neo4j). Relacionamentos são a entidade principal — nós e arestas são nativos, consultas de relacionamento são O(1) por salto."},
+  {q:"Diferença entre 2FN e 3FN",a:"2FN: elimina dependências parciais (atributo depende de parte da chave composta). 3FN: elimina dependências transitivas (não-chave depende de outro não-chave)."},
+  {q:"Modus Ponens vs Modus Tollens",a:"Ponens: [p→q, p] ⊢ q — afirma antecedente. Tollens: [p→q, ~q] ⊢ ~p — nega consequente. Ambos VÁLIDOS."},
+  {q:"Negação correta de 'Todos os servidores passaram'",a:"'Existe pelo menos um servidor que não passou.' Negação de 'Todos P' = 'Existe P que não'. NÃO é 'Nenhum passou'."},
+  {q:"Override vs Overload — qual ocorre em runtime?",a:"Override (sobrescrita) = runtime, mesma assinatura, subclasse redefine superclasse. Overload (sobrecarga) = compile time, mesmo nome, assinaturas diferentes."},
+];
+
+const QS=[
+  {ce:true, q:"(C/E) A operação de projeção (π) da álgebra relacional corresponde à cláusula WHERE do SQL, pois ambas filtram linhas de uma relação de acordo com uma condição.",ok:false,g:"ERRADO. π = projeção = seleciona COLUNAS (equivale ao SELECT col). Quem filtra linhas é a seleção (σ), equivalente ao WHERE. Confundir as duas é o erro mais cobrado em álgebra relacional."},
+  {ce:true, q:"(C/E) Na Segunda Forma Normal, quando a chave primária é composta por um único atributo, a relação está automaticamente nessa forma normal se estiver na 1FN, pois não há possibilidade de dependência parcial.",ok:true,g:"CERTO. Dependência parcial só existe com chave composta. Com chave simples não há 'parte' da chave, portanto a 2FN é satisfeita automaticamente ao satisfazer a 1FN."},
+  {ce:true, q:"(C/E) O QuickSort possui complexidade O(n²) no pior caso, que ocorre quando o pivot escolhido é sempre o maior ou o menor elemento do subarray, resultando em partições extremamente desbalanceadas.",ok:true,g:"CERTO. Com pivot extremo, cada partição gera subarrays de tamanho n-1 e 0. Total de comparações = n + (n-1) + ... + 1 = n(n-1)/2 = O(n²)."},
+  {ce:true, q:"(C/E) Uma pilha (stack) implementa a política FIFO (First In, First Out), enquanto uma fila (queue) implementa LIFO (Last In, First Out).",ok:false,g:"ERRADO. É o oposto: Pilha = LIFO (último a entrar, primeiro a sair). Fila = FIFO (primeiro a entrar, primeiro a sair). Inversão clássica da Cebraspe."},
+  {ce:true, q:"(C/E) A contrapositiva de 'Se o sistema falhar, os dados serão perdidos' é 'Se os dados não forem perdidos, o sistema não falhou', e essa proposição é logicamente equivalente à original.",ok:true,g:"CERTO. Contrapositiva de p→q é ~q→~p — inverte E nega os dois lados. Sempre equivalente ao condicional original."},
+  {ce:false, q:"(múltipla) Qual operador SQL filtra grupos após o GROUP BY, retornando apenas departamentos com mais de 3 funcionários?\na) WHERE COUNT(id) > 3\nb) HAVING COUNT(id) > 3\nc) FILTER COUNT(id) > 3\nd) WHERE HAVING COUNT(id) > 3\ne) AFTER GROUP COUNT(id) > 3",ok:"b",g:"B — CORRETA. HAVING filtra após o agrupamento, sobre os grupos. WHERE filtra antes do GROUP BY, sobre linhas individuais. FILTER, AFTER GROUP e a combinação WHERE HAVING não existem em SQL ANSI."},
+  {ce:true, q:"(C/E) A negação da proposição 'Todos os candidatos aprovados estudaram diariamente' é 'Nenhum candidato aprovado estudou diariamente'.",ok:false,g:"ERRADO. Negação de 'Todos P são Q' = 'Existe pelo menos um P que não é Q'. Correto: 'Existe pelo menos um candidato aprovado que não estudou diariamente.' 'Nenhum estudou' seria a negação de 'Algum estudou'."},
+  {ce:true, q:"(C/E) Bancos de dados do tipo chave-valor são ideais para armazenar dados com estrutura altamente variável e consultas complexas envolvendo múltiplos atributos.",ok:false,g:"ERRADO. Chave-valor (Redis, DynamoDB) são ideais para acesso simples e rápido por chave única — cache, sessão, contadores. Para consultas complexas com múltiplos atributos, use relacional ou orientado a documentos."},
+  {ce:true, q:"(C/E) O argumento 'Se há sobrecarga no sistema, o desempenho cai. O desempenho não caiu. Logo, não há sobrecarga' é uma aplicação válida do Modus Tollens.",ok:true,g:"CERTO. Modus Tollens: [p→q, ~q] ⊢ ~p. Premissas: sobrecarga→queda; não houve queda. Conclusão: não há sobrecarga. Argumento válido."},
+  {ce:false, q:"(múltipla) Em OOP, qual define corretamente a diferença entre sobrescrita e sobrecarga?\na) Sobrescrita em compile time; sobrecarga em runtime\nb) Sobrecarga redefine método da superclasse com mesma assinatura\nc) Sobrescrita ocorre em runtime, redefine método da superclasse com mesma assinatura\nd) São sinônimos em Java\ne) Sobrecarga exige herança",ok:"c",g:"C — CORRETA. Override (sobrescrita) = runtime, mesma assinatura, subclasse redefine superclasse. Overload (sobrecarga) = compile time, mesmo nome, assinaturas diferentes. A A inverte os tempos. B descreve override. D e E são falsas."},
+];
+
+/* flashcards */
+function buildFC(){
+  const g=document.getElementById('fc-grid');
+  if(!g) return;
+  FC.forEach((card,i)=>{
+    const el=document.createElement('div');
+    el.className='fc';
+    el.innerHTML=`<div class="fc-q">${card.q}</div><div class="fc-a">${card.a}</div><div class="fc-hint">toque para revelar</div>`;
+    el.addEventListener('click',()=>{
+      el.classList.toggle('flipped');
+      el.querySelector('.fc-hint').textContent=el.classList.contains('flipped')?'toque para ocultar':'toque para revelar';
+    });
+    g.appendChild(el);
+  });
+}
+function resetFC(){
+  document.querySelectorAll('.fc').forEach(el=>{
+    el.classList.remove('flipped');
+    el.querySelector('.fc-hint').textContent='toque para revelar';
+  });
+}
+
+/* questões */
+let qState={ans:{},right:0,total:0};
+function buildQs(){
+  const list=document.getElementById('q-list');
+  if(!list) return;
+  QS.forEach((q,i)=>{
+    const block=document.createElement('div');
+    block.className='q-block';
+    const isMC=!q.ce;
+    let inner=`<div class="q-num">questão ${String(i+1).padStart(2,'0')}</div>`;
+    if(isMC){
+      const lines=q.q.split('\n');
+      inner+=`<div class="q-text">${lines[0]}</div><div class="q-opts" id="opts-${i}">`;
+      lines.slice(1).forEach((l,j)=>{
+        inner+=`<button id="btn-${i}-${String.fromCharCode(97+j)}" onclick="pickMC(${i},'${String.fromCharCode(97+j)}')">${l}</button>`;
+      });
+      inner+=`</div>`;
+    } else {
+      inner+=`<div class="q-text">${q.q}</div>`;
+      inner+=`<div class="ce-row"><button class="btn-ce btn-c" id="bc-${i}" onclick="pickCE(${i},true)">✓ Certo</button><button class="btn-ce btn-e" id="be-${i}" onclick="pickCE(${i},false)">✗ Errado</button></div>`;
+    }
+    inner+=`<div class="q-actions"><button class="btn" onclick="toggleGab(${i})">ver gabarito</button></div>`;
+    inner+=`<div class="q-gab" id="gab-${i}"><strong>${isMC?'Resposta: '+q.ok.toUpperCase():(q.ok?'CERTO':'ERRADO')}</strong> — ${q.g}</div>`;
+    block.innerHTML=inner;
+    list.appendChild(block);
+  });
+}
+function toggleGab(i){ document.getElementById('gab-'+i)?.classList.toggle('show'); }
+function pickMC(i,ltr){
+  if(qState.ans[i]!==undefined) return;
+  qState.ans[i]=ltr; qState.total++;
+  if(ltr===QS[i].ok) qState.right++;
+  ['a','b','c','d','e'].forEach(l=>{
+    const btn=document.getElementById(`btn-${i}-${l}`);
+    if(btn) btn.className=l===QS[i].ok?'ok':'no';
+  });
+  updateScore();
+}
+function pickCE(i,val){
+  if(qState.ans[i]!==undefined) return;
+  qState.ans[i]=val; qState.total++;
+  if(val===QS[i].ok) qState.right++;
+  const bc=document.getElementById('bc-'+i);
+  const be=document.getElementById('be-'+i);
+  if(bc) bc.className='btn-ce btn-c '+(val===true?(QS[i].ok===true?'ok':'no'):'');
+  if(be) be.className='btn-ce btn-e '+(val===false?(QS[i].ok===false?'ok':'no'):'');
+  updateScore();
+}
+function updateScore(){
+  const pct=qState.total>0?Math.round(qState.right/qState.total*100):0;
+  const el=document.getElementById('score-txt');
+  const bar=document.getElementById('prog-f');
+  if(el) el.textContent=`${qState.right} acertos / ${qState.total} respondidas`;
+  if(bar) bar.style.width=pct+'%';
+}
+function resetQs(){
+  qState={ans:{},right:0,total:0};
+  updateScore();
+  document.querySelectorAll('.q-opts button').forEach(b=>{ b.className=''; });
+  document.querySelectorAll('[id^="bc-"],[id^="be-"]').forEach(b=>{
+    const isc=b.id.startsWith('bc-');
+    b.className='btn-ce '+(isc?'btn-c':'btn-e');
+  });
+  document.querySelectorAll('.q-gab').forEach(g=>g.classList.remove('show'));
+}
+
+/* TOC highlight */
+function initTOC(){
+  const items=document.querySelectorAll('.toc-item');
+  if(!items.length) return;
+  const sections=[...document.querySelectorAll('section[id]')];
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        items.forEach(i=>i.classList.remove('active'));
+        const active=[...items].find(i=>i.getAttribute('href')==='#'+e.target.id);
+        if(active) active.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -60% 0px'});
+  sections.forEach(s=>obs.observe(s));
+}
+
+buildFC();
+buildQs();
+initTOC();
+</script>
+</body>
+</html>
