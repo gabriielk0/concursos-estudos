@@ -72,10 +72,11 @@
         display: none;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         gap: 4px;
-        width: 36px;
-        height: 36px;
-        padding: 6px;
+        width: 44px;
+        height: 44px;
+        padding: 0;
         border-radius: 6px;
         border: 1px solid var(--border);
         background: transparent;
@@ -84,7 +85,8 @@
       }
       .hamburger span {
         display: block;
-        height: 1.5px;
+        width: 20px;
+        height: 2px;
         background: var(--muted);
         border-radius: 2px;
         transition:
@@ -92,13 +94,13 @@
           opacity 0.2s;
       }
       .hamburger.open span:nth-child(1) {
-        transform: translateY(5.5px) rotate(45deg);
+        transform: translateY(6px) rotate(45deg);
       }
       .hamburger.open span:nth-child(2) {
         opacity: 0;
       }
       .hamburger.open span:nth-child(3) {
-        transform: translateY(-5.5px) rotate(-45deg);
+        transform: translateY(-6px) rotate(-45deg);
       }
 
       .logo {
@@ -419,7 +421,7 @@
         align-items: center;
         gap: 8px;
         padding: 0 1rem;
-        height: 40px;
+        height: 48px;
         flex-shrink: 0;
         border-bottom: 1px solid var(--border);
         background: var(--surface);
@@ -428,18 +430,21 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         color: var(--muted);
         background: transparent;
         border: none;
         cursor: pointer;
         font-family: var(--sans);
+        height: 100%;
+        min-height: 44px;
+        padding: 0 8px;
       }
       .back-btn:hover {
         color: var(--text);
       }
       .back-title {
-        font-size: 0.78rem;
+        font-size: 0.85rem;
         font-weight: 500;
         color: var(--text);
       }
@@ -565,6 +570,17 @@
         }
         .sidebar.open {
           transform: translateX(0);
+        }
+
+        /* Aumento do touch target dos itens da sidebar em mobile */
+        .sb-item {
+          padding: 10px 12px;
+          min-height: 44px;
+          font-size: 0.85rem;
+        }
+        .sb-label {
+          font-size: 0.68rem;
+          margin-bottom: 0.6rem;
         }
 
         /* iframe off, inline on */
