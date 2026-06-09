@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps, Contêineres & Qualidade — Monitor SERPRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+/* ── LOCAL PIPELINE & TAB COMPONENT STYLES ── */
+.pipeline-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 24px;
+}
+
+.pipeline-title {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.pipeline-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+}
+
+.pipeline-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.pipe-node {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pipe-node:hover {
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+    background: rgba(6, 182, 212, 0.02);
+}
+
+.pipe-node.active {
+    border-color: var(--cyan);
+    background: rgba(6, 182, 212, 0.08);
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+}
+
+.pipe-node .step-num {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--cyan);
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.pipe-node .step-name {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--text);
+}
+
+.pipe-arrow {
+    color: var(--border2);
+    font-weight: bold;
+    font-size: 16px;
+    user-select: none;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.25s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.main-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.box-title {
+    font-family: var(--sans);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+}
+
+.box-title span {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.concept-row {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.concept-row:last-child {
+    border-bottom: none;
+}
+
+.concept-name {
+    font-family: var(--mono);
+    color: var(--cyan);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.concept-row p {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.badge-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+}
+
+.b-engine {
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: var(--warning);
+    background: rgba(245, 158, 11, 0.06);
+}
+.b-orquestra {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: var(--purple);
+    background: rgba(139, 92, 246, 0.06);
+}
+
+@media (max-width: 900px) {
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="ph">
+        <div class="ph-meta">Módulo 02 · Semanas 3–4 · Automação</div>
+        <h1 class="ph-title">Engine Terminal: <em>DevOps & Infraestrutura</em></h1>
+        <p class="ph-desc">Práticas modernas de engenharia: automação de testes com GitLab CI, dublês de testes e orquestração de contêineres com Docker e Kubernetes.</p>
+    </div>
+
+    <div class="pipeline-container">
+        <div class="pipeline-title">Trilha de Implantação e Qualidade Integrada</div>
+        <div class="pipeline-flex">
+            <div class="pipe-node active" onclick="switchTab('tab-git', this)">
+                <span class="step-num">STAGE 01</span>
+                <span class="step-name">Gestão de Código</span>
+            </div>
+            <span class="pipe-arrow">➔</span>
+            <div class="pipe-node" onclick="switchTab('tab-cicd', this)">
+                <span class="step-num">STAGE 02</span>
+                <span class="step-name">Pipeline CI / CD</span>
+            </div>
+            <span class="pipe-arrow">➔</span>
+            <div class="pipe-node" onclick="switchTab('tab-testes', this)">
+                <span class="step-num">STAGE 03</span>
+                <span class="step-name">Garantia & Mocks</span>
+            </div>
+            <span class="pipe-arrow">➔</span>
+            <div class="pipe-node" onclick="switchTab('tab-containers', this)">
+                <span class="step-num">STAGE 04</span>
+                <span class="step-name">Docker vs K8s</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content active" id="tab-git">
+        <div class="grid-layout">
+            <div class="main-card">
+                <h2 class="box-title">Versionamento Avançado com Git e GitLab <span>Core</span></h2>
+                <div class="concept-row">
+                    <div class="concept-name">Merge vs Rebase</div>
+                    <p>O <strong>Merge</strong> cria um novo commit unindo os históricos, preservando a linha temporal real da equipe. O <strong>Rebase</strong> reescreve o histórico, movendo a base da ramificação para o topo da branch de destino, resultando em uma linha temporal linear.</p>
+                </div>
+                <div class="concept-row">
+                    <div class="concept-name">Estratégias de Branching</div>
+                    <p>Utilização de modelos como GitFlow ou Trunk-Based Development para orquestrar o desenvolvimento em paralelo sem gerar conflitos destrutivos no repositório principal.</p>
+                </div>
+            </div>
+            <div class="side-panel">
+                <div class="main-card" style="border-top: 3px solid var(--amber);">
+                    <h3 style="color: var(--amber); margin-bottom: 10px;">⚡ Foco de Prova</h3>
+                    <p style="font-size: 13px; color: var(--text-muted);">A banca adora testar comandos de recuperação de código como <code>git cherry-pick</code> (trazer um commit específico) e <code>git revert</code> (criar commit que desfaz uma alteração).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-cicd">
+        <div class="grid-layout">
+            <div class="main-card">
+                <h2 class="box-title">Automação com GitLab CI <span>Automate</span></h2>
+                <div class="concept-row">
+                    <div class="concept-name">Continuous Integration (CI)</div>
+                    <p>Prática de integrar código ao repositório principal várias vezes ao dia. Cada integração dispara uma esteira automatizada de build e execução de testes de unidade para detectar falhas o quanto antes.</p>
+                </div>
+                <div class="concept-row">
+                    <div class="concept-name">Continuous Delivery vs Deployment (CD)</div>
+                    <p>Na <strong>Entrega Contínua (Delivery)</strong>, o artefato é gerado e fica pronto para ir para produção, dependendo de uma aprovação manual. No <strong>Implante Contínuo (Deployment)</strong>, a ida para produção é 100% automatizada caso passe nos estágios anteriores.</p>
+                </div>
+            </div>
+            <div class="side-panel">
+                <div class="trap">
+                    <strong>Rasteira Clássica Cebraspe:</strong> Afirmar que a Integração Contínua elimina a necessidade de revisões de código manuais. Errado! A esteira automatiza testes, mas a análise de arquitetura (Code Review) permanece ativa.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-testes">
+        <div class="grid-layout">
+            <div class="main-card">
+                <h2 class="box-title">Estratégia de Testes & Qualidade de Software <span>QA</span></h2>
+                <div class="trap">
+                    <strong>Foco Absoluto:</strong> Testes de carga e estresse avaliam o comportamento e a resiliência da infraestrutura perante picos de requisições, sendo classificados estritamente como <strong>Testes de Requisitos Não Funcionais (RNF)</strong>.
+                </div>
+                <div class="concept-row">
+                    <div class="concept-name">Dublês de Teste: Mocks vs Stubs</div>
+                    <p><strong>Stubs:</strong> Fornecem respostas estáticas e fixadas para as chamadas feitas durante o teste de unidade, servindo para alimentar a execução.</p>
+                    <p><strong>Mocks:</strong> São objetos pré-programados que verificam o comportamento e a interação (se o método foi chamado, quantas vezes e com quais parâmetros corretos).</p>
+                </div>
+            </div>
+            <div class="side-panel">
+                <div class="main-card">
+                    <h3 style="margin-bottom:10px;">Ordem de Escopo</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">1. Teste Unitário (Isolado)<br>2. Teste de Integração (Módulos)<br>3. Teste de RNF (Carga/Estresse)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-containers">
+        <div class="grid-layout">
+            <div class="main-card">
+                <h2 class="box-title">Isolamento e Orquestração de Contêineres <span>Infra</span></h2>
+                <div class="concept-row">
+                    <div class="concept-name">
+                        <span class="badge-tag b-engine">Engine</span>Docker
+                    </div>
+                    <p>Tecnologia voltada ao empacotamento da aplicação e de todas as suas dependências em uma imagem imutável, rodando em contêineres isolados que compartilham o kernel do sistema operacional nativo.</p>
+                </div>
+                <div class="concept-row">
+                    <div class="concept-name">
+                        <span class="badge-tag b-orquestra">Orquestração</span>Kubernetes & OpenShift
+                    </div>
+                    <p>Ferramentas responsáveis por coordenar múltiplos contêineres espalhados em um cluster de servidores. Gerenciam o balanceamento de carga de rede, escalabilidade automática baseada em consumo de CPU e autorrecuperação (self-healing) de pods caídos.</p>
+                </div>
+            </div>
+            <div class="side-panel">
+                <div class="main-card" style="border-top: 3px solid var(--purple);">
+                    <h3 style="color: var(--purple); margin-bottom:10px;">WSL na Prática</h3>
+                    <p style="font-size:13px; color:var(--text-muted);">Rodar os contêineres em ambientes locais Linux através do WSL (Windows Subsystem for Linux) simula a produção em nuvem de forma nativa e otimiza o uso do Docker Engine.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId, nodeEl) {
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+            document.querySelectorAll('.pipe-node').forEach(pn => pn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            nodeEl.classList.add('active');
+        }
+    </script>
+</body>
+</html>

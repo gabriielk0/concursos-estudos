@@ -9,91 +9,17 @@
       rel="stylesheet"
     />
     <style>
-      :root {
-        --bg: #0d0f14;
-        --surface: #13161e;
-        --card: #1a1e2a;
-        --border: #252a38;
+      .container {
         --accent1: #00e5c3;
         --accent2: #ff6b6b;
         --accent3: #ffd166;
         --accent4: #a78bfa;
         --accent5: #38bdf8;
-        --text: #e2e8f0;
-        --muted: #64748b;
         --fn-colors: #00e5c3, #38bdf8, #a78bfa, #ff6b6b, #ffd166;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: 'IBM Plex Mono', monospace;
-        font-size: 14px;
-        line-height: 1.7;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 20px 80px;
         overflow-x: hidden;
-      }
-
-      /* HERO */
-      .hero {
-        position: relative;
-        text-align: center;
-        padding: 80px 20px 60px;
-        overflow: hidden;
-        max-width: 100%;
-      }
-
-      .hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-          ellipse 80% 60% at 50% 0%,
-          rgba(0, 229, 195, 0.08) 0%,
-          transparent 70%
-        );
-        pointer-events: none;
-      }
-
-      .hero-label {
-        font-size: 11px;
-        letter-spacing: 4px;
-        color: var(--accent1);
-        text-transform: uppercase;
-        margin-bottom: 16px;
-        opacity: 0.8;
-      }
-
-      .hero h1 {
-        font-family: 'Fraunces', serif;
-        font-size: clamp(32px, 6vw, 64px);
-        font-weight: 700;
-        line-height: 1.1;
-        background: linear-gradient(
-          135deg,
-          #fff 0%,
-          var(--accent1) 50%,
-          var(--accent5) 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 20px;
-      }
-
-      .hero-sub {
-        font-family: 'Fraunces', serif;
-        font-style: italic;
-        font-weight: 300;
-        color: var(--muted);
-        font-size: 16px;
-        max-width: 500px;
-        margin: 0 auto 40px;
       }
 
       /* PROGRESS NAV */
@@ -112,7 +38,7 @@
         border: 1px solid var(--border);
         background: var(--card);
         color: var(--muted);
-        font-family: 'IBM Plex Mono', monospace;
+        font-family: var(--mono);
         font-size: 12px;
         cursor: pointer;
         transition: all 0.2s;
@@ -191,7 +117,7 @@
       }
 
       .fn-badge {
-        font-family: 'Fraunces', serif;
+        font-family: var(--serif);
         font-size: 40px;
         font-weight: 700;
         min-width: 80px;
@@ -200,7 +126,7 @@
       }
 
       .fn-title-block h2 {
-        font-family: 'Fraunces', serif;
+        font-family: var(--serif);
         font-size: 26px;
         font-weight: 700;
         margin-bottom: 6px;
@@ -250,7 +176,7 @@
       }
 
       .rule-box .rule-text {
-        font-family: 'Fraunces', serif;
+        font-family: var(--serif);
         font-size: 17px;
         font-weight: 300;
         font-style: italic;
@@ -288,7 +214,7 @@
       }
 
       .explain h3 {
-        font-family: 'Fraunces', serif;
+        font-family: var(--serif);
         font-size: 16px;
         font-weight: 700;
         margin-bottom: 12px;
@@ -322,13 +248,13 @@
         gap: 8px;
       }
 
-      table {
+      .table-wrap table {
         width: 100%;
         border-collapse: collapse;
         font-size: 12px;
       }
 
-      th {
+      .table-wrap th {
         background: var(--card);
         padding: 10px 16px;
         text-align: left;
@@ -339,12 +265,12 @@
         border-bottom: 1px solid var(--border);
       }
 
-      td {
+      .table-wrap td {
         padding: 10px 16px;
         border-bottom: 1px solid var(--border);
       }
 
-      tr:last-child td {
+      .table-wrap tr:last-child td {
         border-bottom: none;
       }
 
@@ -551,7 +477,7 @@
         border: 1px solid var(--accent1);
         background: transparent;
         color: var(--accent1);
-        font-family: 'IBM Plex Mono', monospace;
+        font-family: var(--mono);
         font-size: 12px;
         cursor: pointer;
         letter-spacing: 1px;
@@ -670,27 +596,26 @@
         color: #00e5c3;
       }
 
-      hr.divider {
+      .container hr.divider {
         border: none;
         border-top: 1px solid var(--border);
         margin: 20px 0;
       }
 
-      code {
+      .container code {
         background: rgba(255, 255, 255, 0.06);
         padding: 2px 6px;
         border-radius: 3px;
-        font-family: 'IBM Plex Mono', monospace;
+        font-family: var(--mono);
       }
     </style>
   </head>
   <body>
-    <div class="hero">
-      <div class="hero-label">Banco de Dados Relacional</div>
-      <h1>Formas Normais</h1>
-      <p class="hero-sub">
-        Do caos ao controle — como organizar dados sem redundância nem anomalias
-      </p>
+    <!-- PAGE HEADER -->
+    <div class="ph">
+      <div class="ph-meta">Banco de Dados Relacional</div>
+      <h1 class="ph-title">Formas <em>Normais</em></h1>
+      <p class="ph-desc">Do caos ao controle — como organizar dados de forma otimizada eliminando redundâncias e anomalias de atualização.</p>
     </div>
 
     <!-- PYRAMID -->

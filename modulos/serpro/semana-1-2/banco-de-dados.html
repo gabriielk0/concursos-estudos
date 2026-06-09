@@ -1,91 +1,217 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Banco de dados — Semana 1–2</title>
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        min-height: 100vh;
-        font-family: 'DM Sans', sans-serif;
-        background: #0e0e10;
-        color: #e8e8ec;
-        padding: 1.5rem;
-      }
-      .page {
-        max-width: 760px;
-        margin: 0 auto;
-      }
-      h1 {
-        font-family: 'DM Serif Display', serif;
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        margin-bottom: 0.75rem;
-      }
-      p {
-        color: #b5b5bc;
-        line-height: 1.75;
-        margin-bottom: 1.2rem;
-      }
-      .link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: #c9a84c;
-        text-decoration: none;
-        font-family: 'DM Mono', monospace;
-        margin-bottom: 1.2rem;
-        min-height: 44px;
-        padding: 4px 0;
-      }
-      .card {
-        background: #17171a;
-        border: 1px solid #2a2a2e;
-        border-radius: 14px;
-        padding: 1.2rem;
-        margin-bottom: 1rem;
-      }
-      .card h2 {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-      }
-      .card p {
-        color: #9a9aa3;
-        font-size: 0.94rem;
-        line-height: 1.7;
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page">
-      <a class="link" href="index.html">← voltar para Semana 1–2</a>
-      <h1>Banco de dados</h1>
-      <p>
-        Use esta página para colocar seus resumos, tabelas e exemplos de SQL.
-        Crie arquivos adicionais se quiser dividir o conteúdo por tópico, por
-        exemplo <code>sql-avancado.html</code> ou
-        <code>normalizacao.html</code>.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banco de Dados Relacional — Semana 1–2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Scoped custom layouts for DB page to avoid leaks */
+    .db-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .db-highlight {
+      border-left-color: var(--cyan) !important;
+    }
+    
+    .iso-table td {
+      text-align: center;
+    }
+    .iso-table td:first-child {
+      text-align: left;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <!-- PAGE HEADER -->
+    <div class="ph">
+      <div class="ph-meta">módulo 01 · semanas 1–2 · aprofundamento</div>
+      <h1 class="ph-title">Banco de <em>Dados</em> Relacional & SQL</h1>
+      <p class="ph-desc">Arquitetura interna de SGBDs, execução lógica de consultas SQL, indexação física, transações concorrentes e equivalências algébricas essenciais para provas.</p>
+      <div class="ph-pills">
+        <span class="pill pill-r">SQL Avançado</span>
+        <span class="pill pill-a">B-Tree vs Hash vs Bitmap</span>
+        <span class="pill pill-p">Níveis de Isolamento (ACID)</span>
+        <span class="pill pill-g">Álgebra Relacional</span>
+      </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <div class="db-grid">
+      <!-- CARD 1: ARQUITETURA -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge b-i">SGBD</span> Arquitetura e Componentes Internos
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+          Um SGBD relacional moderno possui componentes organizados em camadas críticas para garantir consistência e performance de busca:
+        </p>
+        
+        <div class="row-item">
+          <span class="row-key">Query Processor</span>
+          <span class="row-val">Analisa a sintaxe (parser), resolve referências de tabelas/colunas, otimiza o plano de execução e gera as chamadas de código de baixo nível.</span>
+        </div>
+        
+        <div class="row-item">
+          <span class="row-key">Storage Manager</span>
+          <span class="row-val">Gerencia a alocação de espaço em disco, estruturas físicas de arquivos e índices. Evita acessos lentos de I/O em disco sempre que possível.</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Buffer Manager</span>
+          <span class="row-val">Mantém em memória RAM páginas do banco de dados trazidas do disco. Implementa políticas de cache (como LRU — Least Recently Used).</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Transaction Mgr</span>
+          <span class="row-val">Garante as propriedades ACID. Controla locks e concorrência (Scheduler) e registra o log de transações (Write-Ahead Logging - WAL) para recuperação de falhas.</span>
+        </div>
+      </div>
+
+      <!-- CARD 2: TRANSACTION ISOLATION -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge b-r">ACID</span> Transações & Isolamento Concorrente
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+          A propriedade **I** (Isolamento) do ACID impede que transações concorrentes causem inconsistências mútuas. O padrão ANSI SQL-92 define 4 níveis de isolamento baseado em anomalias toleradas:
+        </p>
+
+        <div class="tbl-wrap">
+          <table class="iso-table">
+            <thead>
+              <tr>
+                <th>Nível de Isolamento</th>
+                <th>Leitura Suja (Dirty Read)</th>
+                <th>Leitura Não Repetível</th>
+                <th>Leitura Fantasma (Phantom)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Read Uncommitted</td>
+                <td style="color:var(--danger)">Permite</td>
+                <td style="color:var(--danger)">Permite</td>
+                <td style="color:var(--danger)">Permite</td>
+              </tr>
+              <tr>
+                <td>Read Committed</td>
+                <td style="color:var(--green)">Evita</td>
+                <td style="color:var(--danger)">Permite</td>
+                <td style="color:var(--danger)">Permite</td>
+              </tr>
+              <tr>
+                <td>Repeatable Read</td>
+                <td style="color:var(--green)">Evita</td>
+                <td style="color:var(--green)">Evita</td>
+                <td style="color:var(--danger)">Permite</td>
+              </tr>
+              <tr>
+                <td>Serializable</td>
+                <td style="color:var(--green)">Evita</td>
+                <td style="color:var(--green)">Evita</td>
+                <td style="color:var(--green)">Evita</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trap">
+          <strong>Pegadinha Clássica:</strong> O PostgreSQL implementa o nível <code>Repeatable Read</code> de forma a evitar leituras fantasmas também. Portanto, na prática PostgreSQL e Oracle diferem do comportamento estrito definido no padrão ANSI.
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: SQL LOGICAL EXECUTION -->
+    <div class="card db-highlight">
+      <div class="card-title">
+        <span class="badge b-a">Cebraspe</span> Ordem de Execução Lógica do SQL
+      </div>
+      <p style="font-size:0.88rem;color:var(--text);margin-bottom:1rem;">
+        Em provas de concursos de TI, é frequente a apresentação de consultas complexas. Para prever o resultado, lembre-se de que a ordem lógica com que o SGBD executa as cláusulas difere de como escrevemos o código:
       </p>
-      <div class="card">
-        <h2>Conceitos principais</h2>
-        <p>
-          Defina aqui: tabelas, chaves primárias e estrangeiras, normalização,
-          formas normais, transações e índices.
-        </p>
+
+      <div class="example">
+        <div class="example-label">Ordem Cronológica de Processamento</div>
+        <ol style="padding-left: 20px; line-height: 1.8; font-size: 0.85rem;">
+          <li><code>FROM</code> &mdash; Carrega e cruza as tabelas de dados.</li>
+          <li><code>ON / JOIN</code> &mdash; Filtra linhas com base nos critérios de união.</li>
+          <li><code>WHERE</code> &mdash; Filtra as linhas individuais. <em>(Não aceita funções de agregação)</em>.</li>
+          <li><code>GROUP BY</code> &mdash; Agrupa as linhas filtradas em subgrupos.</li>
+          <li><code>HAVING</code> &mdash; Filtra os grupos resultantes. <em>(Aceita funções de agregação)</em>.</li>
+          <li><code>SELECT</code> &mdash; Projeta e formata as colunas de retorno.</li>
+          <li><code>DISTINCT</code> &mdash; Elimina linhas duplicadas.</li>
+          <li><code>ORDER BY</code> &mdash; Ordena os dados finais.</li>
+          <li><code>LIMIT / OFFSET</code> &mdash; Restringe o tamanho do conjunto de resultados.</li>
+        </ol>
       </div>
-      <div class="card">
-        <h2>Exemplo de SQL</h2>
-        <p>
-          Insira consultas e exercícios. Por exemplo, SELECT com JOIN, GROUP BY
-          e subconsultas para treinar questões típicas.
-        </p>
+
+      <div class="tip">
+        <strong>Diferença crucial:</strong> Não tente utilizar um alias criado no <code>SELECT</code> (ex: <code>SELECT salario * 12 AS salario_anual</code>) dentro da cláusula <code>WHERE</code> ou <code>GROUP BY</code>, pois o SGBD tentará processá-las antes de ler o SELECT, causando erro de sintaxe.
       </div>
-    </main>
-  </body>
+    </div>
+
+    <!-- CARD 4: WINDOW FUNCTIONS -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-p">Avançado</span> Window Functions (Funções de Janela)
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+        As funções de janela realizam cálculos em um conjunto de linhas que estão relacionadas com a linha atual, sem agrupá-las em uma única linha de saída:
+      </p>
+
+      <div class="code"><span class="kw">SELECT</span> nome, dept_id, salario,
+       <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> dept_id <span class="kw">ORDER BY</span> salario <span class="kw">DESC</span>) <span class="kw">AS</span> pos_no_dept,
+       <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> dept_id <span class="kw">ORDER BY</span> salario <span class="kw">DESC</span>) <span class="kw">AS</span> ranking_denso
+<span class="kw">FROM</span>   funcionario;</div>
+
+      <div class="row-item">
+        <span class="row-key">ROW_NUMBER()</span>
+        <span class="row-val">Atribui um número sequencial único a cada linha de forma incremental. Se houver empates de valores, os números continuam sequenciais e aleatórios (ex: 1, 2, 3, 4).</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">RANK()</span>
+        <span class="row-val">Atribui rankings contendo lacunas se houver empates. Ex: se duas linhas empatam na 2ª posição, a sequência será (1, 2, 2, 4).</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">DENSE_RANK()</span>
+        <span class="row-val">Atribui rankings consecutivos sem lacunas em caso de empates. Ex: se duas linhas empatam na 2ª posição, a sequência será (1, 2, 2, 3).</span>
+      </div>
+    </div>
+
+    <!-- CARD 5: INDEXES -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-g">Performance</span> Estruturas Físicas de Indexação
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+        Índices aumentam a velocidade de consultas ao custo de espaço extra em disco e redução na velocidade de escrita (INSERT, UPDATE, DELETE):
+      </p>
+
+      <div class="row-item">
+        <span class="row-key">B-Tree</span>
+        <span class="row-val">Estrutura balanceada em árvore multinível. Excelente para buscas de igualdade (<code>=</code>), buscas por intervalo (<code>BETWEEN</code>, <code>&lt;</code>, <code>&gt;</code>) e ordenações (<code>ORDER BY</code>).</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Hash Index</span>
+        <span class="row-val">Usa uma função de espalhamento (hash). É extremamente rápido para buscas exatas por igualdade (<code>O(1)</code>), mas inútil para intervalos e ordenações.</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Bitmap Index</span>
+        <span class="row-val">Vetores de bits que indicam se uma linha contém determinado valor. Ideal para colunas com **baixa cardinalidade** (poucos valores distintos, ex: Status, Genero) e leituras pesadas (Data Warehouse). Péssimo para atualizações frequentes (locks massivos).</span>
+      </div>
+    </div>
+  </div>
+</body>
 </html>

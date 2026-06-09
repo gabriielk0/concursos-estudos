@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitetura de Sistemas & Padrões — Monitor SERPRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+/* ── LOCAL ARCHITECTURE COMPONENT STYLES ── */
+.blueprint-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.layer-card {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.layer-card:hover {
+    border-style: solid;
+    border-color: var(--purple);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.1);
+}
+
+.layer-card.active {
+    border-style: solid;
+    border-color: var(--purple);
+    background: rgba(139, 92, 246, 0.05);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.08);
+}
+
+.layer-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.layer-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.layer-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.detail-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    display: none;
+    animation: slideDown 0.25s ease;
+}
+
+.detail-panel.active {
+    display: block;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.detail-title {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    color: var(--text);
+}
+
+.topic-block {
+    margin-bottom: 1.5rem;
+}
+.topic-block:last-child {
+    margin-bottom: 0;
+}
+
+.topic-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--cyan);
+    margin-bottom: 6px;
+    font-family: var(--sans);
+}
+
+.topic-block p {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+    .blueprint-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .blueprint-grid {
+        grid-template-columns: 1fr;
+    }
+    .detail-panel {
+        padding: 1.25rem;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="canvas-container">
+        <div class="ph">
+            <div class="ph-meta">Módulo 02 · Semanas 3–4 · Estratégia</div>
+            <h1 class="ph-title">Architecture Blueprint: <em>Padrões & Design</em></h1>
+            <p class="ph-desc">Arquiteturas modernizadas para ecossistemas de alta disponibilidade: padrões de microsserviços distribuídos, ciclo de vida Frontend e os princípios SOLID.</p>
+        </div>
+
+        <div class="blueprint-grid">
+            <div class="layer-card active" onclick="openLayer('layer-front', this)">
+                <span class="layer-tag">Layer 01</span>
+                <div class="layer-name">Frontend Patterns</div>
+                <p class="layer-desc">Modelos de ciclo de vida modernos, arquitetura SPA e ecossistema PWA offline.</p>
+            </div>
+            <div class="layer-card" onclick="openLayer('layer-backend', this)">
+                <span class="layer-tag">Layer 02</span>
+                <div class="layer-name">Integration & API</div>
+                <p class="layer-desc">Roteamento por API Gateway, comunicações assíncronas, RESTful e GraphQL.</p>
+            </div>
+            <div class="layer-card" onclick="openLayer('layer-micro', this)">
+                <span class="layer-tag">Layer 03</span>
+                <div class="layer-name">Microsserviços</div>
+                <p class="layer-desc">Orquestração distribuída de dados utilizando os padrões avançados SAGA e CQRS.</p>
+            </div>
+            <div class="layer-card" onclick="openLayer('layer-solid', this)">
+                <span class="layer-tag">Layer 04</span>
+                <div class="layer-name">SOLID & Code</div>
+                <p class="layer-desc">Princípios de engenharia de software para garantir baixo acoplamento e Clean Code.</p>
+            </div>
+        </div>
+
+        <div class="detail-panel active" id="layer-front">
+            <div class="detail-title">Frontend & Interfaces Responsivas</div>
+            <div class="topic-block">
+                <div class="topic-name">Single Page Application (SPA)</div>
+                <p>O navegador realiza o download de uma única página estrutural. A atualização de views e o fluxo de telas ocorrem via manipulação assíncrona do DOM (JSON manipulado por bibliotecas como React e VueJS), mitigando o reload completo do servidor.</p>
+            </div>
+            <div class="topic-block">
+                <div class="topic-name">Progressive Web App (PWA)</div>
+                <p>Estratégia que transforma aplicações web em experiências similares às nativas de dispositivos móveis. Utiliza <strong>Service Workers</strong> em segundo plano para interceptar requisições, permitindo cache agressivo, push notifications e funcionamento offline.</p>
+            </div>
+        </div>
+
+        <div class="detail-panel" id="layer-backend">
+            <div class="detail-title">Integração, Gateway e Protocolos</div>
+            <div class="topic-block">
+                <div class="topic-name">API Gateway</div>
+                <p>Atua como o ponto único de entrada do ecossistema de microsserviços. É responsável por receber requisições externas, realizar a autenticação/autorização unificada e fazer o roteamento inteligente de tráfego para os serviços internos adequados.</p>
+            </div>
+            <div class="topic-block">
+                <div class="topic-name">RESTful vs GraphQL</div>
+                <p>O modelo <strong>REST</strong> baseia-se em recursos mapeados por URIs imutáveis acessadas via verbos HTTP estáveis. O <strong>GraphQL</strong> permite que o cliente envie uma query sob medida, solicitando apenas os campos desejados, o que erradica problemas de overfetching.</p>
+            </div>
+        </div>
+
+        <div class="detail-panel" id="layer-micro">
+            <div class="detail-title">Microsserviços & Transações Distribuídas</div>
+            <div class="topic-block">
+                <div class="topic-name">Padrão SAGA</div>
+                <p>Responsável pela consistência de dados em transações que cruzam múltiplos microsserviços com bancos isolados. Executa uma série de transações locais em cadeia. Caso ocorra uma quebra ou rejeição em qualquer ponto intermediário, o padrão engatilha <strong>transações de compensação</strong> que desfazem os passos anteriores de forma reversa.</p>
+            </div>
+            <div class="topic-block">
+                <div class="topic-name">CQRS (Command Query Responsibility Segregation)</div>
+                <p>Segregação de Responsabilidade de Comando (Escrita/Alteração) e Consulta (Leitura). Cria caminhos ou até bancos de dados otimizados e distintos para operações de atualização de dados e operações de leitura rápida, permitindo escalabilidade assimétrica.</p>
+            </div>
+        </div>
+
+        <div class="detail-panel" id="layer-solid">
+            <div class="detail-title">SOLID & Sustentabilidade de Código</div>
+            <div class="topic-block">
+                <p>Conjunto de boas práticas de engenharia de software fundamentais para o desenvolvimento limpo (Clean Code):</p>
+                <ul style="padding-left: 20px; margin-top: 10px; line-height: 2;">
+                    <li><strong>S (Single Responsibility):</strong> Uma classe deve reter apenas uma única responsabilidade central.</li>
+                    <li><strong>O (Open/Closed):</strong> O código deve ser aberto para extensão (herança/polimorfismo), mas totalmente fechado para modificação de fontes antigos.</li>
+                    <li><strong>L (Liskov Substitution):</strong> Classes filhas devem ser capazes de substituir suas classes mães perfeitamente sem quebrar o ecossistema.</li>
+                    <li><strong>I (Interface Segregation):</strong> Prefira múltiplas interfaces enxutas e focadas a uma única interface massiva e genérica.</li>
+                    <li><strong>D (Dependency Inversion):</strong> Módulos de alto nível não devem depender de detalhes de baixo nível; ambos devem depender de interfaces e abstrações.</li>
+                </ul>
+            </div>
+            <div class="trap">
+                <strong>Rasteira de Prova:</strong> O Cebraspe adora colocar exemplos de códigos que violam o princípio Open/Closed enchendo funções de blocos <code>if/else</code> ou <code>switch</code> para validar tipos de classes, quando o correto seria delegar o comportamento via polimorfismo dinâmico.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openLayer(layerId, cardEl) {
+            document.querySelectorAll('.detail-panel').forEach(dp => dp.classList.remove('active'));
+            document.querySelectorAll('.layer-card').forEach(lc => lc.classList.remove('active'));
+            
+            document.getElementById(layerId).classList.add('active');
+            cardEl.classList.add('active');
+        }
+    </script>
+</body>
+</html>

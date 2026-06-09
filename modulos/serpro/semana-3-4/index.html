@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Semana 1–2 — SERPRO</title>
+    <title>Semana 3–4 — SERPRO</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -797,7 +797,7 @@
       .btn-e:hover { background: rgba(244, 63, 94, 0.05); }
       
       .btn-c.ok { background: rgba(16, 185, 129, 0.12); font-weight: 700; border-color: var(--green); color: #fff; }
-      .btn-e.ok { background: rgba(16, 185, 129, 0.12); font-weight: 700; border-color: var(--green); color: #fff; }
+      .btn-e.ok { background: rgba(16, 185, 129, 0.12); font-weight: 700; border-color: var(--green); color: #fff; } /* Se escolheu Errado e a resposta era Errado, fica verde! */
       .btn-c.no { background: rgba(244, 63, 94, 0.08); opacity: 0.5; border-color: var(--danger); }
       .btn-e.no { background: rgba(244, 63, 94, 0.08); opacity: 0.5; border-color: var(--danger); }
 
@@ -884,7 +884,7 @@
       /* Navigation Dashboard Cards inside Visão Geral */
       .dashboard-nav-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 16px;
         margin-top: 2rem;
       }
@@ -892,7 +892,7 @@
         background: linear-gradient(135deg, var(--card), rgba(23, 28, 44, 0.6));
         border: 1px dashed var(--border);
         border-radius: 14px;
-        padding: 1.5rem;
+        padding: 1.75rem;
         cursor: pointer;
         transition: all 0.25s ease;
         display: flex;
@@ -913,14 +913,14 @@
         letter-spacing: 0.1em;
       }
       .db-nav-title {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: 700;
         color: var(--text);
       }
       .db-nav-desc {
         font-size: 0.8rem;
         color: var(--muted);
-        line-height: 1.5;
+        line-height: 1.6;
       }
       .db-nav-action {
         font-family: var(--mono);
@@ -933,24 +933,6 @@
         font-weight: 600;
         text-transform: uppercase;
         padding-top: 0.75rem;
-      }
-
-      /* ─── CUSTOM LOCAL STYLES FOR ALG/LOGIC COMPONENTS ─── */
-      .flow-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
-        margin-bottom: 20px;
-      }
-      .alg-step {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 1.25rem;
-        transition: all 0.2s;
-      }
-      .alg-step:hover {
-        border-color: var(--purple);
       }
 
       /* ═══════════════════════════════════════
@@ -1063,14 +1045,14 @@
       <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
         ☰
       </button>
-      <div class="topbar-title">Semana 1–2</div>
+      <div class="topbar-title">Semana 3–4</div>
     </header>
 
     <div class="layout">
       <aside class="sidebar" id="sidebar" aria-label="Menu de Estudos">
         <div class="logo-container">
-          <div class="logo">Semana 1–2</div>
-          <div class="subtitle">Banco de Dados, Algoritmos & Lógica</div>
+          <div class="logo">Semana 3–4</div>
+          <div class="subtitle">Engenharia, Arquitetura & Segurança</div>
         </div>
 
         <a class="sb-back-btn" href="../index.html">
@@ -1098,7 +1080,7 @@
         {
           id: 'resumo',
           title: 'Visão geral',
-          file: 'semana-1-2.html',
+          file: 'semana-3-4.html',
           meta: 'Início',
         },
         {
@@ -1107,28 +1089,22 @@
           meta: 'Módulo',
           children: [
             {
-              id: 'banco',
-              title: 'Banco de dados',
-              file: 'banco-de-dados.html',
-              meta: 'BD',
+              id: 'devops',
+              title: 'DevOps & Infraestrutura',
+              file: 'tema-devops-infra.html',
+              meta: 'CI/CD & Docker',
             },
             {
-              id: 'formas-normais',
-              title: 'Formas normais',
-              file: 'formas-normais-db.html',
-              meta: 'Normalização',
+              id: 'arquitetura',
+              title: 'Arquitetura & Design',
+              file: 'tema-arquitetura-design.html',
+              meta: 'Padrões & SOLID',
             },
             {
-              id: 'algoritmos',
-              title: 'Algoritmos',
-              file: 'algoritmos.html',
-              meta: 'Padrões',
-            },
-            {
-              id: 'logica',
-              title: 'Lógica',
-              file: 'logica.html',
-              meta: 'Raciocínio',
+              id: 'seguranca',
+              title: 'Segurança & LGPD',
+              file: 'tema-seguranca-legal.html',
+              meta: 'ISO & LGPD',
             },
           ],
         },
@@ -1267,7 +1243,7 @@
             // Inject the dynamic sequential navigation footer
             injectNavFooter(page.id, container);
 
-            document.title = page.title + ' — Semana 1–2';
+            document.title = page.title + ' — Semana 3–4';
             highlightActive(page.id);
             window.scrollTo(0, 0);
           })
@@ -1319,6 +1295,7 @@
         container.appendChild(footer);
       }
 
+      // Add a function to programmatically open a subpage by ID (used by dashboard cards)
       window.navigateToTopic = function(topicId) {
         const sequence = getPageSequence();
         const page = sequence.find(p => p.id === topicId);
@@ -1334,6 +1311,8 @@
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape' && drawerOpen) closeDrawer();
         });
+        
+        // Check if there is an anchor or hash in URL, otherwise load general overview
         loadPage(SUBPAGES[0]);
       });
     </script>

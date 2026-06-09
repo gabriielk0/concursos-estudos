@@ -1,90 +1,253 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Algoritmos — Semana 1–2</title>
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        min-height: 100vh;
-        font-family: 'DM Sans', sans-serif;
-        background: #0e0e10;
-        color: #e8e8ec;
-        padding: 1.5rem;
-      }
-      .page {
-        max-width: 760px;
-        margin: 0 auto;
-      }
-      h1 {
-        font-family: 'DM Serif Display', serif;
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        margin-bottom: 0.75rem;
-      }
-      p {
-        color: #b5b5bc;
-        line-height: 1.75;
-        margin-bottom: 1.2rem;
-      }
-      .link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: #c9a84c;
-        text-decoration: none;
-        font-family: 'DM Mono', monospace;
-        margin-bottom: 1.2rem;
-        min-height: 44px;
-        padding: 4px 0;
-      }
-      .card {
-        background: #17171a;
-        border: 1px solid #2a2a2e;
-        border-radius: 14px;
-        padding: 1.2rem;
-        margin-bottom: 1rem;
-      }
-      .card h2 {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-      }
-      .card p {
-        color: #9a9aa3;
-        font-size: 0.94rem;
-        line-height: 1.7;
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page">
-      <a class="link" href="index.html">← voltar para Semana 1–2</a>
-      <h1>Algoritmos</h1>
-      <p>
-        Esta página é um exemplo de tópico dentro da semana. Você pode criar
-        outras páginas dedicadas a ordenação, grafos, estruturas de dados ou
-        complexidade.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algoritmos & Estruturas de Dados — Semana 1–2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Scoped layout rules for Algoritmos to keep sandbox clean */
+    .algo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .col-stable {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <!-- PAGE HEADER -->
+    <div class="ph">
+      <div class="ph-meta">módulo 01 · semanas 1–2 · prioridade alta</div>
+      <h1 class="ph-title">Algoritmos, <em>Estruturas</em> & OOP</h1>
+      <p class="ph-desc">Análise de complexidade assintótica (Big-O), estruturas de dados fundamentais, ordenação estável e in-place, algoritmos em grafos e orientação a objetos.</p>
+      <div class="ph-pills">
+        <span class="pill pill-r">Complexidade Big-O</span>
+        <span class="pill pill-a">Ordenação Rápida vs Estável</span>
+        <span class="pill pill-p">Dijkstra, BFS & DFS</span>
+        <span class="pill pill-g">Pilares de OOP</span>
+      </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <div class="algo-grid">
+      <!-- CARD 1: COMPLEXIDADE ASSINTÓTICA -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge b-r">Teoria</span> Notação Big-O & Limites Assintóticos
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+          A notação Big-O descreve o comportamento de pior caso do tempo de execução ou consumo de memória de um algoritmo conforme o volume de entrada $n$ cresce:
+        </p>
+
+        <div class="row-item">
+          <span class="row-key">O(1) &mdash; Constante</span>
+          <span class="row-val">Tempo de execução independente do tamanho dos dados. Ex: acessar elemento por índice de array ou chave em Hash Table.</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">O(log n) &mdash; Logarítmica</span>
+          <span class="row-val">A entrada é dividida sucessivamente (dividir para conquistar). Ex: Busca Binária em array ordenado, busca em árvores balanceadas (AVL).</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">O(n) &mdash; Linear</span>
+          <span class="row-val">Tempo cresce proporcionalmente à entrada. Ex: busca sequencial em lista não-ordenada, travessia de lista encadeada.</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">O(n log n) &mdash; Linearítmica</span>
+          <span class="row-val">Melhor limite teórico para ordenação baseada em comparação. Ex: MergeSort, HeapSort e QuickSort (caso médio).</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">O(n²) &mdash; Quadrática</span>
+          <span class="row-val">Algoritmos de loops aninhados simples. Ex: BubbleSort, SelectionSort, InsertionSort.</span>
+        </div>
+      </div>
+
+      <!-- CARD 2: ESTRUTURAS DE DADOS -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge b-i">Estruturas</span> Estruturas Lineares & Não-Lineares
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+          Escolher a estrutura correta dita o trade-off de complexidades das operações:
+        </p>
+
+        <div class="row-item">
+          <span class="row-key">Pilha (Stack)</span>
+          <span class="row-val">Estrutura LIFO (Last-In, First-Out). Operações push/pop ocorrem no topo em <code>O(1)</code>. Usada em pilhas de chamadas de recursão e DFS.</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Fila (Queue)</span>
+          <span class="row-val">Estrutura FIFO (First-In, First-Out). Inserção no final e remoção no início em <code>O(1)</code>. Usada em buffers e BFS.</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Heap / Fila de Prioridade</span>
+          <span class="row-val">Árvore binária quase completa onde cada nó pai cumpre a propriedade do heap (maior ou menor que os filhos). Extração de topo em <code>O(log n)</code>.</span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Tabela Hash</span>
+          <span class="row-val">Mapeia chaves para valores usando uma função hash. Busca, inserção e remoção em <code>O(1)</code> médio. Colisões degradam o pior caso para <code>O(n)</code>.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: SORTING COMPARATIVE -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-a">Algoritmos</span> Tabela Comparativa de Ordenação
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+        Algoritmos baseados em comparação têm limite assintótico inferior de $\Omega(n \log n)$. A estabilidade indica se a ordem original de chaves duplicadas é preservada:
       </p>
-      <div class="card">
-        <h2>Resumo rápido</h2>
-        <p>
-          Escreva aqui: O que é complexidade de tempo e espaço, notação Big-O,
-          busca binária, ordenação por seleção e algoritmos recursivos.
-        </p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Algoritmo</th>
+              <th>Melhor Caso</th>
+              <th>Caso Médio</th>
+              <th>Pior Caso</th>
+              <th>Espaço Extra</th>
+              <th>Estável?</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr>
+              <td style="text-align:left;font-weight:600;">Bubble Sort</td>
+              <td>O(n)</td>
+              <td>O(n²)</td>
+              <td>O(n²)</td>
+              <td>O(1)</td>
+              <td class="col-stable" style="color:var(--green)">Sim</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;font-weight:600;">Selection Sort</td>
+              <td>O(n²)</td>
+              <td>O(n²)</td>
+              <td>O(n²)</td>
+              <td>O(1)</td>
+              <td class="col-stable" style="color:var(--danger)">Não</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;font-weight:600;">Insertion Sort</td>
+              <td>O(n)</td>
+              <td>O(n²)</td>
+              <td>O(n²)</td>
+              <td>O(1)</td>
+              <td class="col-stable" style="color:var(--green)">Sim</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;font-weight:600;">Merge Sort</td>
+              <td>O(n log n)</td>
+              <td>O(n log n)</td>
+              <td>O(n log n)</td>
+              <td>O(n)</td>
+              <td class="col-stable" style="color:var(--green)">Sim</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;font-weight:600;">Quick Sort</td>
+              <td>O(n log n)</td>
+              <td>O(n log n)</td>
+              <td>O(n²)</td>
+              <td>O(log n)</td>
+              <td class="col-stable" style="color:var(--danger)">Não</td>
+            </tr>
+            <tr>
+              <td style="text-align:left;font-weight:600;">Heap Sort</td>
+              <td>O(n log n)</td>
+              <td>O(n log n)</td>
+              <td>O(n log n)</td>
+              <td>O(1)</td>
+              <td class="col-stable" style="color:var(--danger)">Não</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="card">
-        <h2>Prática</h2>
-        <p>
-          Inclua exemplos e exercícios. Por exemplo, descreva um problema e sua
-          solução passo a passo usando pseudo-código.
-        </p>
+
+      <div class="trap">
+        <strong>Pior Caso do QuickSort:</strong> Ocorre quando o vetor já está ordenado (ou reversamente ordenado) e o pivô é escolhido de maneira ingênua como o primeiro ou último elemento, resultando em <code>O(n²)</code>. Mitigado usando pivô aleatório ou mediana de três.
       </div>
-    </main>
-  </body>
+    </div>
+
+    <!-- CARD 4: GRAPH ALGORITHMS -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-p">Grafos</span> BFS vs DFS vs Dijkstra
+      </div>
+      <p style="font-size:0.88rem;color:var(--text);margin-bottom:1rem;">
+        Algoritmos clássicos para travessia e menor caminho em grafos representados por Lista de Adjacência ou Matriz de Adjacência:
+      </p>
+
+      <div class="row-item">
+        <span class="row-key">BFS (Busca em Largura)</span>
+        <span class="row-val">Explora vizinhos de nível em nível. Utiliza uma **Fila** (Queue) para controle. Garante o menor caminho em grafos **sem pesos** (menor número de arestas). Complexidade: <code>O(V + E)</code>.</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">DFS (Busca em Profundidade)</span>
+        <span class="row-val">Segue um ramo até a folha antes de retroceder (backtracking). Utiliza uma **Pilha** (Stack) ou recursão. Útil para ordenação topológica e detecção de ciclos. Complexidade: <code>O(V + E)</code>.</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Dijkstra (Menor Caminho)</span>
+        <span class="row-val">Encontra caminhos mínimos de uma origem para todos os outros nós em grafos com **pesos não-negativos**. Utiliza uma **Min-Heap (Fila de Prioridade)**. Complexidade: <code>O((V + E) log V)</code>.</span>
+      </div>
+      
+      <div class="note">
+        <strong>Nota de Prova:</strong> Se o grafo contiver pesos de arestas negativos, Dijkstra falha catastróficamente. Nesses cenários, deve-se usar o algoritmo de **Bellman-Ford** (que suporta pesos negativos e detecta ciclos negativos) ou **Floyd-Warshall** (para caminhos mínimos entre todos os pares).
+      </div>
+    </div>
+
+    <!-- CARD 5: OOP PILARS -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-g">Paradigmas</span> Os Quatro Pilares de OOP & Assinaturas
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+        Conceitos fundamentais da Programação Orientada a Objetos exigidos em provas teóricas e de programação:
+      </p>
+
+      <div class="row-item">
+        <span class="row-key">Encapsulamento</span>
+        <span class="row-val">Proteção do estado interno de um objeto. O acesso a atributos privados é exposto controladamente via métodos públicos (getters e setters).</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Herança</span>
+        <span class="row-val">Mecanismo que permite a uma subclasse herdar membros (atributos/métodos) de uma superclasse, promovendo reuso de código e hierarquias semânticas.</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Polimorfismo</span>
+        <span class="row-val">Capacidade de tratar objetos de subclasses diferentes de maneira uniforme através da superclasse. O comportamento varia dependendo do tipo dinâmico do objeto em runtime.</span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Abstração</span>
+        <span class="row-val">Focar apenas nas características essenciais de um objeto para o domínio do problema, omitindo detalhes concretos e de implementação complexa.</span>
+      </div>
+
+      <div class="tip" style="margin-top:1.5rem;">
+        <strong>Diferença de Assinaturas (Concurso Core):</strong>
+        <br>• <strong>Override (Sobrescrita):</strong> Ocorre em **tempo de execução** (polimorfismo dinâmico). A subclasse fornece uma nova implementação para um método com a **mesma assinatura** (mesmo nome, mesmos parâmetros e retorno).
+        <br>• <strong>Overload (Sobrecarga):</strong> Ocorre em **tempo de compilação** (polimorfismo estático). A mesma classe define múltiplos métodos com o **mesmo nome, mas assinaturas diferentes** (diferentes tipos ou quantidade de parâmetros).
+      </div>
+    </div>
+  </div>
+</body>
 </html>

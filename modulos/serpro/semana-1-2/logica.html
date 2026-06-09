@@ -1,90 +1,232 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lógica — Semana 1–2</title>
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        min-height: 100vh;
-        font-family: 'DM Sans', sans-serif;
-        background: #0e0e10;
-        color: #e8e8ec;
-        padding: 1.5rem;
-      }
-      .page {
-        max-width: 760px;
-        margin: 0 auto;
-      }
-      h1 {
-        font-family: 'DM Serif Display', serif;
-        font-size: clamp(2rem, 4vw, 2.8rem);
-        margin-bottom: 0.75rem;
-      }
-      p {
-        color: #b5b5bc;
-        line-height: 1.75;
-        margin-bottom: 1.2rem;
-      }
-      .link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: #c9a84c;
-        text-decoration: none;
-        font-family: 'DM Mono', monospace;
-        margin-bottom: 1.2rem;
-        min-height: 44px;
-        padding: 4px 0;
-      }
-      .card {
-        background: #17171a;
-        border: 1px solid #2a2a2e;
-        border-radius: 14px;
-        padding: 1.2rem;
-        margin-bottom: 1rem;
-      }
-      .card h2 {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-      }
-      .card p {
-        color: #9a9aa3;
-        font-size: 0.94rem;
-        line-height: 1.7;
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page">
-      <a class="link" href="index.html">← voltar para a navegação da semana</a>
-      <h1>Lógica</h1>
-      <p>
-        Use esta página para aprofundar raciocínio lógico, argumentos,
-        tabelas-verdade e equivalências. A barra lateral permite mudar entre os
-        temas rapidamente.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raciocínio Lógico & Sentencial — Semana 1–2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Scoped layout rules for Logica to keep sandbox clean */
+    .logic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .val-table td {
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+    }
+    .val-table td:nth-child(1),
+    .val-table td:nth-child(2) {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <!-- PAGE HEADER -->
+    <div class="ph">
+      <div class="ph-meta">módulo 01 · semanas 1–2 · p1 garantida</div>
+      <h1 class="ph-title">Lógica <em>Proposicional</em> & Argumentos</h1>
+      <p class="ph-desc">Tabelas-verdade, equivalências notáveis, leis de negação do condicional e quantificadores, validade de argumentos e métodos de inferência.</p>
+      <div class="ph-pills">
+        <span class="pill pill-r">Tabela-Verdade</span>
+        <span class="pill pill-a">Equivalências de De Morgan</span>
+        <span class="pill pill-p">Modus Ponens & Tollens</span>
+        <span class="pill pill-g">Negação do Condicional (MANÉ)</span>
+      </div>
+    </div>
+
+    <!-- MAIN BODY -->
+    <div class="logic-grid">
+      <!-- CARD 1: CONECTIVOS & TABELA VERDADE -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge b-r">Base</span> Conectivos Lógicos Fundamentais
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+          Tabela resumo dos valores lógicos para as principais operações proposicionais compostas:
+        </p>
+
+        <div class="tbl-wrap">
+          <table class="val-table">
+            <thead>
+              <tr>
+                <th>p</th>
+                <th>q</th>
+                <th>Conjunção (p ∧ q)</th>
+                <th>Disjunção (p ∨ q)</th>
+                <th>Disj. Excl. (p <u>∨</u> q)</th>
+                <th>Condicional (p → q)</th>
+                <th>Bicondicional (p ↔ q)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>V</td>
+                <td>V</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--danger)">F</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--green)">V</td>
+              </tr>
+              <tr>
+                <td>V</td>
+                <td>F</td>
+                <td style="color:var(--danger)">F</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--danger);font-weight:700;">F</td>
+                <td style="color:var(--danger)">F</td>
+              </tr>
+              <tr>
+                <td>F</td>
+                <td>V</td>
+                <td style="color:var(--danger)">F</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--danger)">F</td>
+              </tr>
+              <tr>
+                <td>F</td>
+                <td>F</td>
+                <td style="color:var(--danger)">F</td>
+                <td style="color:var(--danger)">F</td>
+                <td style="color:var(--danger)">F</td>
+                <td style="color:var(--green)">V</td>
+                <td style="color:var(--green)">V</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trap">
+          <strong>Apenas 1 caso Falso no Condicional:</strong> O condicional $p \rightarrow q$ só resulta em **Falso** se a antecedente for verdadeira e a consequente for falsa ($V \rightarrow F$). Se a antecedente for falsa ($F \rightarrow V$ ou $F \rightarrow F$), o condicional é **sempre Verdadeiro**!
+        </div>
+      </div>
+
+      <!-- CARD 2: EQUIVALÊNCIAS CRÍTICAS -->
+      <div class="card">
+        <div class="card-title">
+          <span class="badge b-a">Cebraspe</span> Equivalências Lógicas mais Cobradas
+        </div>
+        <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+          Equivalências que reduzem complexidade ou mudam conectivos sem alterar a tabela-verdade:
+        </p>
+
+        <div class="row-item">
+          <span class="row-key">Contrapositiva</span>
+          <span class="row-val">
+            <code>p → q ≡ ¬q → ¬p</code>
+            <br>Inverte o sentido da seta e nega ambos os termos.
+            <br><em>Ex: "Se chove, o chão molha" ≡ "Se o chão não molhou, não choveu".</em>
+          </span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Condicional p/ Disjunção</span>
+          <span class="row-val">
+            <code>p → q ≡ ¬p ∨ q</code>
+            <br>Nega a primeira, troca o conectivo por OU, e mantém a segunda.
+            <br><em>Ex: "Se estudo, passo" ≡ "Não estudo OU passo".</em>
+          </span>
+        </div>
+
+        <div class="row-item">
+          <span class="row-key">Leis de De Morgan</span>
+          <span class="row-val">
+            • <code>¬(p ∧ q) ≡ ¬p ∨ ¬q</code> (Negação de E vira OU)
+            <br>• <code>¬(p ∨ q) ≡ ¬p ∧ ¬q</code> (Negação de OU vira E)
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: LEIS DE NEGAÇÃO -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-p">Atenção</span> Leis de Negação de Proposições
+      </div>
+      <p style="font-size:0.88rem;color:var(--text);margin-bottom:1rem;">
+        Cuidado para não confundir equivalência com negação. Negar uma proposição inverte completamente seus valores lógicos:
       </p>
-      <div class="card">
-        <h2>Argumentos e proposições</h2>
-        <p>
-          Defina proposições simples e compostas, e treine a transformação de
-          enunciados para símbolos lógicos.
-        </p>
+
+      <div class="row-item">
+        <span class="row-key">Negação do Condicional</span>
+        <span class="row-val">
+          <strong>Regra do "MANÉ":</strong> MANTÉM a primeira <strong>E</strong> NEGA a segunda.
+          <br><code>¬(p → q) ≡ p ∧ ¬q</code>
+          <br><em>Ex: "Se chover, vou à praia" &rarr; Negação: "Choveu E eu não fui à praia".</em>
+        </span>
       </div>
-      <div class="card">
-        <h2>Tabelas-verdade</h2>
-        <p>
-          Mantenha exemplos de tabelas-verdade para conectivos como E, OU, NÃO e
-          condicional.
-        </p>
+
+      <div class="row-item">
+        <span class="row-key">Negação do Todo (∀)</span>
+        <span class="row-val">
+          Para negar "Todo P é Q", basta encontrar **pelo menos um** que não seja.
+          <br><code>¬(Todo P é Q) ≡ Algum P não é Q</code> (ou "Existe P que não é Q")
+          <br><strong style="color:var(--danger)">Pegadinha:</strong> Negar "Todo P é Q" com "Nenhum P é Q" é um erro fatal e recorrente em provas.
+        </span>
       </div>
-    </main>
-  </body>
+
+      <div class="row-item">
+        <span class="row-key">Negação do Nenhum (∄)</span>
+        <span class="row-val">
+          Para negar "Nenhum P é Q", basta que pelo menos um seja.
+          <br><code>¬(Nenhum P é Q) ≡ Algum P é Q</code> (ou "Existe pelo menos um P que é Q")
+        </span>
+      </div>
+
+      <div class="tip">
+        <strong>Resumo de Quantificadores:</strong>
+        <br>• A negação de um quantificador universal (**Todo / Nenhum**) é sempre feita usando um quantificador existencial (**Algum / Existe pelo menos um / Pelo menos um**) negado ou afirmado respectivamente.
+      </div>
+    </div>
+
+    <!-- CARD 4: ARGUMENTOS E REGRAS DE INFERÊNCIA -->
+    <div class="card">
+      <div class="card-title">
+        <span class="badge b-g">Lógica de Argumentação</span> Validade de Argumentos & Inferências
+      </div>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem;">
+        Um argumento é válido se e somente se a verdade de suas premissas garante obrigatoriamente a verdade de sua conclusão. Regras clássicas de inferência válida:
+      </p>
+
+      <div class="row-item">
+        <span class="row-key">Modus Ponens</span>
+        <span class="row-val">
+          Se temos a regra <code>p → q</code> e afirmamos a antecedente <code>p</code>, conclui-se a consequente <code>q</code>.
+          <br>Assinatura: <code>[p → q, p] ⊢ q</code> (Válido)
+        </span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Modus Tollens</span>
+        <span class="row-val">
+          Se temos a regra <code>p → q</code> e negamos a consequente <code>¬q</code>, conclui-se a negação da antecedente <code>¬p</code>.
+          <br>Assinatura: <code>[p → q, ¬q] ⊢ ¬p</code> (Válido)
+        </span>
+      </div>
+
+      <div class="row-item">
+        <span class="row-key">Silogismo Disjuntivo</span>
+        <span class="row-val">
+          Se temos <code>p ∨ q</code> (um ou outro) e negamos um dos lados (ex: <code>¬p</code>), o outro lado deve ser verdadeiro (<code>q</code>).
+          <br>Assinatura: <code>[p ∨ q, ¬p] ⊢ q</code> (Válido)
+        </span>
+      </div>
+
+      <div class="trap" style="margin-top:1rem;">
+        <strong>Falácias Lógicas Comuns (Argumentos Inválidos):</strong>
+        <br>• <strong>Afirmação do Consequente:</strong> <code>[p → q, q] ⊢ p</code>. Saber que o chão está molhado não permite concluir que choveu (alguém pode ter lavado a rua).
+        <br>• <strong>Negação do Antecedente:</strong> <code>[p → q, ¬p] ⊢ ¬q</code>. Se não choveu, o chão ainda assim pode estar molhado por outro motivo.
+      </div>
+    </div>
+  </div>
+</body>
 </html>

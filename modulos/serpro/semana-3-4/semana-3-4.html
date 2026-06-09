@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semanas 3–4 — Eng. Software · Arquitetura · Segurança</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+/* ── LOCAL LAYOUT & TOC ONLY ── */
+.toc-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+}
+
+/* ── INNER TABLE OF CONTENTS (TOC) ── */
+.toc {
+  border-right: 1px solid var(--border);
+  padding: 1.25rem 0.9rem;
+  position: sticky;
+  top: 10px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.toc-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.55rem;
+}
+.toc-item {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  color: var(--muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  margin-bottom: 2px;
+  transition: all 0.15s ease;
+}
+.toc-item:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+}
+.toc-item.active {
+  color: var(--cyan);
+  border-left-color: var(--cyan);
+  background: rgba(6, 182, 212, 0.05);
+}
+.toc-sub {
+  padding-left: 14px;
+  font-size: 0.7rem;
+}
+
+/* ── MOBILE SECTION NAV ── */
+.mnav {
+  display: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 6px;
+  padding: 0.6rem 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.mnav::-webkit-scrollbar {
+  display: none;
+}
+.mnav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  min-height: 40px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.15s ease;
+}
+.mnav a:hover {
+  color: var(--text);
+  border-color: var(--border2);
+}
+
+.sec-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cyan);
+  margin-bottom: 0.4rem;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  color: var(--text);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+
+section {
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 760px) {
+  .toc-layout {
+    grid-template-columns: 1fr;
+  }
+  .toc {
+    display: none;
+  }
+  .mnav {
+    display: flex;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="ph">
+  <div class="ph-meta">módulo 02 · semanas 3–4 · prioridade altíssima</div>
+  <h1 class="ph-title">Eng. Software, <em>Arquitetura</em> e Segurança</h1>
+  <p class="ph-desc">Tópicos avançados cobrados massivamente no edital Cebraspe: conteinerização, microsserviços, padrões Frontend/Backend, qualidade de código e legislações de segurança essenciais.</p>
+  <div class="ph-pills">
+    <span class="pill pill-r">P2 · ~40 itens estimados</span>
+    <span class="pill pill-a">Docker/K8s · CI/CD · SOLID</span>
+    <span class="pill pill-a">SAGA · CQRS · SPA · PWA</span>
+    <span class="pill">P1 · ISO 27000 · LGPD</span>
+    <span class="pill pill-p">20 flashcards · 10 questões Cebraspe</span>
+    <span class="pill pill-g">14 dias · 2–3h/dia</span>
+  </div>
+</div>
+
+<nav class="mnav" aria-label="Seções">
+  <a href="#devops">Eng. Software & DevOps</a>
+  <a href="#arquitetura">Arquitetura & Frontend</a>
+  <a href="#seguranca">Segurança & LGPD</a>
+  <a href="#flash">Flashcards</a>
+  <a href="#quest">Simulado Cebraspe</a>
+  <a href="#links">Links</a>
+</nav>
+
+<div class="toc-layout">
+
+<nav class="toc" aria-label="Índice">
+  <div class="toc-label">neste módulo</div>
+  <a class="toc-item active" href="#devops">Eng. Software & DevOps</a>
+  <a class="toc-item toc-sub" href="#devops-containers">Contêineres</a>
+  <a class="toc-item toc-sub" href="#devops-cicd">CI/CD & Versionamento</a>
+  <a class="toc-item toc-sub" href="#devops-testes">Testes & Qualidade</a>
+  <a class="toc-item" href="#arquitetura">Arquitetura & Frontend</a>
+  <a class="toc-item toc-sub" href="#arq-micro">Microsserviços</a>
+  <a class="toc-item toc-sub" href="#arq-front">SPA & PWA</a>
+  <a class="toc-item toc-sub" href="#arq-solid">SOLID & Clean Code</a>
+  <a class="toc-item" href="#seguranca">Segurança & LGPD</a>
+  <a class="toc-item toc-sub" href="#seg-iso">ISO 27000</a>
+  <a class="toc-item toc-sub" href="#seg-owasp">OWASP Top 10</a>
+  <a class="toc-item toc-sub" href="#seg-lgpd">LGPD (Lei 13.709)</a>
+  <a class="toc-item" href="#flash">Flashcards</a>
+  <a class="toc-item" href="#quest">Simulado Cebraspe</a>
+  <a class="toc-item" href="#links">Links</a>
+</nav>
+
+<div class="content">
+
+<section id="devops">
+<div class="sec-label">módulo 02 · parte 1</div>
+<h2 class="sec-title">Engenharia de Software e DevOps</h2>
+
+<div id="devops-containers" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Contêineres — Engine vs Orquestração</div>
+  <div class="trap"><strong>Pegadinha principal do Edital:</strong> A banca separa estritamente o Docker como ferramenta de "Engine" e o Kubernetes/OpenShift como ferramentas de "Orquestração"[cite: 652]. Misturar esses conceitos resulta em perda de pontos.</div>
+
+  <div class="row-item">
+    <span class="row-key">Docker (Engine)</span>
+    <span class="row-val">Plataforma que empacota, distribui e gerencia contêineres individuais. Responsável por construir a imagem e rodar o contêiner isolado no sistema host[cite: 652].</span>
+  </div>
+  <div class="row-item">
+    <span class="row-key">K8s (Orquestração)</span>
+    <span class="row-val">Kubernetes automatiza a implantação, o dimensionamento e o gerenciamento de aplicações em contêineres em um cluster. Ele gerencia múltiplos "Dockers", garantindo resiliência e balanceamento[cite: 652].</span>
+  </div>
+</div>
+
+<div id="devops-cicd" class="card">
+  <div class="card-title"><span class="badge b-a">alta incidência</span> Versionamento e CI/CD</div>
+  
+  <div class="row-item">
+    <span class="row-key">CI (Integração)</span>
+    <span class="row-val">Continuous Integration: Prática de realizar merges frequentes do código em um repositório centralizado, acionando builds automatizados e testes unitários. Foco: Qualidade do código.</span>
+  </div>
+  <div class="row-item">
+    <span class="row-key">CD (Entrega/Deploy)</span>
+    <span class="row-val">Continuous Delivery (Entrega) vs Continuous Deployment (Implantação). Na Entrega, o deploy em produção é manual; na Implantação, é totalmente automatizado.</span>
+  </div>
+</div>
+
+<div id="devops-testes" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Qualidade de Código e Testes</div>
+  <div class="trap"><strong>O que a Cebraspe cobra:</strong> Diferenciar o escopo de cada teste[cite: 656, 657]. Mocks e Stubs pertencem aos testes unitários. Carga e estresse são Testes de Requisitos Não Funcionais (RNF).</div>
+
+  <div class="row-item"><span class="row-key">Teste Unitário</span><span class="row-val">Testa o menor componente isolado do sistema (ex: uma função ou classe). Utiliza Mocks (objetos programados para verificar interações) e Stubs (respostas fixas)[cite: 656].</span></div>
+  <div class="row-item"><span class="row-key">Teste de Integração</span><span class="row-val">Avalia se múltiplos módulos/componentes do sistema funcionam corretamente quando agrupados[cite: 656].</span></div>
+  <div class="row-item"><span class="row-key">Teste de RNF</span><span class="row-val">Requisitos Não Funcionais. Avaliam "como" o sistema faz. Engloba Teste de Carga (volume esperado) e Teste de Estresse (volume acima da capacidade até o colapso)[cite: 657].</span></div>
+</div>
+
+</section>
+
+<section id="arquitetura">
+<div class="sec-label">módulo 02 · parte 2</div>
+<h2 class="sec-title">Arquitetura, Frontend e Backend</h2>
+
+<div id="arq-micro" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Padrões de Microsserviços</div>
+  <div class="note">A banca exige a compreensão de transações distribuídas em microsserviços[cite: 664, 665]. O Cebraspe gosta de cobrar SAGA e CQRS.</div>
+
+  <div class="row-item"><span class="row-key">SAGA</span><span class="row-val">Padrão para lidar com transações distribuídas. Ao invés de um grande "commit" (impossível entre múltiplos bancos separados), executa uma sequência de transações locais. Se uma falha, dispara transações de "compensação" para reverter[cite: 664].</span></div>
+  <div class="row-item"><span class="row-key">CQRS</span><span class="row-val">Command Query Responsibility Segregation. Separa as operações de leitura (Query) das operações de escrita (Command). Permite escalar leitura e escrita de forma independente[cite: 664].</span></div>
+  <div class="row-item"><span class="row-key">API Gateway</span><span class="row-val">Ponto de entrada único que roteia as requisições dos clientes para os microsserviços adequados, atuando como orquestrador de serviços e facilitando a segurança/monitoramento[cite: 664].</span></div>
+</div>
+
+<div id="arq-front" class="card">
+  <div class="card-title"><span class="badge b-a">alta incidência</span> Padrões Frontend: SPA e PWA</div>
+  <div class="row-item"><span class="row-key">SPA</span><span class="row-val">Single Page Application. Carrega uma única página HTML e atualiza o conteúdo dinamicamente via Ajax (JSON) sem recarregar a página inteira. Exemplos de frameworks: React, VueJS, Angular[cite: 645, 646].</span></div>
+  <div class="row-item"><span class="row-key">PWA</span><span class="row-val">Progressive Web App. Aplicações web que oferecem experiência nativa (instalação no celular, notificações push) e funcionamento offline (via Service Workers)[cite: 646].</span></div>
+</div>
+
+<div id="arq-solid" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> SOLID e Clean Code</div>
+  <div class="row-item"><span class="row-key">S - Single Respons.</span><span class="row-val">Uma classe deve ter apenas uma razão para mudar (uma única responsabilidade).</span></div>
+  <div class="row-item"><span class="row-key">O - Open/Closed</span><span class="row-val">Aberta para extensão, fechada para modificação. Use herança/polimorfismo ao invés de alterar o código já existente[cite: 662].</span></div>
+  <div class="row-item"><span class="row-key">L - Liskov</span><span class="row-val">Subclasses devem ser substituíveis pelas suas superclasses sem quebrar o sistema.</span></div>
+  <div class="row-item"><span class="row-key">I - Interface Segreg.</span><span class="row-val">Múltiplas interfaces pequenas são melhores que uma interface generalista.</span></div>
+  <div class="row-item"><span class="row-key">D - Dependency Inv.</span><span class="row-val">Módulos de alto nível não devem depender de baixo nível. Ambos devem depender de abstrações.</span></div>
+</div>
+
+</section>
+
+<section id="seguranca">
+<div class="sec-label">módulo 02 · parte 3 · Conhecimentos Específicos/Básicos</div>
+<h2 class="sec-title">Segurança da Informação e LGPD</h2>
+
+<div id="seg-iso" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> Padrões ISO 27000 — Os Três Pilares (CID)</div>
+  <div class="trap"><strong>Mnemônico Clássico Cebraspe:</strong> CID (Confidencialidade, Integridade e Disponibilidade). O edital explicitamente aborda Confiabilidade/Confidencialidade, Integridade e Disponibilidade[cite: 632]. Se a banca incluir um quarto pilar como "exclusivo" da ISO 27000, o item estará errado.</div>
+
+  <div class="row-item"><span class="row-key">Confiabilidade</span><span class="row-val">Garante que a informação seja acessível apenas àqueles autorizados a ter acesso (Confidencialidade)[cite: 632]. Criptografia é a principal ferramenta.</span></div>
+  <div class="row-item"><span class="row-key">Integridade</span><span class="row-val">Salvaguarda a exatidão e a completude da informação e dos métodos de processamento[cite: 632]. Hashes e assinaturas digitais são mecanismos de proteção.</span></div>
+  <div class="row-item"><span class="row-key">Disponibilidade</span><span class="row-val">Garante que os usuários autorizados tenham acesso à informação e aos ativos sempre que necessário[cite: 632]. Balanceamento de carga e backups garantem isso.</span></div>
+</div>
+
+<div id="seg-owasp" class="card">
+  <div class="card-title"><span class="badge b-a">média-alta incidência</span> OWASP Top 10</div>
+  <div class="row-item"><span class="row-key">O que é?</span><span class="row-val">Um documento de conscientização padrão para desenvolvedores e segurança de aplicações web, listando os riscos de segurança mais críticos[cite: 636].</span></div>
+  <div class="row-item"><span class="row-key">Injeção (SQLi)</span><span class="row-val">Dados não confiáveis são enviados a um interpretador (ex: banco de dados). Mitigação: Parameterized queries (Queries preparadas).</span></div>
+  <div class="row-item"><span class="row-key">XSS</span><span class="row-val">Cross-Site Scripting. Atacante injeta scripts maliciosos (geralmente JS) em sites confiáveis. Mitigação: Escapar/sanitizar inputs.</span></div>
+</div>
+
+<div id="seg-lgpd" class="card">
+  <div class="card-title"><span class="badge b-r">cai todo concurso</span> LGPD (Lei nº 13.709/2018)</div>
+  <div class="note">Classificado no edital como "Legislação acerca de privacidade" (Conhecimentos Básicos)[cite: 627].</div>
+
+  <div class="row-item"><span class="row-key">Dado Pessoal</span><span class="row-val">Informação relacionada a pessoa natural identificada ou identificável (Ex: Nome, CPF, IP, Geolocalização).</span></div>
+  <div class="row-item"><span class="row-key">Dado Sensível</span><span class="row-val">Dado sobre origem racial/étnica, convicção religiosa, opinião política, saúde, vida sexual, dado genético ou biométrico. O tratamento é MUITO mais restrito[cite: 627]. Dica: Dados financeiros/bancários <strong>NÃO</strong> são dados sensíveis pela LGPD.</span></div>
+  <div class="row-item"><span class="row-key">Tratamento</span><span class="row-val">Toda operação realizada com dados pessoais: coleta, produção, recepção, classificação, utilização, acesso, etc.</span></div>
+</div>
+
+</section>
+
+<section id="flash">
+<div class="sec-label">módulo 02 · prática</div>
+<h2 class="sec-title">Flashcards — toque para revelar</h2>
+
+<div class="fc-filters" id="fc-filters"></div>
+<div class="fc-grid" id="fc-grid"></div>
+<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn" onclick="resetFC()">reiniciar todos</button>
+</div>
+</section>
+
+<section id="quest">
+<div class="sec-label">módulo 02 · simulado</div>
+<h2 class="sec-title">Simulado Cebraspe (Apenas C/E - Foco na penalidade)</h2>
+<div class="score-row">
+  <span id="score-txt">0 acertos / 0 respondidas</span>
+  <div class="prog"><div class="prog-f" id="prog-f"></div></div>
+  <button class="btn" onclick="resetQs()">reiniciar</button>
+</div>
+<div id="q-list"></div>
+</section>
+
+<section id="links">
+<div class="sec-label">módulo 02 · recursos</div>
+<h2 class="sec-title">Links e vídeos recomendados — PT-BR</h2>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-r">Engenharia e DevOps</span> YouTube</div>
+  <div class="link-item">
+    <div class="link-title">Docker e K8s — Diferenças e Orquestração</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=Docker+e+Kubernetes+diferencas+orquestracao+concurso+Cebraspe" target="_blank">Docker e Kubernetes Cebraspe</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Mocks, Stubs e Testes Unitários/Integração</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=Tipos+de+Testes+Software+Mocks+Stubs+concurso" target="_blank">Tipos de Testes Software Mocks Stubs concurso</a>
+  </div>
+</div>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-a">Arquitetura</span> YouTube</div>
+  <div class="link-item">
+    <div class="link-title">Padrões de Microsserviços — SAGA e CQRS</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=Arquitetura+Microsservicos+SAGA+CQRS+Cebraspe" target="_blank">Arquitetura Microsserviços SAGA CQRS Cebraspe</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">Princípios SOLID e Clean Code</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=Principios+SOLID+Clean+Code+concurso+TI" target="_blank">Princípios SOLID Clean Code concurso TI</a>
+  </div>
+</div>
+
+<div class="link-card">
+  <div class="link-card-title"><span class="badge b-p">Segurança e LGPD</span> YouTube</div>
+  <div class="link-item">
+    <div class="link-title">ISO 27000 — Pilares da Segurança da Informação</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=ISO+27000+Seguranca+Informacao+Cebraspe" target="_blank">ISO 27000 Segurança Informação Cebraspe</a>
+  </div>
+  <div class="link-item">
+    <div class="link-title">LGPD (Lei 13.709) — Mapa Mental e Resumo</div>
+    <a class="link-a" href="https://www.youtube.com/results?search_query=LGPD+Lei+13709+resumo+esquematizado+concurso" target="_blank">LGPD Lei 13709 resumo esquematizado concurso</a>
+  </div>
+</div>
+
+</section>
+
+<section id="navegacao-temas">
+  <div class="sec-label">Aprofundamento</div>
+  <h2 class="sec-title">Temas para Estudo Detalhado</h2>
+  <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 0.88rem;">
+    Selecione um dos temas abaixo para abrir os resumos estratégicos e focos específicos do edital Cebraspe:
+  </p>
+  <div class="dashboard-nav-grid">
+    <div class="db-nav-card" onclick="window.navigateToTopic('devops')">
+      <span class="db-nav-meta">Parte 1 · Infraestrutura</span>
+      <h3 class="db-nav-title">DevOps & Infraestrutura</h3>
+      <p class="db-nav-desc">Gestão avançada de ramificação Git, esteiras CI/CD no GitLab, dublês de testes (Mocks vs Stubs) e orquestração de contêineres com Docker e Kubernetes.</p>
+      <span class="db-nav-action">Acessar resumo detalhado →</span>
+    </div>
+    
+    <div class="db-nav-card" onclick="window.navigateToTopic('arquitetura')">
+      <span class="db-nav-meta">Parte 2 · Engenharia</span>
+      <h3 class="db-nav-title">Arquitetura & Design</h3>
+      <p class="db-nav-desc">Padrões de microsserviços distribuídos (SAGA, CQRS, API Gateway), arquiteturas Frontend modernizadas (SPA, PWA) e os princípios fundamentais do SOLID.</p>
+      <span class="db-nav-action">Acessar resumo detalhado →</span>
+    </div>
+    
+    <div class="db-nav-card" onclick="window.navigateToTopic('seguranca')">
+      <span class="db-nav-meta">Parte 3 · Conformidade</span>
+      <h3 class="db-nav-title">Segurança & LGPD</h3>
+      <p class="db-nav-desc">Triade CID de segurança da informação da ISO 27000, auditorias do SGSI da ISO 27001/2, principais falhas OWASP e regras legais de privacidade da LGPD.</p>
+      <span class="db-nav-action">Acessar resumo detalhado →</span>
+    </div>
+  </div>
+</section>
+
+</div></div><script>
+/* ═══════════ FLASHCARDS ═══════════ */
+const CARDS = [
+  /* Eng Software / DevOps */
+  {t:"DevOps",q:"Qual a diferença no edital entre Docker e Kubernetes?",a:"O edital trata o Docker estritamente como 'Engine' (motor de contêineres para criação e execução isolada) e o Kubernetes/OpenShift como 'Orquestração' (gerenciamento e escalabilidade de clusters de contêineres)."},
+  {t:"DevOps",q:"Qual a diferença entre Mocks e Stubs nos testes unitários?",a:"Stubs fornecem respostas prontas/fixas para chamadas durante o teste. Mocks são mais avançados: eles registram e verificam as interações (se um método foi chamado, quantas vezes, com quais parâmetros)."},
+  {t:"DevOps",q:"Testes de carga e estresse pertencem a qual categoria de testes?",a:"Pertencem aos testes de Requisitos Não Funcionais (RNF). Avaliam o desempenho, a escalabilidade e os limites da aplicação, não as regras de negócio."},
+  
+  /* Arquitetura / Frontend */
+  {t:"Arquitetura",q:"O que é o padrão SAGA em Microsserviços?",a:"Padrão para lidar com transações distribuídas (que envolvem múltiplos bancos/serviços). Executa transações locais em sequência e, em caso de erro, dispara transações de compensação para reverter o processo."},
+  {t:"Arquitetura",q:"O que é o padrão CQRS?",a:"Command Query Responsibility Segregation. É o isolamento arquitetural das operações de Leitura (Query) das operações de Escrita/Atualização (Command), permitindo otimização e escalabilidade separadas para leitura e gravação."},
+  {t:"Arquitetura",q:"O que é uma PWA (Progressive Web App)?",a:"Uma aplicação web que usa tecnologias modernas (como Service Workers) para entregar uma experiência de aplicativo nativo, suportando uso offline, notificações push e instalação na tela inicial do dispositivo."},
+  {t:"Arquitetura",q:"O que define o princípio Open/Closed do SOLID?",a:"O código (classes/módulos) deve estar ABERTO para extensão (adicionar novos comportamentos), mas FECHADO para modificação (alterar o código fonte existente para não quebrar o que já funciona)."},
+  
+  /* Seguranca / LGPD */
+  {t:"Segurança",q:"Quais são os 3 pilares da Segurança da Informação segundo a ISO 27000 (O famoso CID)?",a:"Confidencialidade (ou Confiabilidade no edital), Integridade e Disponibilidade."},
+  {t:"Segurança",q:"Segundo a LGPD, o que é um dado sensível?",a:"Dado sobre origem racial/étnica, convicção religiosa, opinião política, saúde, vida sexual, dado genético ou biométrico. O tratamento exige consentimento explícito em quase todos os casos."},
+  {t:"Segurança",q:"A situação financeira ou score de crédito de uma pessoa é considerada um dado sensível na LGPD?",a:"NÃO! Essa é uma das maiores pegadinhas. Dados financeiros, bancários e score de crédito são dados pessoais comuns (podem ser tratados mediante outras hipóteses, como proteção ao crédito), mas não constam no rol estrito de 'dados sensíveis' da LGPD."}
+];
+
+const TOPICS = [...new Set(CARDS.map(c=>c.t))];
+let activeFC = 'Todos';
+
+function buildFCFilters(){
+  const wrap = document.getElementById('fc-filters');
+  const all = document.createElement('button');
+  all.className='fc-filter on'; all.textContent='Todos ('+CARDS.length+')';
+  all.onclick=()=>setFC('Todos');
+  wrap.appendChild(all);
+  TOPICS.forEach(t=>{
+    const btn=document.createElement('button');
+    btn.className='fc-filter';
+    btn.textContent=t+' ('+CARDS.filter(c=>c.t===t).length+')';
+    btn.onclick=()=>setFC(t);
+    wrap.appendChild(btn);
+  });
+}
+
+function setFC(topic){
+  activeFC=topic;
+  document.querySelectorAll('.fc-filter').forEach(b=>{
+    b.classList.toggle('on', b.textContent.startsWith(topic));
+  });
+  document.getElementById('fc-grid').innerHTML='';
+  buildFCCards();
+}
+
+function buildFCCards(){
+  const g=document.getElementById('fc-grid');
+  CARDS.filter(c=>activeFC==='Todos'||c.t===activeFC).forEach((card)=>{
+    const el=document.createElement('div');
+    el.className='fc';
+    el.innerHTML=`<div class="fc-tag">${card.t}</div><div class="fc-q">${card.q}</div><div class="fc-a">${card.a}</div><div class="fc-hint">toque para revelar</div>`;
+    el.addEventListener('click',()=>{
+      el.classList.toggle('flipped');
+      el.querySelector('.fc-hint').textContent=el.classList.contains('flipped')?'toque para ocultar':'toque para revelar';
+    });
+    g.appendChild(el);
+  });
+}
+
+function resetFC(){
+  document.querySelectorAll('.fc').forEach(el=>{
+    el.classList.remove('flipped');
+    el.querySelector('.fc-hint').textContent='toque para revelar';
+  });
+}
+
+/* ═══════════ QUESTÕES (SOMENTE CEBRASPE C/E) ═══════════ */
+const QS=[
+  {t:"DevOps", q:"(C/E) No contexto de conteinerização, o Kubernetes atua primariamente como a Engine responsável por criar, isolar e executar imagens de contêineres, enquanto o Docker é utilizado para a orquestração do cluster.",ok:false,g:"ERRADO. A banca inverteu os conceitos do edital. O Docker atua especificamente como Engine (criação e execução das imagens), e o Kubernetes (junto com o OpenShift) é classificado na seção de Orquestração do cluster."},
+  {t:"Arquitetura", q:"(C/E) O padrão SAGA é uma estratégia empregada na arquitetura de microsserviços para gerenciar transações distribuídas, baseando-se na execução sequencial de transações locais e no uso de mecanismos de compensação em caso de falhas.",ok:true,g:"CERTO. O padrão SAGA substitui a tradicional transação ACID única em ambientes distribuídos, realizando pequenas transações que, se falharem em alguma etapa, disparam ações compensatórias (desfazer) para as transações anteriores."},
+  {t:"Segurança", q:"(C/E) A ISO 27000 estabelece que os mecanismos fundamentais da segurança da informação devem ser estruturados unicamente sobre a confiabilidade e a disponibilidade dos dados organizacionais.",ok:false,g:"ERRADO. A ISO 27000 e o edital focam em três pilares essenciais: Confiabilidade (Confidencialidade), Integridade e Disponibilidade. A exclusão da Integridade e a palavra 'unicamente' tornam o item errado."},
+  {t:"Segurança", q:"(C/E) De acordo com a Lei Geral de Proteção de Dados Pessoais (LGPD), informações referentes ao histórico bancário e score de crédito do titular são classificadas expressamente como dados pessoais sensíveis, exigindo rigor extra em seu tratamento.",ok:false,g:"ERRADO. Pegadinha clássica de legislação. Dados financeiros NÃO figuram no rol de dados sensíveis da LGPD. Dados sensíveis dizem respeito à origem racial/étnica, saúde, vida sexual, religião, biometria e filiação política."},
+  {t:"Arquitetura", q:"(C/E) Em arquitetura de software focada em boas práticas como o Clean Code, a implementação do princípio Open/Closed (O do SOLID) estabelece que o desenvolvimento deve permitir que classes existentes sejam estendidas com novos comportamentos, sem a necessidade de modificar seu código fonte original.",ok:true,g:"CERTO. Open for Extension (aberto para ser estendido via herança/polimorfismo/composição) e Closed for Modification (fechado para alteração em seu próprio corpo fonte)."},
+  {t:"DevOps", q:"(C/E) No fluxo moderno de Engenharia de Software e DevOps, a realização de testes de carga e testes de estresse faz parte do escopo de testes de requisitos funcionais da aplicação.",ok:false,g:"ERRADO. Testes de carga e de estresse são testes de Requisitos Não Funcionais (RNF). Requisitos funcionais testam 'o que' o sistema deve fazer (regras de negócio), enquanto RNF testa 'como' o sistema faz (desempenho, escalabilidade, segurança)."},
+  {t:"Arquitetura", q:"(C/E) Uma Single Page Application (SPA) é um padrão arquitetural de frontend em que o navegador carrega uma página HTML inicial e, em seguida, atualiza dinamicamente as informações solicitando apenas os dados necessários através de chamadas assíncronas ao servidor.",ok:true,g:"CERTO. É exatamente esse o conceito de SPA (usado largamente por bibliotecas e frameworks como React e VueJS). A página não sofre um reload (recarregamento) completo, garantindo uma navegação fluida."},
+  {t:"DevOps", q:"(C/E) Em um cenário de automação de testes unitários, Mocks e Stubs possuem finalidades idênticas, servindo ambos exclusivamente para retornar dados estáticos codificados previamente (hardcoded) sem a capacidade de registrar a interação dos métodos testados.",ok:false,g:"ERRADO. Stubs fornecem dados estáticos fixos, mas Mocks vão além: eles registram como os métodos são acionados (se foram chamados, com quais parâmetros, quantas vezes). Suas finalidades não são idênticas e a limitação descrita aplica-se apenas aos Stubs."},
+  {t:"Arquitetura", q:"(C/E) A utilização do padrão Command Query Responsibility Segregation (CQRS) permite o escalonamento independente de leitura e gravação, baseando-se na divisão estrita entre os serviços que atualizam dados e os serviços responsáveis por realizar as consultas.",ok:true,g:"CERTO. O CQRS segrega as responsabilidades de Query (Leitura) e Command (Escrita), o que é ideal em cenários onde há uma disparidade enorme entre a quantidade de leituras e escritas na aplicação."}
+];
+
+let qState={ans:{},right:0,total:0};
+
+function buildQs(){
+  const list=document.getElementById('q-list');
+  if(!list) return;
+  QS.forEach((q,i)=>{
+    const block=document.createElement('div');
+    block.className='q-block';
+    let inner=`<div class="q-num"><span>questão ${String(i+1).padStart(2,'0')}</span><span class="q-tag">${q.t}</span></div>`;
+    inner+=`<div class="q-text">${q.q}</div>`;
+    inner+=`<div class="ce-row"><button class="btn-ce btn-c" id="bc-${i}" onclick="pickCE(${i},true)">✓ Certo</button><button class="btn-ce btn-e" id="be-${i}" onclick="pickCE(${i},false)">✗ Errado</button></div>`;
+    inner+=`<div class="q-actions"><button class="btn" onclick="toggleGab(${i})">ver gabarito</button></div>`;
+    inner+=`<div class="q-gab" id="gab-${i}"><strong>${(q.ok?'CERTO':'ERRADO')}</strong> — ${q.g}</div>`;
+    block.innerHTML=inner;
+    list.appendChild(block);
+  });
+}
+
+function toggleGab(i){document.getElementById('gab-'+i)?.classList.toggle('show')}
+
+function pickCE(i,val){
+  if(qState.ans[i]!==undefined) return;
+  qState.ans[i]=val; qState.total++;
+  if(val===QS[i].ok) qState.right++;
+  const bc=document.getElementById('bc-'+i);
+  const be=document.getElementById('be-'+i);
+  if(bc) bc.className='btn-ce btn-c '+(val===true?(QS[i].ok===true?'ok':'no'):'');
+  if(be) be.className='btn-ce btn-e '+(val===false?(QS[i].ok===false?'ok':'no'):'');
+  updateScore();
+}
+
+function updateScore(){
+  const pct=qState.total>0?Math.round(qState.right/qState.total*100):0;
+  const el=document.getElementById('score-txt');
+  const bar=document.getElementById('prog-f');
+  if(el) el.textContent=`${qState.right} acertos / ${qState.total} respondidas (${pct}%)`;
+  if(bar) bar.style.width=pct+'%';
+}
+
+function resetQs(){
+  qState={ans:{},right:0,total:0};
+  updateScore();
+  document.querySelectorAll('[id^="bc-"],[id^="be-"]').forEach(b=>{
+    b.className='btn-ce '+(b.id.startsWith('bc-')?'btn-c':'btn-e');
+  });
+  document.querySelectorAll('.q-gab').forEach(g=>g.classList.remove('show'));
+}
+
+/* ═══════════ TOC HIGHLIGHT ═══════════ */
+function initTOC(){
+  const items=document.querySelectorAll('.toc-item');
+  if(!items.length) return;
+  const sections=[...document.querySelectorAll('section[id], div[id]')];
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        items.forEach(i=>i.classList.remove('active'));
+        const active=[...items].find(i=>i.getAttribute('href')==='#'+e.target.id);
+        if(active) active.classList.add('active');
+      }
+    });
+  },{rootMargin:'-15% 0px -65% 0px'});
+  sections.forEach(s=>obs.observe(s));
+}
+
+buildFCFilters();
+buildFCCards();
+buildQs();
+initTOC();
+</script>
+</body>
+</html>
